@@ -237,7 +237,7 @@ def face_layer(faces, tmp):
     return inputs, graph.replace(base, "[base]") if faces else (inputs, graph)
 
 
-def mix(sched, video, narr_wav, sfx_log, srt_path, thumbnail, out, theme="clean", faces=None):
+def mix(sched, video, narr_wav, sfx_log, srt_path, thumbnail, out, theme="clean", faces=None, captions=True):
     tmp = Path(out).parent / ("tmp-" + Path(out).stem)
     tmp.mkdir(exist_ok=True)
     voice, _ = sf.read(narr_wav, dtype="float32")
@@ -260,8 +260,10 @@ def mix(sched, video, narr_wav, sfx_log, srt_path, thumbnail, out, theme="clean"
     if faces:                                                   # your camera, in a circle
         face_in, face_graph = face_layer(faces, tmp)
         base = "[base]"
+    # captions burned into the picture, or left to YouTube's own subtitle track (captions.srt)
+    last = f"{base}subtitles=filename='{subs}':force_style='{style}'[vout]" if captions else f"{base}null[vout]"
     vedit.run(["ffmpeg", "-y", "-i", video, "-i", video, "-i", tmp / "voice.wav", "-i", tmp / "fxmusic.wav", *face_in,
-               "-filter_complex", graph + ";" + face_graph + f"{base}subtitles=filename='{subs}':force_style='{style}'[vout]",
+               "-filter_complex", graph + ";" + face_graph + last,
                "-map", "[vout]", "-map", "[a]", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
                "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-shortest", out])
     vedit.embed_cover(Path(out), Path(thumbnail), False)
@@ -350,6 +352,7 @@ def main(beats_mod, scene_py, project_dir, sections, min_window, meta):
                     "'face': real voice + your camera (--camera) where the mascot stands; "
                     "'cameo': cloned voice + the mascot, with you on camera in a few short shots (meta['cameo'])")
     ap.add_argument("--camera", help="face/cameo variants: the camera recording your real-voice lines were cut from")
+    ap.add_argument("--no-captions", action="store_true", help="do not burn captions into the picture (upload the .srt)")
     args = ap.parse_args()
     p = Path(project_dir)
     sfx = f"-{args.variant}" if args.variant else ""
@@ -390,6 +393,7 @@ def main(beats_mod, scene_py, project_dir, sections, min_window, meta):
             real = ROOT / meta["cameo"]["real"]
             clips = facecam.cameos(sched["cameos"], args.camera, real, build, sched["face_px"])
             faces = [{"clip": c, **{k: s[k] for k in ("start", "end", "pos")}} for c, s in zip(clips, sched["cameos"])]
-        mix(sched, video, narr, sfx_log, srt_path, p / "output" / "thumbnail.png", out, faces=faces)
+        mix(sched, video, narr, sfx_log, srt_path, p / "output" / "thumbnail.png", out, faces=faces,
+            captions=not args.no_captions)
         youtube_description(sched, meta, p / "output" / f"youtube-description{sfx}.txt")
         print(f"Final video: {out}")
