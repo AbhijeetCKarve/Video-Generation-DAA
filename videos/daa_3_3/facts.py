@@ -15,27 +15,28 @@ def brute(w, m):
 
 
 def sum_of_sub(w, m):
-    """Horowitz-Sahni SumOfSub: answers in the order found, and the node count (live + killed)."""
-    n, x, answers, nodes = len(w), [0] * len(w), [], [0]
+    """Horowitz-Sahni SumOfSub: answers in the order found, and every node as the tree grows:
+    (kind, k, x_k, s_after) with kind "live", "answer" or "dead"."""
+    n, x, answers, nodes = len(w), [0] * len(w), [], []
 
     def rec(s, k, r):
         x[k] = 1
         if s + w[k] == m:
-            nodes[0] += 1
+            nodes.append(("answer", k + 1, 1, s + w[k]))
             answers.append([w[i] for i in range(k + 1) if x[i]])
         elif k + 1 < n and s + w[k] + w[k + 1] <= m:
-            nodes[0] += 1
+            nodes.append(("live", k + 1, 1, s + w[k]))
             rec(s + w[k], k + 1, r - w[k])
         else:
-            nodes[0] += 1                                  # killed
+            nodes.append(("dead", k + 1, 1, s + w[k]))
         x[k] = 0
         if s + r - w[k] >= m and k + 1 < n and s + w[k + 1] <= m:
-            nodes[0] += 1
+            nodes.append(("live", k + 1, 0, s))
             rec(s, k + 1, r - w[k])
         else:
-            nodes[0] += 1                                  # killed
+            nodes.append(("dead", k + 1, 0, s))
     rec(0, 0, sum(w))
-    return answers, nodes[0]
+    return answers, nodes
 
 
 def hamiltonian(n, edges):
@@ -67,7 +68,14 @@ def check():
     results.append(("weights 7,11,13,24 / target 31: exactly two answers, 7+24 and 7+11+13",
                     brute(W, M) == [[7, 11, 13], [7, 24]]))
     results.append(("backtracking finds 7+11+13 first, then 7+24", answers == [[7, 11, 13], [7, 24]]))
-    results.append(("the trace generates 16 nodes", nodes == 16))
+    results.append(("the trace generates 16 nodes", len(nodes) == 16))
+    story = [("live", 1, 1, 7), ("live", 2, 1, 18), ("answer", 3, 1, 31), ("dead", 3, 0, 18),   # 18+24 = 42 > 31
+             ("live", 2, 0, 7), ("dead", 3, 1, 20), ("live", 3, 0, 7),                            # skip 11; 20+24 too big
+             ("answer", 4, 1, 31), ("dead", 4, 0, 7)]                                             # 7+24 = 31
+    results.append(("the trace runs as narrated: 7 -> 18 -> 31 (answer); 18 skip 13 dies; 7 skip 11: take 13 dies, "
+                    "skip 13 lives, take 24 = 31 (answer)", nodes[:9] == story))
+    results.append(("leaving 7 out: no answer on that side, all four leaves die",
+                    [n[0] for n in nodes[9:]] == ["live", "live", "dead", "dead", "live", "dead", "dead"]))
     results.append(("the full tree for 4 weights has 31 nodes", 2 ** (len(W) + 1) - 1 == 31))
     results.append(("r at the root is 55", sum(W) == 55))
     results.append(("40 weights: over a trillion subsets", 2 ** 40 > 10 ** 12))

@@ -13,7 +13,7 @@
 13  {explain} Weight one is seven. Taking it makes s seven. | That is the left child, x one equals one.
 14  {excited} Take eleven as well: s is eighteen. Then take thirteen: s is thirty one. | That equals m, so we have our first answer: seven, eleven, thirteen.
 15  {explain} Back up one step. At s eighteen, skipping thirteen leaves only twenty four, | and eighteen plus twenty four is forty two, over m. That node dies.
-16  {explain} Back to s seven, and skip eleven. Taking thirteen gives twenty, and twenty plus twenty four is too big. | Skipping thirteen leaves twenty, with nothing left to reach thirty one. Both die.
+16  {explain} Back to s seven, and skip eleven. | Taking thirteen gives twenty, and twenty plus twenty four is forty four, too big, so that node dies.
 17  {excited} Skip thirteen as well, so s is still seven, and take twenty four: thirty one. | Second answer: seven and twenty four!
 18  {explain} Finally, leave seven out. | Every path on this side overshoots thirty one or cannot reach it, so they all die early.
 19  {warm} Done. Sixteen nodes instead of thirty one in the full tree, | and not a single hopeless subset was built.

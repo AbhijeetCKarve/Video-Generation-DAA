@@ -1,4 +1,5 @@
 VIDEO 3.3 - SUM OF SUBSETS & HAMILTONIAN CYCLE - full recording script (44 lines, about 7 minutes)
+(v2: line 16 corrected)
 
 How to record: quiet room, mic close, one line at a time with a short pause between lines.
 Read naturally, as if teaching a class. The number is for reference only - do not read it.
@@ -20,7 +21,7 @@ Numbers: say them as written (seven, eleven, thirteen, twenty four, thirty one, 
 13  Weight one is seven. Taking it makes s seven. That is the left child, x one equals one.
 14  Take eleven as well: s is eighteen. Then take thirteen: s is thirty one. That equals m, so we have our first answer: seven, eleven, thirteen.
 15  Back up one step. At s eighteen, skipping thirteen leaves only twenty four, and eighteen plus twenty four is forty two, over m. That node dies.
-16  Back to s seven, and skip eleven. Taking thirteen gives twenty, and twenty plus twenty four is too big. Skipping thirteen leaves twenty, with nothing left to reach thirty one. Both die.
+16  Back to s seven, and skip eleven. Taking thirteen gives twenty, and twenty plus twenty four is forty four, too big, so that node dies.
 17  Skip thirteen as well, so s is still seven, and take twenty four: thirty one. Second answer: seven and twenty four!
 18  Finally, leave seven out. Every path on this side overshoots thirty one or cannot reach it, so they all die early.
 19  Done. Sixteen nodes instead of thirty one in the full tree, and not a single hopeless subset was built.

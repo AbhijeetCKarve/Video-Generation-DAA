@@ -113,6 +113,27 @@ def tree_card(w=490, h=470):
     return img
 
 
+def cycle_card(w=490, h=470):
+    """A 5-city road map on a white card, with its Hamiltonian cycle drawn in green."""
+    import math
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    cx, cy, R = w / 2, h / 2 + 10, 165
+    pos = {k + 1: (cx + R * math.sin(2 * math.pi * k / 5), cy - R * math.cos(2 * math.pi * k / 5)) for k in range(5)}
+    roads = [(1, 2), (1, 3), (1, 5), (2, 3), (2, 4), (3, 5), (4, 5)]
+    cycle = [(1, 2), (2, 4), (4, 5), (5, 3), (3, 1)]
+    for a, b in roads:
+        d.line([pos[a], pos[b]], fill="#CBD5E1", width=9)
+    for a, b in cycle:
+        d.line([pos[a], pos[b]], fill="#22C55E", width=14)
+    for k, (x, y) in pos.items():
+        r = 34
+        d.ellipse([x - r, y - r, x + r, y + r], fill="#1E293B" if k != 1 else "#EF4444", outline="#0B1220", width=4)
+        d.text((x, y), str(k), font=font("Inter:extrabold", 34), fill="#FFFFFF", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -122,7 +143,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = tree_card() if visual == "tree" else board(n, 470)
+    b = {"tree": tree_card, "cycle": cycle_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -177,7 +198,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
