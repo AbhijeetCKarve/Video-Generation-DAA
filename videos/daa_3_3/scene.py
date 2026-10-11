@@ -204,9 +204,9 @@ class Video(Lesson):
         node = tree.mobs[tree.event_node[i]]
         t = tags[i]
         if t[0] == "dead":
-            return label(t[1], size - 2, KILL).next_to(node, DOWN, buff=0.05)
+            return label(t[1], size - 2, KILL).next_to(node, DOWN, buff=0.04)
         _, s, k, r = t
-        return label(f"{s}, {k}, {r}", size, GOLD).next_to(node, UR, buff=0.02)
+        return label(f"{s},{k},{r}", size - 2, GOLD).next_to(node, UR, buff=0.0)
 
     def tagged_grow(self, tree, tags, b, phrase, n, per=0.5):
         def extra(i, kind):
@@ -222,13 +222,13 @@ class Video(Lesson):
         self.clear(run_time=0.4)
         self.strip = self.weights_strip(np.array([STAGE[0], 3.0, 0])).scale(0.85)
         self.show(self.strip, run_time=0.4)
-        self.tree = Tree(SUM_EV, width=9.6, height=3.5, r=0.19, level_names=[f"w{i + 1}={w}" for i, w in enumerate(W)],
+        self.tree = Tree(SUM_EV, width=8.8, height=3.4, r=0.19, level_names=[f"w{i + 1}={w}" for i, w in enumerate(W)],
                          value_fmt=str, kill_label=True)
-        self.tree.center_on(STAGE + DOWN * 0.35 + RIGHT * 0.35)
+        self.tree.center_on(STAGE + DOWN * 0.15 + RIGHT * 1.0)
         self.tree.ev_i, self.tree.tagmobs = 0, []
         self.show(self.tree, run_time=0.5)
         self.at(b, 1)
-        root_tag = label(f"0, 1, {sum(W)}", 15, GOLD).next_to(self.tree.root, UR, buff=0.02)
+        root_tag = label(f"0,1,{sum(W)}", 13, GOLD).next_to(self.tree.root, UR, buff=0.0)
         self.show(root_tag, run_time=0.4)
         self.go(Indicate(self.tree.root, color=GOLD, scale_factor=1.8), run_time=0.7)
 
@@ -271,7 +271,7 @@ class Video(Lesson):
         self.at(b, 1)
         res = VGroup(chip("16 nodes generated", SAFE, 24), label("vs", 24, MUTED),
                      chip("31 in the full tree", PANEL_EDGE, 24)).arrange(RIGHT, buff=0.3)
-        res.move_to(STAGE + DOWN * 2.75)
+        res.move_to(STAGE + DOWN * 3.0)
         self.show(res, run_time=0.5, shift=UP * 0.2)
         self.sfx("pop")
 
@@ -411,7 +411,7 @@ class Video(Lesson):
         self.grow_tree(self.htree, HAM_EV, b, 0, 1, on_event=self.path_anims)     # 4: no road back to 1
         g = self.graph
         missing = DashedLine(g.pos[4], g.pos[1], color=KILL, stroke_width=6)
-        no = label("no road", 20, KILL, "BOLD").move_to(missing.get_center() + LEFT * 0.55)
+        no = chip("no road 4 → 1", KILL, 20).next_to(g, DOWN, buff=0.25)
         self.show(missing, no, run_time=0.5)
         self.sfx("kill")
         self.at(b, 1)
@@ -516,7 +516,7 @@ class Video(Lesson):
         self.clear(run_time=0.4)
         self.ptree = Tree(PR_EV, width=8.4, height=3.3, r=0.19, level_names=[f"w{i + 1}={w}" for i, w in enumerate(PW)],
                           value_fmt=str, kill_label=True)
-        self.ptree.center_on(STAGE + DOWN * 0.2 + RIGHT * 0.3)
+        self.ptree.center_on(STAGE + DOWN * 0.1 + RIGHT * 1.0)
         self.ptree.ev_i, self.ptree.tagmobs = 0, []
         self.show(self.ptree, run_time=0.4)
         made = [i for i, ev in enumerate(PR_EV) if ev[0] != "back"]
