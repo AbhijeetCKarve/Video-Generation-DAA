@@ -303,10 +303,10 @@ TAGS
 
 
 def cameo_voice(p, spec):
-    """voice-cameo/: the cloned lines, with the beats named in spec["lines"] replaced by your real
-    recording of the same line from another video (wav + caption timings)."""
+    """voice-cameo/: this video's lines (spec["voice"], default the cloned voice/), with the lines named
+    in spec["lines"] replaced by your on-camera take of the same line from another video (wav + captions)."""
     import shutil
-    src, dst, real = p / "voice", p / "voice-cameo", ROOT / spec["real"]
+    src, dst, real = p / spec.get("voice", "voice"), p / "voice-cameo", ROOT / spec["real"]
     dst.mkdir(exist_ok=True)
     for f in src.glob("[0-9]*.*"):
         shutil.copy(f, dst / f.name)

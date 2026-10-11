@@ -172,6 +172,7 @@ def main():
     ap.add_argument("--video", help="defaults to the newest daa-*.mp4 in output/")
     ap.add_argument("--minutes", default="6,8", help="target length range, e.g. 6,8")
     ap.add_argument("--variant", default="", help="check daa-*-<variant>.mp4 with build-<variant>/ captions")
+    ap.add_argument("--real-voice", action="store_true", help="the narration is entirely your own recording")
     args = ap.parse_args()
     p = Path(args.project)
     sfx = f"-{args.variant}" if args.variant else ""
@@ -192,7 +193,8 @@ def main():
     check_picture(video, dur, report)
     check_captions(p / f"build{sfx}" / "captions.srt", report)
     check_facts(args.facts, report)
-    check_rights(p, desc, report, real_voice=args.variant in ("real", "face"), camera=args.variant == "face")
+    check_rights(p, desc, report, real_voice=args.real_voice or args.variant in ("real", "face"),
+                 camera=args.variant in ("face", "cameo"))
     if desc:
         check_youtube(desc, p / "output" / "thumbnail.png", report)
     else:

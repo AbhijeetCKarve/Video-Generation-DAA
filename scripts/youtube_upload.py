@@ -68,6 +68,7 @@ def main():
     ap.add_argument("--consent", required=True, help='exactly "upload <video file name>"')
     ap.add_argument("--again", action="store_true", help="allow a second upload of the same video")
     ap.add_argument("--variant", default="", help="upload daa-<code>-<variant>.mp4 (e.g. real)")
+    ap.add_argument("--real-voice", action="store_true", help="the narration is entirely your own recording")
     args = ap.parse_args()
     project = Path(args.project)
     sfx = f"-{args.variant}" if args.variant else ""
@@ -76,7 +77,7 @@ def main():
     video = sorted(videos, key=lambda f: f.stat().st_mtime)[-1]
     gates(project, video, args.consent, args.again, sfx)
     title, body, tags = read_metadata(project / "output" / f"youtube-description{sfx}.txt")
-    synthetic = args.variant not in ("real", "face")   # only the cloned narration needs the AI disclosure
+    synthetic = not args.real_voice and args.variant not in ("real", "face")   # only cloned narration needs the AI disclosure
 
     from googleapiclient.http import MediaFileUpload
     yt = youtube_client()

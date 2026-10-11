@@ -36,7 +36,7 @@ if __name__ == "__main__":
     main(beats, HERE / "scene.py", HERE.parents[1] / "projects" / "daa-3.1", SECTIONS, MIN_WINDOW,
          {"title": beats.TITLE, "code": beats.CODE, "unit": beats.UNIT, "end_secs": 15.0, "title_suffix": "State Space Tree Explained",
           # cameo variant: you on camera in three short shots, from the 3.2 recording (same welcome line)
-          "cameo": {"size": 312, "real": "projects/daa-3.2/voice-real", "lines": {"03": "03"},
+          "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {"03": "03"},
                     "shots": [{"beat": "hook_mascot", "kind": "line", "pos": [-5.8, -1.0]},
                               {"beat": "p_pause", "kind": "after", "pos": [-5.8, -1.0]},
                               {"kind": "end", "pos": [-5.8, 1.3]}]},
