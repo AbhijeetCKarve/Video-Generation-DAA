@@ -1,0 +1,51 @@
+VIDEO 3.3 - SUM OF SUBSETS & HAMILTONIAN CYCLE - full recording script (44 lines, about 7 minutes)
+
+How to record: quiet room, mic close, one line at a time with a short pause between lines.
+Read naturally, as if teaching a class. The number is for reference only - do not read it.
+If you stumble, pause and read the whole line again; I keep the last clean take.
+Numbers: say them as written (seven, eleven, thirteen, twenty four, thirty one, fifty five).
+
+01  Here are four weights: seven, eleven, thirteen and twenty four kilos. Can you pick some of them that weigh exactly thirty one?
+02  Two ways: seven plus twenty four, and seven plus eleven plus thirteen. With forty weights there are over a trillion subsets, and backtracking finds the answers without trying them all.
+03  Welcome to the DAA series. I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+04  This is Unit Three, video three. Two more classic backtracking problems: sum of subsets, and the Hamiltonian cycle.
+05  Both appear in exams as draw-the-state-space-tree questions, so stay till the end for the exam tips.
+06  Sum of subsets. Given n positive weights and a target m, find every subset whose weights add up to exactly m.
+07  A solution is a tuple of zeros and ones: x k is one if weight k is chosen, and zero if it is left out.
+08  We keep the weights sorted in increasing order: seven, eleven, thirteen, twenty four. The bounding function depends on that.
+09  Every node remembers three numbers: s, the sum chosen so far; k, the next weight to decide; and r, the sum of the weights still undecided.
+10  Two bounding checks. First: s plus everything remaining must reach m, otherwise even taking all of it is not enough.
+11  Second: s plus the next weight must not exceed m, otherwise we have already overshot.
+12  Let's trace it. At the root, s is zero, k is one, and r is fifty five, the sum of all four weights.
+13  Weight one is seven. Taking it makes s seven. That is the left child, x one equals one.
+14  Take eleven as well: s is eighteen. Then take thirteen: s is thirty one. That equals m, so we have our first answer: seven, eleven, thirteen.
+15  Back up one step. At s eighteen, skipping thirteen leaves only twenty four, and eighteen plus twenty four is forty two, over m. That node dies.
+16  Back to s seven, and skip eleven. Taking thirteen gives twenty, and twenty plus twenty four is too big. Skipping thirteen leaves twenty, with nothing left to reach thirty one. Both die.
+17  Skip thirteen as well, so s is still seven, and take twenty four: thirty one. Second answer: seven and twenty four!
+18  Finally, leave seven out. Every path on this side overshoots thirty one or cannot reach it, so they all die early.
+19  Done. Sixteen nodes instead of thirty one in the full tree, and not a single hopeless subset was built.
+20  Here is the algorithm, Sum Of Sub of s, k, r. It first tries x k equals one, then x k equals zero.
+21  Taking weight k: if the new sum equals m, print the answer; if the sum plus the next weight is still within m, go deeper.
+22  Leaving weight k: go deeper only if the remaining weights can still reach m, and the next weight does not overshoot.
+23  There are two to the power n subsets, so the worst case is order two to the n. The bounding function is what makes it fast in practice.
+24  Now the second problem. A delivery van must visit five cities and come back home, visiting each city exactly once, using only the roads that exist.
+25  In graph terms, this is a Hamiltonian cycle: a cycle that passes through every vertex exactly once and returns to the start.
+26  It is named after William Hamilton, who sold it as a board game puzzle in eighteen fifty seven.
+27  Our tuple is the order of the visit, x one to x n. We fix x one as vertex one, so the same cycle is not counted n times.
+28  The bounding rule for x k has three checks: it must be adjacent to the previous vertex, it must not be visited already, and the last vertex must also be adjacent to vertex one, to close the cycle.
+29  Start at one. Vertex two is adjacent, so x two is two. From two, the smallest unvisited neighbour is three. From three, it is five.
+30  The last vertex must be four, the only one left. Four is adjacent to five, but there is no road from four back to one. Dead end!
+31  Backtrack to x three. After vertex two, the next option is four. From four we go to five, and from five to three.
+32  Three is adjacent to one, so the cycle closes: one, two, four, five, three, and back to one. Found!
+33  The algorithm. Next Value of k keeps trying the next vertex for x k until one passes all three checks.
+34  Hamiltonian of k calls Next Value; if k equals n it prints the cycle, otherwise it moves on to k plus one.
+35  In the worst case it tries every ordering of the remaining vertices, order of n factorial. Still far better than listing all orderings first.
+36  Both problems follow the same pattern as the queens: choose x k, check the bound, go deeper, and come back when stuck.
+37  Your turn. Weights three, five, six and seven, target fifteen. Find every subset that works.
+38  Pause the video and draw the tree, with s, k and r at every node. I'll wait!
+39  There is exactly one answer: three plus five plus seven. Every path that takes six either overshoots fifteen or falls short.
+40  Exam tip one. For sum of subsets, label every node with s, k and r, and write the two bounding conditions beside the tree.
+41  Exam tip two. Sort the weights first, and say that you did. Without sorting, the second check is not valid.
+42  Exam tip three. For the Hamiltonian cycle, list the three checks of Next Value, and show the dead end before the cycle.
+43  To recap: sum of subsets tracks s, k and r with two bounding checks, the Hamiltonian cycle picks the next adjacent unvisited vertex, and both use the same backtracking control abstraction.
+44  In the next video, we move on to Branch and Bound: FIFO, LIFO and least cost search. See you there!
