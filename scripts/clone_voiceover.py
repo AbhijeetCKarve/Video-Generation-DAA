@@ -290,6 +290,12 @@ def main():
     ap.add_argument("--max-prompts", type=int, default=0,
                     help="use only this many of your lines as voice samples (the clearest 5-10 s ones, "
                          "different moods first); 0 = all. Long references make cloning slow without it")
+    ap.add_argument("--split-long", type=float, default=0,
+                    help="split phrases longer than this many seconds at their shorter pauses "
+                         "(for lines read without a clear pause between them)")
+    ap.add_argument("--show", action="store_true", help="print which recorded phrases each line uses")
+    ap.add_argument("--cuts", help="JSON {line: [[start_s, end_s], ...]}: take these exact stretches of the "
+                                   "(single) reference for those lines instead of matching them automatically")
     ap.add_argument("--polish-only", action="store_true",
                     help="re-apply the clean-up to the saved raw takes (outdir/raw) without re-cloning")
     args = ap.parse_args()
@@ -324,10 +330,18 @@ def main():
     for path in args.reference:
         y48 = load(path, SR)
         # find pauses on a 16 kHz copy: phone recordings carry hiss above 8 kHz that hides them
-        found = speech_segments(resample(y48, SR, 16000), 16000)
+        y16 = resample(y48, SR, 16000)
+        found = speech_segments(y16, 16000)
         for (_, b1), (a2, _) in zip(found, found[1:]):     # the pauses = your room's background sound
             if a2 - b1 > 0.3:
                 noise.append(y48[int((b1 + 0.08) * SR):int((a2 - 0.08) * SR)])
+        if args.split_long:                                 # run-on lines: cut long phrases at shorter pauses
+            finer = []
+            for a, b in found:
+                parts = speech_segments(y16[int(a * 16000):int(b * 16000)], 16000, min_gap=0.15, pad=0.06) \
+                    if b - a > args.split_long else []
+                finer += [(a + pa, a + pb) for pa, pb in parts] if len(parts) > 1 else [(a, b)]
+            found = finer
         for a, b in found:
             piece = y48[int(a * SR):int(b * SR)].copy()
             piece[:len(fade)] *= fade                       # soft edges: no clicks where phrases join
@@ -352,9 +366,23 @@ def main():
     if args.reference_script:
         args.clone_all = True                            # your lines belong to another script
     read = align(ref_lines, segs)
+    manual = {f"{int(k):02d}": v for k, v in json.loads(Path(args.cuts).read_text()).items()} if args.cuts else {}
     own = {}
     for num, mood, phrases in ref_lines:
-        if num in read:
+        if num in manual:                                # hand-picked stretches: retakes and stumbles left out
+            gap = np.zeros(int(0.25 * SR), dtype="float32")
+            parts, cuts, t = [], [], 0.0
+            for a, b in manual[num]:
+                piece = y48[int(a * SR):int(b * SR)].copy()
+                piece[:len(fade)] *= fade
+                piece[-len(fade):] *= fade[::-1]
+                parts += [piece, gap]
+                t += len(piece) / SR + len(gap) / SR
+                cuts.append(t - len(gap) / SR / 2)
+            own[num] = {"audio": np.concatenate(parts[:-1]), "text": " ".join(phrases), "mood": mood,
+                        "cuts": cuts[:-1], "score": 1.0}
+            print(f"[{num}] you read this line (hand-picked, {len(manual[num])} pieces)")
+        elif num in read:
             a, b, score = read[num]
             gap = np.zeros(int(0.25 * SR), dtype="float32")
             parts, cuts, t = [], [], 0.0
@@ -366,6 +394,8 @@ def main():
             own[num] = {"audio": audio, "text": " ".join(phrases), "mood": mood, "cuts": cuts[:-1],
                         "score": score}
             print(f"[{num}] you read this line (match {score:.0%})")
+            if args.show:
+                print("        " + " / ".join(s["text"] for s in segs[a:b + 1]))
     if own:
         prompts = [(num, o["text"], o["audio"], o["mood"]) for num, o in own.items()]
         if args.max_prompts and len(prompts) > args.max_prompts:

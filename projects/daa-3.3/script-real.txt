@@ -23,7 +23,7 @@
 23  {explain} There are two to the power n subsets, so the worst case is order two to the n. | The bounding function is what makes it fast in practice.
 24  {curious} Now the second problem. | A delivery van must visit five cities and come back home, visiting each city exactly once, using only the roads that exist.
 25  {explain} In graph terms, this is a Hamiltonian cycle: | a cycle that passes through every vertex exactly once and returns to the start.
-26  {warm} It is named after William Hamilton, | who sold it as a board game puzzle in eighteen fifty seven.
+26  {warm} It is named after William Hamilton, | who sold it as a board game puzzle.
 27  {explain} Our tuple is the order of the visit, x one to x n. | We fix x one as vertex one, so the same cycle is not counted n times.
 28  {emphatic} The bounding rule for x k has three checks: | it must be adjacent to the previous vertex, it must not be visited already, | and the last vertex must also be adjacent to vertex one, to close the cycle.
 29  {explain} Start at one. Vertex two is adjacent, so x two is two. | From two, the smallest unvisited neighbour is three. From three, it is five.
