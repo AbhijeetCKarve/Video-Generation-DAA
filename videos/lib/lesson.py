@@ -266,6 +266,8 @@ class Lesson(Scene):
                      VGroup(label(text, 30, TEXT, "BOLD"), label(sub, 22, MUTED)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
                      ).arrange(RIGHT, buff=0.35)
         row.move_to(STAGE + UP * (1.7 - 1.35 * (n - 1))).align_to(STAGE + LEFT * 3.6, LEFT)
+        if row.get_right()[0] > 6.6:                        # never run off the right edge of the frame
+            row.scale_to_fit_width(6.6 - row.get_left()[0], about_point=row.get_left())
         self.stage.add(row)
         self.go(FadeIn(row, shift=RIGHT * 0.3), run_time=0.5)
         self.sfx("pop")
