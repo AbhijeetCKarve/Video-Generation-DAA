@@ -160,6 +160,26 @@ def bb_card(w=490, h=470):
     return img
 
 
+def matrix_card(w=490, h=470):
+    """A 5x5 cost matrix on a white card, one row reduced and the chosen road highlighted."""
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    vals = [["∞", "20", "30", "10", "11"], ["15", "∞", "16", "4", "2"], ["3", "5", "∞", "2", "4"],
+            ["19", "6", "18", "∞", "3"], ["16", "4", "7", "16", "∞"]]
+    cell, x0, y0 = 72, 70, 45
+    for r in range(5):
+        for c in range(5):
+            x, y = x0 + c * cell, y0 + r * cell
+            fill = "#22C55E" if (r, c) == (0, 3) else ("#FEF3C7" if r == 0 else "#F1F5F9")
+            d.rectangle([x, y, x + cell - 6, y + cell - 6], fill=fill, outline="#CBD5E1", width=2)
+            d.text((x + (cell - 6) / 2, y + (cell - 6) / 2), vals[r][c], font=font("Inter:extrabold", 28),
+                   fill="#FFFFFF" if (r, c) == (0, 3) else "#1E293B", anchor="mm")
+    d.rounded_rectangle([300, 452 - 40, 470, 452], radius=14, fill="#FACC15")
+    d.text((385, 432), "ĉ = 25", font=font("Inter:extrabold", 26), fill="#0F172A", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -169,7 +189,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -224,7 +244,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
