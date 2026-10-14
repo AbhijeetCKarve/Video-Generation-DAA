@@ -1,0 +1,50 @@
+VIDEO 3.4 - BRANCH & BOUND: FIFO, LIFO & LC SEARCH - full recording script (42 lines, about 7 minutes)
+
+How to record: quiet room, mic close, one line at a time with a short pause between lines.
+Read naturally, as if teaching a class. The number is for reference only - do not read it.
+If you stumble, pause and read the whole line again; I keep the last clean take.
+Say: FIFO as 'fife-oh', LIFO as 'life-oh', LC as 'L C', 'c hat' for c-cap, 'g hat' for g-cap,
+'f of h of x', 'U' as the letter U. Numbers as written (sixteen, twenty one, twenty five...).
+
+01  You are in a building with three doors, and behind each one are more doors. Somewhere inside is the exit you want, the cheapest way out.
+02  You could open doors left to right, or always open the newest door first, or peek at a price tag on every door and open the cheapest one.
+03  Those three strategies are FIFO, LIFO and least cost search. Together, they are called branch and bound.
+04  Welcome to the DAA series. I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+05  This is Unit Three, video four. Today: how branch and bound differs from backtracking, the three search strategies, and how bounds kill nodes.
+06  Comparing FIFO, LIFO and LC search is a classic exam question, so stay till the end for the exam tips.
+07  Quick recap of the words from video three point one. A live node has been generated, but not all its children have. The E node is the one being expanded.
+08  In backtracking, as soon as a child is generated, that child becomes the new E node, so the search dives deep.
+09  In branch and bound, the E node stays the E node until all its children are generated. Only then do we pick the next E node from the list of live nodes.
+10  So everything depends on one question: which live node do we expand next?
+11  FIFO search keeps the live nodes in a queue. First in, first out: nodes are expanded level by level, like breadth first search.
+12  LIFO search keeps them in a stack. Last in, first out: the newest live node is expanded next, so the search goes deep.
+13  LC search, least cost search, gives every live node a cost estimate, c hat, and always expands the live node with the smallest c hat.
+14  Let's run all three on the same tree. The leaves are answer nodes, and the number on each node is its c hat. We want the cheapest answer.
+15  FIFO first. Node one is expanded, and its children two, three and four join the queue. The front of the queue is node two.
+16  Node two is expanded. Its first child, node five, is an answer node, with cost eighteen. FIFO stops there.
+17  Now LIFO. Node one is expanded and two, three, four are pushed on the stack. The top of the stack is four, the last one pushed.
+18  Node four is expanded, and its first child, node nine, is an answer, with cost twenty five. Worse than FIFO!
+19  Finally LC. After node one, the live nodes have c hat sixteen, ten and twenty one. The smallest is ten, so node three is expanded.
+20  Its first child, node seven, is an answer with cost twelve, and that is the cheapest answer in the whole tree.
+21  Same tree, three strategies: FIFO found cost eighteen, LIFO found twenty five, and LC went straight to twelve.
+22  Where does c hat come from? c hat of x equals f of h of x, plus g hat of x.
+23  h of x is the cost of reaching x from the root. g hat of x is an estimate of the cost from x to the nearest answer node.
+24  For minimisation problems, c hat must never overestimate. It is a lower bound on the cost of any answer below that node.
+25  Now the bound in branch and bound. We keep U, the cost of the best answer found so far. At the start, U is infinity.
+26  The rule is simple: if a node's c hat is greater than U, nothing below it can beat the best answer, so the node is killed.
+27  Let's make FIFO find the cheapest answer using this rule. Expanding node two finds answers eighteen and twenty, so U becomes eighteen.
+28  Expanding node three finds answer seven with cost twelve. U drops to twelve.
+29  Next in the queue is node four, but its c hat is twenty one, greater than twelve. Killed, without generating its children. The best answer is twelve.
+30  So c hat gives a lower bound for every node, U gives an upper bound on the best answer, and whenever a lower bound passes the upper bound, that branch is cut away.
+31  Here is the control abstraction for LC search. It starts with the root as the E node and an empty list of live nodes.
+32  Each child of the E node is checked: if it is an answer node, we output the path and stop. Otherwise it is added to the live list.
+33  Then Least removes the live node with the smallest c hat, and that becomes the next E node.
+34  Here is the neat part. Replace Least with a queue and you get FIFO, replace it with a stack and you get LIFO.
+35  Your turn. In this tree, in which order do the nodes become E nodes under LC search?
+36  Pause the video and work it out. I'll wait!
+37  Node one, then node three with c hat four, then node four with c hat six. Its child, node seven, is the answer.
+38  Exam tip one. Explain the difference: in branch and bound, the E node remains the E node until it is dead.
+39  Exam tip two. For FIFO, LIFO and LC, draw the live node list, queue, stack or priority list, at every step.
+40  Exam tip three. Write c hat of x equals f of h of x plus g hat of x, and explain the kill rule with U.
+41  To recap: branch and bound expands an E node completely before choosing the next, FIFO uses a queue, LIFO a stack, and LC the smallest c hat, and bounds kill nodes that cannot beat the best answer.
+42  In the next video, we apply LC branch and bound to the zero one knapsack problem and the travelling salesperson problem. See you there!
