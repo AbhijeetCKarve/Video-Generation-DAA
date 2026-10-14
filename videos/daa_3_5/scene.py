@@ -308,7 +308,7 @@ class Video(Lesson):
         t = VGroup(label("Textbook form (minimisation):", 24, MUTED, "BOLD"),
                    MathTex(r"\hat{c} = -38,\quad u = -32", color=TEXT).scale(0.9)).arrange(DOWN, buff=0.12)
         box = card(t.width + 0.6, t.height + 0.5)
-        self.show(VGroup(box, t.move_to(box)).move_to(STAGE + LEFT * 3.6 + DOWN * 2.0), run_time=0.5, shift=UP * 0.2)
+        self.show(VGroup(box, t.move_to(box)).move_to(STAGE + LEFT * 4.6 + DOWN * 2.4), run_time=0.5, shift=UP * 0.2)
 
     # ------------------------------------------------------------ TSP: the reduced cost matrix
     def b_t_problem(self, b):
@@ -490,7 +490,7 @@ class Video(Lesson):
         self.sfx("chime")
 
     def b_tip1(self, b):
-        self.tip(b, 1, "Knapsack: order by p/w, write ĉ and u at every node", "the fractional bound and the whole-item bound")
+        self.tip(b, 1, "Knapsack: order by p/w, then ĉ and u per node", "the fractional bound and the whole-item bound")
 
     def b_tip2(self, b):
         self.tip(b, 2, "TSP: show both reductions", "and the reduced matrix of at least one child")
