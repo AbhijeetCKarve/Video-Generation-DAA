@@ -1,0 +1,42 @@
+VIDEO 3.5 - 0/1 KNAPSACK & TSP WITH BRANCH & BOUND - full recording script (35 lines, about 7 minutes)
+
+How to record: quiet room, mic close, one line at a time with a short pause between lines.
+Read naturally, as if teaching a class. The number is for reference only - do not read it.
+If you stumble, pause and read the whole line again; I keep the last clean take.
+Say: LC as 'L C', 'c hat', 'u' as the letter U, TSP as 'T S P'. Numbers as written.
+
+01  A bag that holds fifteen kilos, and four items worth ten, ten, twelve and eighteen rupees. Which ones do you take to earn the most?
+02  A salesperson must visit five cities and come home. There are twenty four possible tours. Which one is cheapest?
+03  Both are solved by least cost branch and bound, the LC search from the last video, with a clever lower bound for each problem.
+04  Welcome to the DAA series. I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+05  This is Unit Three, video five, the last one on branch and bound. Today: the zero one knapsack with LC search, and the travelling salesperson problem with the reduced cost matrix.
+06  Both traces are long answer questions in the exam, so stay till the end for the exam tips.
+07  The zero one knapsack. Four items with profits ten, ten, twelve, eighteen, and weights two, four, six, nine. The bag holds fifteen.
+08  First we order the items by profit per kilo: five, two and a half, two, two. These are already in that order.
+09  Every node gets two numbers. An optimistic bound: fill the remaining space fractionally, like the fractional knapsack. And a guaranteed profit: whole items only.
+10  At the root, items one, two and three fit: weight twelve, profit thirty two. Three kilos are left, and a third of item four adds six. So the bounds are thirty eight and thirty two.
+11  LC search always expands the live node with the best optimistic bound, and a node is killed when its optimistic bound cannot beat the best guaranteed profit found so far.
+12  Level one. Taking item one keeps the bounds at thirty eight and thirty two. Leaving it out drops them to thirty two and twenty two. We expand the thirty eight.
+13  Level two. Taking item two: still thirty eight and thirty two. Leaving it out: thirty six and twenty two.
+14  Level three. Taking item three: thirty eight and thirty two again. But leaving item three out, item four fits whole: ten plus ten plus eighteen. Guaranteed thirty eight!
+15  A guaranteed thirty eight equals the best optimistic bound anywhere, so nothing can beat it. The answer is x equals one, one, zero, one: profit thirty eight, weight exactly fifteen.
+16  Every other live node is killed: thirty six and thirty two are both below thirty eight. Only four of the sixteen possible choices were ever examined.
+17  One textbook detail. Branch and bound minimises, so the book writes these bounds as negatives: c hat equals minus thirty eight, and u equals minus thirty two.
+18  Now the travelling salesperson. Here is the cost matrix for five cities. Infinity on the diagonal, because a city has no road to itself.
+19  The lower bound comes from reducing the matrix. Subtract the smallest entry from every row: ten, two, two, three and four. That is twenty one.
+20  Then do the same for every column: one, zero, three, zero, zero, another four. Every tour must pay at least these amounts, so c hat of the root is twenty five.
+21  For each child, take a road, say one to four. Cross out row one and column four, block the road back, four to one, and reduce again.
+22  The child's c hat is the parent's twenty five, plus the reduced cost of that road, plus the new reduction. For one to four: twenty five plus zero plus zero, twenty five.
+23  The other roads from city one cost more: one to two gives thirty five, one to three fifty three, and one to five thirty one.
+24  LC search expands the smallest: one to four. From four: to two is twenty eight, to three fifty, to five thirty six.
+25  Expand one, four, two. From two: to three is fifty two, to five is twenty eight. Expand one, four, two, five, and the only city left, three, keeps c hat at twenty eight.
+26  The tour one, four, two, five, three, back to one costs twenty eight. Every other live node is thirty one or more, so this tour is optimal.
+27  Same recipe both times. A lower bound you can trust, LC search expanding the smallest one, and bounds that kill the rest.
+28  Your turn. Same four items, but the bag holds only twelve kilos. What are the two bounds at the root?
+29  Pause the video and work it out. I'll wait!
+30  Items one, two and three weigh exactly twelve, so both bounds are thirty two, and the answer is found at the root.
+31  Exam tip one. For the knapsack, order by profit per weight first, and write both bounds, c hat and u, at every node.
+32  Exam tip two. For TSP, show the row reduction, the column reduction, and the reduced matrix of at least one child.
+33  Exam tip three. Say why the answer is optimal: no live node has a bound that can beat it.
+34  To recap: the knapsack bound is the fractional fill, the TSP bound is the reduced cost matrix, and LC branch and bound finds the best answer without visiting every node.
+35  That completes Unit Three. In the next video we start Unit Four, with P versus NP and deterministic versus non deterministic algorithms. See you there!
