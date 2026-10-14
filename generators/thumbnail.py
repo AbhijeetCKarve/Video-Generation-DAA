@@ -134,6 +134,32 @@ def cycle_card(w=490, h=470):
     return img
 
 
+def bb_card(w=490, h=470):
+    """A branch-and-bound tree on a white card: c-hat on every node, a killed branch, the cheapest answer in green."""
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    pos = {1: (245, 80), 2: (95, 220), 3: (245, 220), 4: (395, 220), 7: (190, 370), 8: (300, 370)}
+    for a, b in [(1, 2), (1, 3), (1, 4), (3, 7), (3, 8)]:
+        d.line([pos[a], pos[b]], fill="#22C55E" if (a, b) in [(1, 3), (3, 7)] else "#CBD5E1", width=12 if (a, b) in [(1, 3), (3, 7)] else 8)
+    cost = {1: "10", 2: "16", 3: "10", 4: "21", 7: "12", 8: "15"}
+    for k, (x, y) in pos.items():
+        r = 38
+        fill = "#22C55E" if k in (3, 7) else "#1E293B"
+        if k in (7, 8):
+            d.rounded_rectangle([x - r, y - r, x + r, y + r], radius=10, fill=fill, outline="#0B1220", width=4)
+        else:
+            d.ellipse([x - r, y - r, x + r, y + r], fill=fill, outline="#0B1220", width=4)
+        d.text((x, y), cost[k], font=font("Inter:extrabold", 30), fill="#FFFFFF", anchor="mm")
+    x, y = pos[4]                                     # killed: c-hat 21 > U
+    d.line([x - 34, y - 34, x + 34, y + 34], fill="#EF4444", width=10)
+    d.line([x - 34, y + 34, x + 34, y - 34], fill="#EF4444", width=10)
+    d.text((x, y), "21", font=font("Inter:extrabold", 30), fill="#FFFFFF", anchor="mm", stroke_width=4, stroke_fill="#1E293B")
+    d.rounded_rectangle([330, 300, 470, 350], radius=16, fill="#FACC15")
+    d.text((400, 325), "U = 12", font=font("Inter:extrabold", 28), fill="#0F172A", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -143,7 +169,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -198,7 +224,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
