@@ -1,0 +1,43 @@
+VIDEO 4.1 - POLYNOMIAL VS NON-POLYNOMIAL & NON-DETERMINISTIC ALGORITHMS - full recording script (34 lines, about 7 minutes)
+
+How to record: quiet room, mic close, one line at a time with a short pause between lines.
+Read naturally, as if teaching a class. The number is for reference only - do not read it.
+If you stumble, pause and read the whole line again; I keep the last clean take.
+Line 04 (the welcome) is optional: I reuse your on-camera take from 3.2 unless you record it again.
+Say: 'n squared', 'n cubed', 'n to the power k', 'two to the n', 'n factorial', 'n log n' as 'n log n',
+NP as 'N P', 'A of j', 'B of i', 'x of i', 'v of i', 'order one' / 'order n' for O(1) / O(n). Numbers as written.
+
+01  Imagine a computer that does one billion steps every second. Sorting a million numbers takes it a fraction of a second.
+02  Now ask it to try every tour of twenty five cities. It will still be running ten million years from now.
+03  The difference is not the computer. It is the growth rate of the algorithm, and that one idea is the start of complexity theory.
+04  Welcome to the DAA series. I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+05  This is Unit Four, video one. Today: polynomial versus exponential growth, tractable and intractable problems, and deterministic versus non deterministic algorithms.
+06  Non deterministic algorithms are a favourite short note in the exam, so stay till the end for the exam tips.
+07  An algorithm runs in polynomial time when its running time is bounded by a polynomial in the input size: n, n log n, n squared, n cubed, any n to the power k.
+08  It runs in exponential time when n sits in the exponent, like two to the n, or n factorial. These grow much, much faster.
+09  Watch the table, at a billion steps a second. n cubed for n equals one hundred takes one millisecond. Two to the n for n equals one hundred takes forty trillion years.
+10  The point is the gap. Make the computer a thousand times faster, and a cubic algorithm handles ten times the input, but an exponential one handles only about ten more items.
+11  Problems that have a polynomial time algorithm are called tractable. Problems for which no polynomial time algorithm is known are called intractable.
+12  Sorting, searching, shortest paths, the minimum spanning tree: all tractable. The travelling salesperson, Hamiltonian cycle, graph coloring, the zero one knapsack: no polynomial algorithm is known for any of them.
+13  Those are exactly the problems from Unit Three. Backtracking and branch and bound help on average, but in the worst case they still take exponential time.
+14  Nobody has proved that these problems have no polynomial algorithm. Nobody has found one either. That open question is P versus NP, the subject of the next video.
+15  Every algorithm so far has been deterministic: each step has exactly one outcome, and the same input always follows the same path.
+16  A non deterministic algorithm is allowed one magical step: Choice. Choice picks an element from a set, and if any pick can lead to success, it picks that one.
+17  Three functions. Choice of S picks an element of the set S. Failure signals an unsuccessful completion. Success signals a successful one. Each takes order one time.
+18  The rule: if there is any sequence of choices that leads to Success, the algorithm is assumed to make exactly those choices. It fails only when no sequence of choices can succeed.
+19  Example one: searching. j is Choice of one to n. If A of j equals x, write j and Success. Otherwise, Failure.
+20  Deterministically, search takes n steps in the worst case. Non deterministically, it takes order one: the position is guessed, and one comparison checks it.
+21  Example two: sorting positive integers. For each i, guess a position j with Choice of one to n. If B of j is already filled, Failure. Else B of j gets A of i. Then check: if any B of i is bigger than B of i plus one, Failure. Otherwise write B, and Success.
+22  Every loop runs at most n times, so non deterministic sorting is order n, where the best deterministic sort needs n log n.
+23  Two ways to picture it. A machine with unlimited parallelism that tries every choice at the same time, or a lucky guesser whose guess is then verified. Either way: guess, then verify.
+24  Example three: the zero one knapsack as a yes or no question. Is there a choice of items with weight at most m and profit at least r? Guess each x of i as zero or one with Choice, add up the weight and profit, and check. Order n.
+25  That is the pattern behind every hard problem from Unit Three. Finding the answer looks exponential, but checking a given answer is polynomial.
+26  That gives the class NP: non deterministic polynomial time. A yes or no problem is in NP when a non deterministic algorithm solves it in polynomial time: guess the answer, verify it fast.
+27  Your turn. Write a non deterministic algorithm that decides whether a graph on n vertices has a Hamiltonian cycle, in polynomial time.
+28  Pause the video and write it down. I'll wait!
+29  Guess: for each position i, v of i is Choice of one to n. Verify: no vertex repeats, every consecutive pair is an edge, and the last vertex connects back to the first. That check is polynomial, so Hamiltonian cycle is in NP.
+30  Exam tip one. Define a polynomial time algorithm by the bound order n to the k, and give the growth table: n cubed against two to the n.
+31  Exam tip two. For non deterministic algorithms, name the three functions, Choice, Failure and Success, and state the rule: the algorithm fails only when no sequence of choices succeeds.
+32  Exam tip three. Write non deterministic search or sorting as your example, with its time: order one for search, order n for sorting.
+33  To recap: polynomial time is tractable, exponential time is not, the hard problems of Unit Three have no known polynomial algorithm, and a non deterministic algorithm guesses with Choice and verifies in polynomial time.
+34  In the next video, we define the classes P, NP, NP hard and NP complete properly, and meet the P versus NP question. See you there!
