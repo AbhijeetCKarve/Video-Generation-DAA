@@ -206,6 +206,27 @@ def growth_card(w=490, h=470):
     return img
 
 
+def venn_card(w=490, h=470):
+    """P inside NP, NP-hard overlapping; the overlap labelled NP-complete."""
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ld = ImageDraw.Draw(lay)
+    ld.ellipse([30, 110, 330, 400], fill=(168, 85, 247, 70), outline="#A855F7", width=7)        # NP
+    ld.ellipse([190, 130, 470, 390], fill=(239, 68, 68, 60), outline="#EF4444", width=7)        # NP-hard
+    ld.ellipse([70, 205, 190, 325], fill=(34, 197, 94, 110), outline="#16A34A", width=7)        # P
+    img.alpha_composite(lay)
+    f = font("Inter:extrabold", 34)
+    d.text((130, 265), "P", font=font("Inter:extrabold", 44), fill="#166534", anchor="mm")
+    d.text((110, 150), "NP", font=f, fill="#6B21A8", anchor="mm")
+    d.text((400, 165), "NP-hard", font=font("Inter:extrabold", 28), fill="#B91C1C", anchor="mm")
+    d.rounded_rectangle([176, 236, 346, 284], radius=14, fill="#FACC15")
+    d.text((261, 260), "NP-complete", font=font("Inter:extrabold", 24), fill="#0F172A", anchor="mm")
+    d.text((245, 430), "P = NP ?", font=font("Inter:extrabold", 40), fill="#1E293B", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -215,7 +236,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -270,7 +291,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
