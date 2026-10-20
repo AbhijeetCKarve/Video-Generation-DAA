@@ -1,0 +1,44 @@
+VIDEO 4.2 - P, NP, NP-HARD & NP-COMPLETE - full recording script (35 lines, about 7.5 minutes)
+
+How to record: quiet room, mic close, one line at a time with a short pause between lines.
+Read naturally, as if teaching a class. The number is for reference only - do not read it.
+If you stumble, pause and read the whole line again; I keep the last clean take.
+Line 04 (the welcome) is optional: I reuse your on-camera take from 3.2 unless you record it again.
+Say: NP as 'N P', 'NP hard', 'NP complete', SAT as 'sat', 'L one' / 'L two', 'x one', 'two to the n',
+'at most k', 'at least r'. Numbers as written.
+
+01  Two questions about the same graph. Does it have a Hamiltonian cycle? And: what is the shortest tour? One is a yes or no question, the other asks for the best answer.
+02  Complexity theory sorts such problems into classes: P, NP, NP hard and NP complete. Four names that every DAA exam asks about.
+03  And behind them sits the most famous open question in computer science: is P equal to NP? There is a one million dollar prize for the answer.
+04  Welcome to the DAA series. I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+05  This is Unit Four, video two. Today: decision versus optimisation problems, the formal definitions of P and NP, NP hard and NP complete, and the P versus NP question.
+06  Defining these four classes, with the diagram, is a guaranteed exam question, so stay till the end for the exam tips.
+07  An optimisation problem asks for the best answer: the shortest tour, the maximum profit, the fewest colours.
+08  A decision problem asks only yes or no: is there a tour of length at most k? Is there a packing with profit at least r? Can the graph be coloured with k colours?
+09  The two are linked. If you can solve the decision version in polynomial time, you can solve the optimisation version too, by asking the yes or no question for different values of k, a polynomial number of times.
+10  That is why complexity theory talks about decision problems only. Every class we define today is a class of decision problems.
+11  The class P: all decision problems that a deterministic algorithm can solve in polynomial time. Shortest path, minimum spanning tree, is this number prime: all in P.
+12  The class NP: all decision problems that a non deterministic algorithm can solve in polynomial time. Guess a candidate answer, verify it in polynomial time.
+13  Hamiltonian cycle, the decision knapsack, graph colouring, satisfiability: all in NP. The certificate, a cycle, a packing, a colouring, an assignment, can be checked fast.
+14  Every problem in P is also in NP: a deterministic algorithm is just a non deterministic one that never uses Choice. So P is a subset of NP.
+15  The open question is the other direction. Is every problem in NP also in P? Nobody knows. Most computer scientists believe P is not equal to NP, but there is no proof.
+16  To define the hard classes we need one special problem: satisfiability. Given a Boolean formula, is there an assignment of true and false to its variables that makes it true?
+17  For example: x one or x two, and, not x one or x three. Setting x one true and x three true satisfies it. With n variables there are two to the n assignments, but checking one is easy. So SAT is in NP.
+18  Next, reducibility. Problem L one reduces to L two if a deterministic polynomial time algorithm can turn any instance of L one into an instance of L two with the same yes or no answer.
+19  So if L two can be solved in polynomial time, so can L one. L two is at least as hard as L one. Reductions are the whole of the next video; today we only need the definition.
+20  A problem L is NP hard if satisfiability reduces to L. Equivalently: every problem in NP reduces to L. L is at least as hard as everything in NP.
+21  A problem L is NP complete if it is NP hard and it is also in NP. The hardest problems inside NP.
+22  Why satisfiability? Cook's theorem, nineteen seventy one: satisfiability is in P if and only if P equals NP. SAT was the first NP complete problem, and every other one is proved by a reduction from it.
+23  NP complete problems: satisfiability, three SAT, Hamiltonian cycle, vertex cover, clique, graph colouring, the decision knapsack. We will prove some of these in video four point four.
+24  Some problems are NP hard but not NP complete, because they are not in NP. The halting problem is one: no algorithm decides it at all, yet SAT reduces to it. And optimisation versions, like the shortest tour, are NP hard.
+25  Here is the picture to draw in the exam. P inside NP. NP hard overlapping NP. The overlap is NP complete. Outside NP sit the NP hard problems that are not NP complete.
+26  If anyone ever finds a polynomial algorithm for one NP complete problem, then by the reductions every problem in NP has one, and P equals NP. The whole picture collapses into one circle.
+27  That is why it is a millennium prize problem: one million dollars from the Clay Mathematics Institute, unclaimed since the year two thousand.
+28  Your turn. Which of these are in NP, and which are also in P? Is there a path between two vertices of length at most k? Does the graph have a Hamiltonian cycle? Is this array sorted?
+29  Pause the video and decide. I'll wait!
+30  All three are in NP. The path question and the sorted check are also in P: Dijkstra, and one linear scan. Hamiltonian cycle is in NP, in fact NP complete, and nobody knows whether it is in P.
+31  Exam tip one. Give all four definitions in one breath: P, deterministic polynomial; NP, non deterministic polynomial; NP hard, SAT reduces to it; NP complete, NP hard and in NP.
+32  Exam tip two. Draw the diagram with P inside NP, and name one example in each region: shortest path, Hamiltonian cycle, the halting problem.
+33  Exam tip three. State Cook's theorem, and what P equals NP would mean: one polynomial algorithm for any NP complete problem gives one for all of NP.
+34  To recap: decision problems only; P is deterministic polynomial, NP is guess and verify; NP hard is as hard as SAT, NP complete is NP hard and in NP; and P versus NP is still open.
+35  In the next video, polynomial time reductions: how to prove a problem is NP hard by reducing a known hard problem to it. See you there!
