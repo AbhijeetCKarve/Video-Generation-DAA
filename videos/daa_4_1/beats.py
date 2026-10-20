@@ -8,7 +8,7 @@ all tours of 25 cities (24!/2) -> about 10 million years. Non-deterministic algo
 NSearch O(1), NSort O(n), DKP (decision knapsack) O(n).
 """
 
-TITLE = "Polynomial vs Non-Polynomial & Non-Deterministic Algorithms"
+TITLE = "Polynomial vs Exponential & Non-Deterministic Algorithms"
 CODE = "4.1"
 UNIT = "IV"
 

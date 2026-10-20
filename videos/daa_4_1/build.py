@@ -34,7 +34,7 @@ MIN_WINDOW = {"hook_fast": 6.0, "hook_mascot": 6.0, "g_table": 9.0, "g_point": 7
 if __name__ == "__main__":
     main(beats, HERE / "scene.py", HERE.parents[1] / "projects" / "daa-4.1", SECTIONS, MIN_WINDOW,
          {"title": beats.TITLE, "code": beats.CODE, "unit": beats.UNIT, "end_secs": 15.0,
-          "title_suffix": "Growth Rates, Tractability & NP",
+          "title_suffix": "Growth Rates & NP",
           # you on camera in three short shots; the welcome line is the on-camera take from the 3.2 recording
           "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {"04": "03"},
                     "shots": [{"beat": "hook_mascot", "kind": "line", "pos": [-5.8, -1.0]},
