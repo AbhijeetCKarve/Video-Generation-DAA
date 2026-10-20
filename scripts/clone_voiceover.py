@@ -165,6 +165,9 @@ def number_words(token):
     if len(token) > 3 and not (len(token) == 4 and token[0] != "0" and n % 1000 < 100 and n < 10000 and n % 100 == 0):
         return " ".join(ONES[int(d)] for d in token)
     parts = []
+    if n >= 1000:                                               # round thousands: '2000' -> 'two thousand'
+        parts.append(ONES[n // 1000] + " thousand")
+        n %= 1000
     if n >= 100:
         parts.append(ONES[n // 100] + " hundred")
         n %= 100
