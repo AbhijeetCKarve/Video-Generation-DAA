@@ -180,6 +180,32 @@ def matrix_card(w=490, h=470):
     return img
 
 
+def growth_card(w=490, h=470):
+    """Axes with a flat polynomial curve (green) and an exploding exponential one (red)."""
+    import math
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    x0, y0, x1, y1 = 90, 400, 400, 60                      # plot area (y grows upwards)
+    d.line([(x0, y1 - 10), (x0, y0), (x1 + 10, y0)], fill="#1E293B", width=5)
+    d.polygon([(x1 + 22, y0), (x1 + 4, y0 - 9), (x1 + 4, y0 + 9)], fill="#1E293B")
+    d.polygon([(x0, y1 - 24), (x0 - 9, y1 - 6), (x0 + 9, y1 - 6)], fill="#1E293B")
+    d.text((x1 + 10, y0 + 14), "n", font=font("Inter:extrabold", 26), fill="#475569", anchor="mt")
+    d.text((x0 + 16, y1 - 22), "time", font=font("Inter:extrabold", 24), fill="#475569", anchor="lt")
+    span = y0 - y1 - 20
+    poly = [(x0 + t * (x1 - x0), y0 - span * 0.42 * t ** 3) for t in [i / 60 for i in range(61)]]
+    expo = [(x0 + t * (x1 - x0), y0 - span * (2 ** (10 * t) - 1) / (2 ** 10 - 1)) for t in [i / 60 for i in range(61)]]
+    expo = [q for q in expo if q[1] >= y1]
+    d.line(poly, fill="#22C55E", width=9, joint="curve")
+    d.line(expo, fill="#EF4444", width=9, joint="curve")
+    f = font("Inter:extrabold", 34)
+    d.text((x1 + 12, poly[-1][1]), "n³", font=f, fill="#16A34A", anchor="lm")
+    d.text((expo[-1][0] + 14, y1 + 4), "2ⁿ", font=f, fill="#DC2626", anchor="lt")
+    d.rounded_rectangle([150, 90, 150 + 230, 90 + 46], radius=14, fill="#FACC15")
+    d.text((150 + 115, 90 + 23), "polynomial?", font=font("Inter:extrabold", 26), fill="#0F172A", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -189,7 +215,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -244,7 +270,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
