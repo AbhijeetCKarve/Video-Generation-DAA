@@ -1,0 +1,37 @@
+01  {curious} On a social network, can you find five people who all follow each other? | That is the clique problem, and it is NP complete. Today we prove it.
+02  {explain} We will prove three problems NP complete, one after the other: three SAT, clique, and vertex cover. | Each proof is a reduction from the previous one.
+03  {excited} Proving NP completeness sounds frightening, | but it is the same two step template every time, and by the end you will write these proofs yourself.
+04  {warm} Welcome to the DAA series. | I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+05  {explain} This is Unit Four, video four. | Today: the two step template, three SAT, the reduction from three SAT to clique, from clique to vertex cover, and how the three are related.
+06  {explain} Prove that a problem is NP complete is a classic eight mark question. | So stay till the end for the exam tips.
+07  {emphatic} The template. Step one: show X is in NP. Give a certificate, and check it in polynomial time. | Step two: show X is NP hard. Take a known NP complete problem and reduce it to X.
+08  {explain} Why does this prove NP complete? NP hard plus in NP is the definition from video four point two. | And the direction, known hard problem reduces to X, is the rule from video four point three.
+09  {explain} The chain needs a start, and Cook's theorem gives it: SAT is NP complete. | Every other proof borrows from SAT, directly or through a chain.
+10  {explain} Three SAT. A formula in conjunctive normal form: an AND of clauses, where every clause is an OR of exactly three literals. | Is it satisfiable?
+11  {explain} Step one. Three SAT is in NP: | the certificate is an assignment, and checking every clause takes linear time.
+12  {explain} Step two. SAT reduces to three SAT. Translate every clause into clauses of exactly three literals. | A long clause is split with a fresh variable: a or b or c or d becomes, a or b or y, and, not y or c or d.
+13  {explain} A short clause is padded: a or b becomes, a or b or y, and, a or b or not y. | The new formula is satisfiable exactly when the old one is, and the translation is linear in the size of the formula. Three SAT is NP complete.
+14  {explain} Clique. Given a graph and a number k, is there a set of k vertices that are all pairwise connected? | Five people who all follow each other: a clique of size five.
+15  {explain} Step one. Clique is in NP: | the certificate is the k vertices; check the k choose two edges between them, polynomial.
+16  {explain} Step two. Three SAT reduces to clique. Take a three SAT formula with k clauses. | Make one vertex for every literal of every clause: three k vertices, in k groups.
+17  {explain} Draw an edge between two vertices when they are in different clauses and they are not opposites: never x with not x. | Then ask for a clique of size k.
+18  {explain} Our example has three clauses, so nine vertices and k equals three. | Picking x three from clause one, x three from clause two and x one from clause three gives a triangle: a clique of size three.
+19  {explain} Why it works. A clique of size k picks one literal from every clause with no contradictions, so setting those literals true satisfies the formula. | And a satisfying assignment picks one true literal per clause, and those k vertices form a clique. Yes matches yes.
+20  {excited} The graph has three k vertices and fewer than nine k squared edges: polynomial. | Clique is NP complete.
+21  {explain} Vertex cover. Given a graph and k, is there a set of k vertices that touches every edge? | The guards at junctions from the last video.
+22  {explain} Step one. Vertex cover is in NP: | the certificate is the k vertices; check that every edge touches one of them, polynomial.
+23  {explain} Step two. Clique reduces to vertex cover. Take the graph G and build its complement, G bar: same vertices, with an edge exactly where G has none. | Ask for a cover of size n minus k.
+24  {explain} Our example: five vertices, and one, two, three, four form a clique of size four. | In the complement, the only edges are the three missing from G, and vertex five alone covers them. Clique of four, cover of one: one is five minus four.
+25  {explain} Why it works. The k clique vertices have no complement edges among them, so every complement edge touches the other n minus k vertices: they are a cover. | And the vertices outside a cover have no edges in G bar, so they are a clique in G.
+26  {excited} The complement has the same n vertices and fewer than n squared edges: polynomial. | Vertex cover is NP complete.
+27  {explain} Three problems, one triangle. | A clique in G, an independent set in G bar, and the complement of a vertex cover in G bar are the same set of vertices. Any one of them solves the others.
+28  {explain} And the chain: SAT to three SAT to clique to vertex cover. | Each arrow is one reduction, and hardness flows down the arrows from Cook's theorem to everything.
+29  {warm} In the exam you may use any of these as your known NP complete problem. | Pick the one that looks most like your new problem: that makes the translation short.
+30  {curious} Your turn. Independent set: is there a set of k vertices with no edges among them? | Prove it is NP complete, using clique as the known problem.
+31  {warm} Pause the video and write the two steps. | I'll wait!
+32  {excited} In NP: the certificate is the set; check that no pair is an edge. | NP hard: a clique of size k in G is an independent set of size k in G bar. So clique reduces to independent set: the complement graph, the same k. Done.
+33  {emphatic} Exam tip one. | Always write both steps with headings: in NP, and NP hard. Students lose marks by proving only the reduction.
+34  {emphatic} Exam tip two. | For the reduction, write four things: the known problem, the translation, yes if and only if yes, and the polynomial size.
+35  {emphatic} Exam tip three. | Memorise the two pictures: the literal graph for three SAT to clique, and the complement graph for clique to vertex cover.
+36  {warm} To recap: | NP complete means in NP plus a reduction from a known NP complete problem; | three SAT by splitting clauses, clique by the literal graph; | vertex cover by the complement graph; | and all three are linked.
+37  {warm} In the next video, the last of Unit Four: approximation algorithms, and how NP hard problems are handled in AI, big data and cryptography. | See you there!
