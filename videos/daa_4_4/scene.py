@@ -334,7 +334,7 @@ class Video(Lesson):
         self.stage.add(rule)
         self.lg_note = rule
         self.at(b, 1)
-        q = chip("clique of size k = 3 ?", GOLD, 22, DARK).move_to(STAGE + RIGHT * 5.5 + DOWN * 3.1)
+        q = chip("clique of size k = 3 ?", GOLD, 22, DARK).move_to(STAGE + RIGHT * 5.2 + DOWN * 3.2)
         self.show(q, anim=GrowFromCenter, run_time=0.5)
         self.sfx("pop")
 
