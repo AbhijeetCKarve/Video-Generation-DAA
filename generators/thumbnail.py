@@ -227,6 +227,29 @@ def venn_card(w=490, h=470):
     return img
 
 
+def reduce_card(w=490, h=470):
+    """Problem A box, a big arrow labelled 'translate', problem B box; 'A ∝ B' below."""
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    d.rounded_rectangle([35, 120, 205, 260], radius=22, fill="#DBEAFE", outline="#3B82F6", width=6)
+    d.rounded_rectangle([285, 120, 455, 260], radius=22, fill="#FEE2E2", outline="#EF4444", width=6)
+    f = font("Inter:extrabold", 30)
+    d.text((120, 170), "Problem", font=f, fill="#1E3A8A", anchor="mm")
+    d.text((120, 210), "A", font=font("Inter:extrabold", 44), fill="#1E3A8A", anchor="mm")
+    d.text((370, 170), "Problem", font=f, fill="#991B1B", anchor="mm")
+    d.text((370, 210), "B", font=font("Inter:extrabold", 44), fill="#991B1B", anchor="mm")
+    d.line([(212, 190), (262, 190)], fill="#FACC15", width=14)
+    d.polygon([(284, 190), (256, 170), (256, 210)], fill="#FACC15")
+    d.rounded_rectangle([150, 50, 340, 96], radius=14, fill="#FACC15")
+    d.text((245, 73), "translate", font=font("Inter:extrabold", 26), fill="#0F172A", anchor="mm")
+    d.text((150, 330), "A", font=font("Inter:extrabold", 64), fill="#1E293B", anchor="mm")
+    d.text((245, 330), "∝", font=font("DejaVu Sans:bold", 64), fill="#FACC15", anchor="mm")
+    d.text((340, 330), "B", font=font("Inter:extrabold", 64), fill="#1E293B", anchor="mm")
+    d.text((245, 410), "B is at least as hard as A", font=font("Inter:bold", 26), fill="#475569", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -236,7 +259,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -291,7 +314,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
