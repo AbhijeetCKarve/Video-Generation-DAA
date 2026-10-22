@@ -250,6 +250,29 @@ def reduce_card(w=490, h=470):
     return img
 
 
+def clique_card(w=490, h=470):
+    """A social graph with a highlighted 5-clique and an NP-complete stamp."""
+    import math
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    cx, cy, r = 245, 215, 150
+    pts = [(cx + r * math.cos(math.pi / 2 - 2 * math.pi * k / 7), cy - r * math.sin(math.pi / 2 - 2 * math.pi * k / 7)) for k in range(7)]
+    clique = [0, 1, 2, 3, 4]
+    for a in range(7):
+        for b in range(a + 1, 7):
+            if a in clique and b in clique:
+                d.line([pts[a], pts[b]], fill="#FACC15", width=7)
+            elif (a, b) in [(4, 5), (5, 6), (2, 6)]:
+                d.line([pts[a], pts[b]], fill="#CBD5E1", width=4)
+    for k, (x, y) in enumerate(pts):
+        col = "#FACC15" if k in clique else "#E2E8F0"
+        d.ellipse([x - 26, y - 26, x + 26, y + 26], fill=col, outline="#1E293B", width=4)
+    d.rounded_rectangle([110, 395, 380, 445], radius=16, fill="#EF4444")
+    d.text((245, 420), "NP-COMPLETE", font=font("Inter:extrabold", 28), fill="#FFFFFF", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -259,7 +282,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card, "clique": clique_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -314,7 +337,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce", "clique"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
