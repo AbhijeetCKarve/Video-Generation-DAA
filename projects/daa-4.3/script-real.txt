@@ -1,0 +1,36 @@
+01  {curious} Your college must schedule the final exams. Two exams cannot share a slot if some student takes both. | How few slots do you need? That is exam timetabling.
+02  {excited} Draw one node per exam, and an edge when a student takes both. | Now the question is: can this graph be coloured with k colours? You just performed a reduction.
+03  {explain} Reductions are how we solve a new problem with an old algorithm, | and how we prove that a problem is hard. Today we make them simple.
+04  {warm} Welcome to the DAA series. | I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+05  {explain} This is Unit Four, video three. | Today: what a reduction is, the direction rule that confuses everyone, three worked reductions with everyday problems, and how reductions prove NP hardness.
+06  {explain} Reductions are the toughest topic in this unit, and a guaranteed question. | So stay till the end for the exam tips.
+07  {explain} Think of a reduction as a translator. You have a problem A you cannot solve, and a problem B with a known solver. | The reduction translates every A question into a B question, so that B's yes or no is also A's yes or no.
+08  {emphatic} Two rules. One: the translation itself must be fast, polynomial time. | Two: the answer must be preserved. A says yes exactly when B says yes.
+09  {explain} We write A reduces to B, A proportional to B, or A less than or equal, with a small p, B. | Read it as: A is no harder than B. If you can do B, you can do A.
+10  {warm} You do this every day. Are two houses within five kilometres? You ask the map app for the shortest path. | Can these guests be seated without a fight? That is graph colouring. Translate, then use the tool you already have.
+11  {emphatic} Now the part everyone gets backwards. A reduces to B means B is at least as hard as A. | If B were easy, A would be easy too, through the translation.
+12  {emphatic} So to prove that a new problem X is hard, you reduce a known hard problem to X. | Not the other way around. Known hard problem on the left, your new problem on the right.
+13  {warm} A memory trick: hardness flows along the arrow. | SAT reduces to X, so X inherits the hardness of SAT. The arrow always starts at the problem you already know is hard.
+14  {explain} Reduction one. Hamiltonian cycle: a delivery van must visit every house exactly once and return home, using only the roads that exist. | TSP, decision version: with road costs, is there a tour of cost at most k?
+15  {explain} The translation. Take the road map with n houses. Make every pair of houses a road: cost one if the road exists, cost two if it does not. | And set k equal to n.
+16  {explain} Why it works. A tour of cost at most n must use n roads of cost one, so it is a Hamiltonian cycle. | And a Hamiltonian cycle gives a tour of cost exactly n. Yes matches yes.
+17  {excited} The translation lists n squared pairs: polynomial. | So Hamiltonian cycle reduces to TSP, and since Hamiltonian cycle is NP hard, TSP is NP hard too.
+18  {explain} Reduction two. Independent set: invite k guests to a party where no two invited people dislike each other. | Vertex cover: place k guards at junctions so that every street has a guard at one of its ends.
+19  {explain} Same graph for both: people and dislikes, or junctions and streets. | The translation changes only the number: can you invite k guests? becomes: can n minus k guards cover every street?
+20  {explain} Why it works. A set is independent exactly when everyone outside it forms a cover. | No dislike inside the party means every dislike touches someone outside. Complement the set, flip the number.
+21  {warm} Lesson: a reduction can be almost trivial. | Independent set reduces to vertex cover, and vertex cover reduces to independent set. They are equally hard.
+22  {explain} Reduction three. Subset sum: you have notes of various values. Can you pay exactly five hundred rupees, no change? | The decision knapsack: is there a packing with weight at most m and profit at least r?
+23  {explain} The translation: each note becomes an item whose weight and profit are both its value. | Set m and r both to five hundred.
+24  {explain} Weight at most five hundred and profit at least five hundred force the total to be exactly five hundred. Yes matches yes. | The translation copies n numbers: linear time. Subset sum reduces to knapsack, so knapsack is at least as hard as subset sum.
+25  {explain} Reductions chain. If A reduces to B and B reduces to C, then A reduces to C: translate twice, still polynomial. | That is why one hard problem, SAT, is enough as the root.
+26  {explain} From SAT, by Cook's theorem, we go to three SAT, then to clique, vertex cover and independent set, | to Hamiltonian cycle and TSP, to subset sum and knapsack. A family tree of hardness, every branch one reduction.
+27  {emphatic} The recipe for proving X is NP hard, in four steps. Pick a known NP hard problem. Give the translation. Show yes maps to yes and no maps to no. Show the translation is polynomial. | Add that X is in NP, and X is NP complete.
+28  {warm} Reductions also work for you. A new rostering problem at a company? | Translate it to SAT or integer programming and hand it to a solver that is already excellent. Translate, then reuse.
+29  {curious} Your turn. Your city wants k charging stations at junctions, so that every street has a station at one of its ends. | Which problem is this, and what does that tell you about its difficulty?
+30  {warm} Pause the video and think. | I'll wait!
+31  {excited} It is vertex cover, exactly: junctions are vertices, streets are edges, stations are the cover. | Vertex cover is NP complete, so no polynomial algorithm is known. For a real city, use an approximation or a solver.
+32  {emphatic} Exam tip one. | Write the direction rule first: the known hard problem reduces to the new problem. Then the four steps: translation, yes to yes, no to no, polynomial time.
+33  {emphatic} Exam tip two. | Learn the two worked reductions by heart: Hamiltonian cycle to TSP with costs one and two and k equal to n, and independent set to vertex cover with n minus k.
+34  {emphatic} Exam tip three. | Never write: X reduces to SAT, so X is NP hard. That direction proves nothing. SAT reduces to X is what you need.
+35  {warm} To recap: | a reduction translates A into B in polynomial time, preserving the answer; | A reduces to B means B is at least as hard; | to prove X is hard, reduce a known hard problem to X; | and reductions chain from SAT to everything.
+36  {warm} In the next video, we prove NP completeness properly: three SAT, vertex cover and clique, step by step. | See you there!
