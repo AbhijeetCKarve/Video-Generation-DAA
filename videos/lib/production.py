@@ -356,7 +356,8 @@ def main(beats_mod, scene_py, project_dir, sections, min_window, meta):
     args = ap.parse_args()
     p = Path(project_dir)
     sfx = f"-{args.variant}" if args.variant else ""
-    if args.variant in ("face", "cameo") and not args.camera:
+    no_shots = args.variant == "cameo" and not meta["cameo"].get("shots")      # cameo layout, nobody on camera
+    if args.variant in ("face", "cameo") and not args.camera and not no_shots:
         sys.exit(f"The {args.variant} variant needs --camera <your camera recording>.")
     voice_dir = p / ("voice-real" if args.variant == "face" else f"voice{sfx}")
     if args.variant == "cameo":
@@ -388,7 +389,7 @@ def main(beats_mod, scene_py, project_dir, sections, min_window, meta):
             start = next(b["start"] for b in sched["beats"] if b["key"] == "hook_mascot")
             clip = facecam.track(sched, voice_dir, args.camera, build / "face.mp4", start)
             faces = [{"clip": clip, "start": start, "end": sched["total"], "pos": FACE_POS}]
-        elif args.variant == "cameo":
+        elif args.variant == "cameo" and sched["cameos"]:
             import facecam
             real = ROOT / meta["cameo"]["real"]
             clips = facecam.cameos(sched["cameos"], args.camera, real, build, sched["face_px"])

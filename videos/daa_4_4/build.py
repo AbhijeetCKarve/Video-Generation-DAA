@@ -33,10 +33,8 @@ if __name__ == "__main__":
     main(beats, HERE / "scene.py", HERE.parents[1] / "projects" / "daa-4.4", SECTIONS, MIN_WINDOW,
          {"title": beats.TITLE, "code": beats.CODE, "unit": beats.UNIT, "end_secs": 15.0,
           "title_suffix": "Step by Step",
-          "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {"04": "03"},
-                    "shots": [{"beat": "hook_mascot", "kind": "line", "pos": [-5.8, -1.0]},
-                              {"beat": "p_pause", "kind": "after", "pos": [-5.8, -1.0]},
-                              {"kind": "end", "pos": [-5.8, 1.3]}]},
+          # cameo layout (no mascot, content centred) but nobody on camera: your own welcome line, no face circles
+          "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {}, "shots": []},
           "summary": "How to prove a problem NP-complete, with the same two-step template every time: show it is in NP "
                      "(a certificate checked in polynomial time), then reduce a known NP-complete problem to it. Three "
                      "proofs step by step: 3-SAT (SAT reduces to it by splitting and padding clauses), clique (the "
