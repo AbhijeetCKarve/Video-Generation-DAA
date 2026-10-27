@@ -1,0 +1,653 @@
+\begin{table}[t]
+\centering
+\small
+\caption{F1 (\%) on held-out entities without injected drift (K=5). Mean $\pm$ std over seeds; strictly point-wise.}
+\label{tab:cold_f1}
+\begin{tabular}{lccc}
+\toprule
+Method & SKAB & SMD & HAI \\
+\midrule
+IF & 16.0 $\pm$ 4.7 & 20.3 $\pm$ 9.4 & 1.9 $\pm$ 2.7 \\
+VAE-S & 64.1 $\pm$ 5.9 & 35.5 $\pm$ 14.5 & 62.2 $\pm$ 0.0 \\
+VAE-FT & \textbf{65.6 $\pm$ 6.0} & 35.1 $\pm$ 14.4 & 61.4 $\pm$ 1.1 \\
+VAE-INC & 53.7 $\pm$ 2.4 & \textbf{39.0 $\pm$ 16.2} & 62.2 $\pm$ 0.0 \\
+VAE-DFT & 42.7 $\pm$ 6.4 & 36.0 $\pm$ 16.6 & \textbf{62.2 $\pm$ 0.0} \\
+MAML-1 & 64.1 $\pm$ 4.9 & 28.6 $\pm$ 6.5 & 52.1 $\pm$ 0.0 \\
+MSGD-1 & 64.0 $\pm$ 5.1 & 28.8 $\pm$ 6.1 & 58.2 $\pm$ 0.0 \\
+OML-A & 62.8 $\pm$ 4.5 & 32.1 $\pm$ 12.0 & 52.1 $\pm$ 0.0 \\
+DAMAD & 54.9 $\pm$ 4.8 & 29.1 $\pm$ 4.1 & 52.1 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{AUROC (\%) on held-out entities without injected drift (K=5). Mean $\pm$ std over seeds; strictly point-wise.}
+\label{tab:cold_auroc}
+\begin{tabular}{lccc}
+\toprule
+Method & SKAB & SMD & HAI \\
+\midrule
+IF & \textbf{86.8 $\pm$ 4.6} & 81.4 $\pm$ 2.5 & 47.1 $\pm$ 1.2 \\
+VAE-S & 85.3 $\pm$ 3.0 & 87.5 $\pm$ 5.5 & 96.8 $\pm$ 0.0 \\
+VAE-FT & 86.7 $\pm$ 3.5 & 88.1 $\pm$ 4.9 & 94.9 $\pm$ 0.9 \\
+VAE-INC & 80.2 $\pm$ 3.0 & \textbf{88.8 $\pm$ 3.2} & \textbf{97.4 $\pm$ 0.0} \\
+VAE-DFT & 75.2 $\pm$ 3.1 & 85.2 $\pm$ 7.5 & 94.9 $\pm$ 0.0 \\
+MAML-1 & 85.8 $\pm$ 3.1 & 87.8 $\pm$ 4.8 & 94.7 $\pm$ 0.0 \\
+MSGD-1 & 85.8 $\pm$ 3.0 & 87.8 $\pm$ 4.4 & 94.3 $\pm$ 0.0 \\
+OML-A & 85.4 $\pm$ 3.0 & 87.7 $\pm$ 5.2 & 95.1 $\pm$ 0.0 \\
+DAMAD & 85.8 $\pm$ 3.1 & 85.7 $\pm$ 6.5 & 94.7 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{AUPRC (\%) on held-out entities without injected drift (K=5). Mean $\pm$ std over seeds; strictly point-wise.}
+\label{tab:cold_auprc}
+\begin{tabular}{lccc}
+\toprule
+Method & SKAB & SMD & HAI \\
+\midrule
+IF & 79.5 $\pm$ 6.5 & 37.8 $\pm$ 4.1 & 1.1 $\pm$ 0.1 \\
+VAE-S & 81.5 $\pm$ 4.0 & 54.1 $\pm$ 13.4 & 67.3 $\pm$ 0.0 \\
+VAE-FT & \textbf{83.2 $\pm$ 4.4} & 51.4 $\pm$ 8.9 & 64.9 $\pm$ 1.0 \\
+VAE-INC & 76.0 $\pm$ 3.1 & \textbf{55.3 $\pm$ 13.1} & 68.0 $\pm$ 0.0 \\
+VAE-DFT & 69.8 $\pm$ 4.9 & 49.1 $\pm$ 15.5 & 66.0 $\pm$ 0.0 \\
+MAML-1 & 82.3 $\pm$ 4.3 & 52.1 $\pm$ 9.6 & 69.8 $\pm$ 0.0 \\
+MSGD-1 & 82.3 $\pm$ 4.1 & 51.9 $\pm$ 6.7 & 68.8 $\pm$ 0.0 \\
+OML-A & 81.8 $\pm$ 4.0 & 52.7 $\pm$ 9.0 & \textbf{69.9 $\pm$ 0.0} \\
+DAMAD & 82.1 $\pm$ 4.4 & 50.4 $\pm$ 8.8 & 69.8 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 on SKAB by drift condition (K=5).}
+\label{tab:drift_f1_skab}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 16.0 $\pm$ 4.7 & – & – & – & – \\
+VAE-S & 64.1 $\pm$ 5.9 & – & – & – & – \\
+VAE-FT & \textbf{65.6 $\pm$ 6.0} & – & – & – & – \\
+VAE-INC & 53.7 $\pm$ 2.4 & – & – & – & – \\
+VAE-DFT & 42.7 $\pm$ 6.4 & – & – & – & – \\
+MAML-1 & 64.1 $\pm$ 4.9 & – & – & – & – \\
+MSGD-1 & 64.0 $\pm$ 5.1 & – & – & – & – \\
+OML-A & 62.8 $\pm$ 4.5 & – & – & – & – \\
+DAMAD & 54.9 $\pm$ 4.8 & – & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 on SMD by drift condition (K=5).}
+\label{tab:drift_f1_smd}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 20.3 $\pm$ 9.4 & 14.5 $\pm$ 10.1 & 14.2 $\pm$ 10.1 & 10.4 $\pm$ 4.2 & 10.8 $\pm$ 4.6 \\
+VAE-S & 35.5 $\pm$ 14.5 & 11.6 $\pm$ 8.0 & 11.8 $\pm$ 8.1 & 9.3 $\pm$ 3.6 & 9.8 $\pm$ 3.6 \\
+VAE-FT & 35.1 $\pm$ 14.4 & 12.2 $\pm$ 8.0 & 12.1 $\pm$ 8.0 & 9.8 $\pm$ 3.9 & 10.5 $\pm$ 4.1 \\
+VAE-INC & \textbf{39.0 $\pm$ 16.2} & 12.9 $\pm$ 7.4 & 20.1 $\pm$ 8.1 & \textbf{23.1 $\pm$ 4.2} & 13.1 $\pm$ 6.6 \\
+VAE-DFT & 36.0 $\pm$ 16.6 & \textbf{27.8 $\pm$ 15.9} & \textbf{23.6 $\pm$ 11.7} & 16.2 $\pm$ 4.4 & 21.3 $\pm$ 8.1 \\
+MAML-1 & 28.6 $\pm$ 6.5 & 12.1 $\pm$ 7.7 & 12.4 $\pm$ 7.9 & 9.9 $\pm$ 3.7 & 10.3 $\pm$ 3.9 \\
+MSGD-1 & 28.8 $\pm$ 6.1 & 12.7 $\pm$ 8.1 & 12.8 $\pm$ 8.2 & 9.9 $\pm$ 3.8 & 10.8 $\pm$ 4.7 \\
+OML-A & 32.1 $\pm$ 12.0 & 12.5 $\pm$ 7.6 & 12.7 $\pm$ 8.4 & 10.1 $\pm$ 4.1 & 10.9 $\pm$ 4.1 \\
+DAMAD & 29.1 $\pm$ 4.1 & 25.2 $\pm$ 5.3 & 23.1 $\pm$ 6.6 & 21.3 $\pm$ 1.9 & \textbf{24.2 $\pm$ 5.0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 on HAI by drift condition (K=5).}
+\label{tab:drift_f1_hai}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 1.9 $\pm$ 2.7 & 0.4 $\pm$ 0.0 & 0.4 $\pm$ 0.0 & – & – \\
+VAE-S & 62.2 $\pm$ 0.0 & 2.3 $\pm$ 0.0 & 2.6 $\pm$ 0.0 & – & – \\
+VAE-FT & 61.4 $\pm$ 1.1 & 2.3 $\pm$ 0.0 & 2.5 $\pm$ 0.0 & – & – \\
+VAE-INC & 62.2 $\pm$ 0.0 & 8.3 $\pm$ 0.0 & 63.8 $\pm$ 0.0 & – & – \\
+VAE-DFT & \textbf{62.2 $\pm$ 0.0} & 6.2 $\pm$ 0.0 & 28.7 $\pm$ 0.0 & – & – \\
+MAML-1 & 52.1 $\pm$ 0.0 & \textbf{64.6 $\pm$ 0.0} & \textbf{64.6 $\pm$ 0.0} & – & – \\
+MSGD-1 & 58.2 $\pm$ 0.0 & 6.7 $\pm$ 0.0 & 5.5 $\pm$ 0.0 & – & – \\
+OML-A & 52.1 $\pm$ 0.0 & 61.7 $\pm$ 0.0 & – & – & – \\
+DAMAD & 52.1 $\pm$ 0.0 & 55.7 $\pm$ 0.0 & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 pooled over the four datasets, by drift condition (K=5).}
+\label{tab:drift_f1_all}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 16.5 $\pm$ 4.0 & 14.3 $\pm$ 10.2 & 14.1 $\pm$ 10.2 & 10.4 $\pm$ 4.2 & 10.8 $\pm$ 4.6 \\
+VAE-S & 51.9 $\pm$ 8.7 & 11.5 $\pm$ 8.1 & 11.7 $\pm$ 8.1 & 9.3 $\pm$ 3.6 & 9.8 $\pm$ 3.6 \\
+VAE-FT & \textbf{53.2 $\pm$ 11.0} & 12.0 $\pm$ 8.0 & 12.0 $\pm$ 8.1 & 9.8 $\pm$ 3.9 & 10.5 $\pm$ 4.1 \\
+VAE-INC & 46.6 $\pm$ 6.7 & 12.8 $\pm$ 7.4 & 21.3 $\pm$ 6.9 & \textbf{23.1 $\pm$ 4.2} & 13.1 $\pm$ 6.6 \\
+VAE-DFT & 39.0 $\pm$ 7.6 & \textbf{27.3 $\pm$ 16.0} & \textbf{23.8 $\pm$ 11.6} & 16.2 $\pm$ 4.4 & 21.3 $\pm$ 8.1 \\
+MAML-1 & 50.4 $\pm$ 8.1 & 13.3 $\pm$ 7.6 & 13.6 $\pm$ 7.7 & 9.9 $\pm$ 3.7 & 10.3 $\pm$ 3.9 \\
+MSGD-1 & 50.3 $\pm$ 7.5 & 12.7 $\pm$ 8.1 & 12.7 $\pm$ 8.3 & 9.9 $\pm$ 3.8 & 10.8 $\pm$ 4.7 \\
+OML-A & 49.9 $\pm$ 7.5 & 13.7 $\pm$ 7.3 & 12.7 $\pm$ 8.4 & 10.1 $\pm$ 4.1 & 10.9 $\pm$ 4.1 \\
+DAMAD & 45.9 $\pm$ 5.5 & 25.9 $\pm$ 5.4 & 23.1 $\pm$ 6.6 & 21.3 $\pm$ 1.9 & \textbf{24.2 $\pm$ 5.0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{FPR under drift on SKAB by drift condition (K=5).}
+\label{tab:drift_fpr_drift_skab}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & – & – & – & – \\
+VAE-S & – & – & – & – & – \\
+VAE-FT & – & – & – & – & – \\
+VAE-INC & – & – & – & – & – \\
+VAE-DFT & – & – & – & – & – \\
+MAML-1 & – & – & – & – & – \\
+MSGD-1 & – & – & – & – & – \\
+OML-A & – & – & – & – & – \\
+DAMAD & – & – & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{FPR under drift on SMD by drift condition (K=5).}
+\label{tab:drift_fpr_drift_smd}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & 67.1 $\pm$ 23.6 & 65.3 $\pm$ 24.7 & 73.8 $\pm$ 3.5 & 64.8 $\pm$ 5.6 \\
+VAE-S & – & 96.6 $\pm$ 5.2 & 93.8 $\pm$ 5.2 & 82.8 $\pm$ 5.3 & 74.0 $\pm$ 3.9 \\
+VAE-FT & – & 97.2 $\pm$ 5.2 & 94.1 $\pm$ 4.5 & 84.1 $\pm$ 5.0 & 75.2 $\pm$ 3.6 \\
+VAE-INC & – & 83.9 $\pm$ 13.1 & 51.1 $\pm$ 18.3 & 23.1 $\pm$ 0.7 & 56.5 $\pm$ 11.4 \\
+VAE-DFT & – & 25.3 $\pm$ 14.4 & 26.1 $\pm$ 9.2 & 34.6 $\pm$ 5.2 & 23.6 $\pm$ 8.8 \\
+MAML-1 & – & 95.7 $\pm$ 5.0 & 93.1 $\pm$ 5.1 & 83.0 $\pm$ 4.6 & 77.7 $\pm$ 3.8 \\
+MSGD-1 & – & 93.9 $\pm$ 9.6 & 91.3 $\pm$ 8.6 & 82.5 $\pm$ 6.6 & 76.2 $\pm$ 7.3 \\
+OML-A & – & 89.8 $\pm$ 10.1 & 88.1 $\pm$ 6.1 & 80.7 $\pm$ 4.2 & 71.5 $\pm$ 4.6 \\
+DAMAD & – & \textbf{15.0 $\pm$ 8.1} & \textbf{19.6 $\pm$ 8.8} & \textbf{19.5 $\pm$ 5.2} & \textbf{12.0 $\pm$ 4.4} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{FPR under drift on HAI by drift condition (K=5).}
+\label{tab:drift_fpr_drift_hai}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & 56.3 $\pm$ 0.0 & 58.8 $\pm$ 0.0 & – & – \\
+VAE-S & – & 98.9 $\pm$ 0.0 & 88.3 $\pm$ 0.0 & – & – \\
+VAE-FT & – & 99.9 $\pm$ 0.0 & 90.0 $\pm$ 0.0 & – & – \\
+VAE-INC & – & 23.0 $\pm$ 0.0 & \textbf{0.4 $\pm$ 0.0} & – & – \\
+VAE-DFT & – & 35.0 $\pm$ 0.0 & 3.5 $\pm$ 0.0 & – & – \\
+MAML-1 & – & 0.5 $\pm$ 0.0 & 0.5 $\pm$ 0.0 & – & – \\
+MSGD-1 & – & 31.3 $\pm$ 0.0 & 40.1 $\pm$ 0.0 & – & – \\
+OML-A & – & 0.5 $\pm$ 0.0 & – & – & – \\
+DAMAD & – & \textbf{0.2 $\pm$ 0.0} & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{FPR under drift pooled over the four datasets, by drift condition (K=5).}
+\label{tab:drift_fpr_drift_all}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & 66.6 $\pm$ 23.4 & 65.0 $\pm$ 24.5 & 73.8 $\pm$ 3.5 & 64.8 $\pm$ 5.6 \\
+VAE-S & – & 96.6 $\pm$ 5.2 & 93.6 $\pm$ 5.0 & 82.8 $\pm$ 5.3 & 74.0 $\pm$ 3.9 \\
+VAE-FT & – & 97.2 $\pm$ 5.2 & 93.9 $\pm$ 4.3 & 84.1 $\pm$ 5.0 & 75.2 $\pm$ 3.6 \\
+VAE-INC & – & 82.3 $\pm$ 11.7 & 49.4 $\pm$ 15.6 & 23.1 $\pm$ 0.7 & 56.5 $\pm$ 11.4 \\
+VAE-DFT & – & 25.7 $\pm$ 14.1 & 25.6 $\pm$ 9.4 & 34.6 $\pm$ 5.2 & 23.6 $\pm$ 8.8 \\
+MAML-1 & – & 93.5 $\pm$ 5.1 & 91.0 $\pm$ 5.3 & 83.0 $\pm$ 4.6 & 77.7 $\pm$ 3.8 \\
+MSGD-1 & – & 92.3 $\pm$ 8.9 & 90.0 $\pm$ 7.9 & 82.5 $\pm$ 6.6 & 76.2 $\pm$ 7.3 \\
+OML-A & – & 87.5 $\pm$ 8.3 & 88.1 $\pm$ 6.1 & 80.7 $\pm$ 4.2 & 71.5 $\pm$ 4.6 \\
+DAMAD & – & \textbf{14.4 $\pm$ 7.1} & \textbf{19.6 $\pm$ 8.8} & \textbf{19.5 $\pm$ 5.2} & \textbf{12.0 $\pm$ 4.4} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{adaptation steps on SKAB by drift condition (K=5).}
+\label{tab:drift_adaptation_steps_skab}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & – & – & – & – \\
+VAE-S & – & – & – & – & – \\
+VAE-FT & – & – & – & – & – \\
+VAE-INC & – & – & – & – & – \\
+VAE-DFT & – & – & – & – & – \\
+MAML-1 & – & – & – & – & – \\
+MSGD-1 & – & – & – & – & – \\
+OML-A & – & – & – & – & – \\
+DAMAD & – & – & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{adaptation steps on SMD by drift condition (K=5).}
+\label{tab:drift_adaptation_steps_smd}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & 3114 $\pm$ 1744 & 782 $\pm$ 510 & 642 $\pm$ 604 & 2605 $\pm$ 193 \\
+VAE-S & – & 4609 $\pm$ 1104 & 1693 $\pm$ 1250 & 422 $\pm$ 444 & 3033 $\pm$ 324 \\
+VAE-FT & – & 4637 $\pm$ 1132 & 1731 $\pm$ 1079 & 629 $\pm$ 509 & 3033 $\pm$ 324 \\
+VAE-INC & – & 4043 $\pm$ 993 & 951 $\pm$ 827 & 150 $\pm$ 37 & 2394 $\pm$ 412 \\
+VAE-DFT & – & \textbf{441 $\pm$ 354} & 287 $\pm$ 185 & 137 $\pm$ 5 & 610 $\pm$ 320 \\
+MAML-1 & – & 4367 $\pm$ 1152 & 2024 $\pm$ 1190 & 1584 $\pm$ 1014 & 3097 $\pm$ 360 \\
+MSGD-1 & – & 4305 $\pm$ 1221 & 1889 $\pm$ 1182 & 1266 $\pm$ 892 & 3069 $\pm$ 495 \\
+OML-A & – & 4172 $\pm$ 1227 & 1924 $\pm$ 1142 & 1069 $\pm$ 1016 & 2784 $\pm$ 389 \\
+DAMAD & – & 517 $\pm$ 352 & \textbf{268 $\pm$ 218} & \textbf{135 $\pm$ 10} & \textbf{246 $\pm$ 47} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{adaptation steps on HAI by drift condition (K=5).}
+\label{tab:drift_adaptation_steps_hai}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & 914 $\pm$ 0 & 914 $\pm$ 0 & – & – \\
+VAE-S & – & 1404 $\pm$ 0 & 99 $\pm$ 0 & – & – \\
+VAE-FT & – & 1404 $\pm$ 0 & 914 $\pm$ 0 & – & – \\
+VAE-INC & – & 418 $\pm$ 0 & 99 $\pm$ 0 & – & – \\
+VAE-DFT & – & 280 $\pm$ 0 & 99 $\pm$ 0 & – & – \\
+MAML-1 & – & 99 $\pm$ 0 & \textbf{99 $\pm$ 0} & – & – \\
+MSGD-1 & – & 590 $\pm$ 0 & 99 $\pm$ 0 & – & – \\
+OML-A & – & 99 $\pm$ 0 & – & – & – \\
+DAMAD & – & \textbf{99 $\pm$ 0} & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{adaptation steps pooled over the four datasets, by drift condition (K=5).}
+\label{tab:drift_adaptation_steps_all}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & – & 3034 $\pm$ 1671 & 777 $\pm$ 505 & 642 $\pm$ 604 & 2605 $\pm$ 193 \\
+VAE-S & – & 4511 $\pm$ 983 & 1624 $\pm$ 1151 & 422 $\pm$ 444 & 3033 $\pm$ 324 \\
+VAE-FT & – & 4538 $\pm$ 1017 & 1687 $\pm$ 1020 & 629 $\pm$ 509 & 3033 $\pm$ 324 \\
+VAE-INC & – & 3930 $\pm$ 791 & 903 $\pm$ 736 & 150 $\pm$ 37 & 2394 $\pm$ 412 \\
+VAE-DFT & – & \textbf{441 $\pm$ 354} & 280 $\pm$ 180 & 137 $\pm$ 5 & 610 $\pm$ 320 \\
+MAML-1 & – & 4239 $\pm$ 970 & 1955 $\pm$ 1111 & 1584 $\pm$ 1014 & 3097 $\pm$ 360 \\
+MSGD-1 & – & 4188 $\pm$ 1055 & 1816 $\pm$ 1072 & 1266 $\pm$ 892 & 3069 $\pm$ 495 \\
+OML-A & – & 4045 $\pm$ 1028 & 1924 $\pm$ 1142 & 1069 $\pm$ 1016 & 2784 $\pm$ 389 \\
+DAMAD & – & 495 $\pm$ 311 & \textbf{268 $\pm$ 218} & \textbf{135 $\pm$ 10} & \textbf{246 $\pm$ 47} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{detection latency (steps) on SKAB by drift condition (K=5).}
+\label{tab:drift_latency_mean_skab}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 137 $\pm$ 24 & – & – & – & – \\
+VAE-S & 34 $\pm$ 5 & – & – & – & – \\
+VAE-FT & \textbf{29 $\pm$ 10} & – & – & – & – \\
+VAE-INC & 35 $\pm$ 10 & – & – & – & – \\
+VAE-DFT & 31 $\pm$ 10 & – & – & – & – \\
+MAML-1 & 36 $\pm$ 5 & – & – & – & – \\
+MSGD-1 & 34 $\pm$ 7 & – & – & – & – \\
+OML-A & 38 $\pm$ 7 & – & – & – & – \\
+DAMAD & 37 $\pm$ 6 & – & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{detection latency (steps) on SMD by drift condition (K=5).}
+\label{tab:drift_latency_mean_smd}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 73 $\pm$ 137 & 14 $\pm$ 20 & 29 $\pm$ 50 & 7 $\pm$ 9 & 7 $\pm$ 8 \\
+VAE-S & 3 $\pm$ 2 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 3 $\pm$ 1 \\
+VAE-FT & \textbf{2 $\pm$ 1} & 1 $\pm$ 1 & \textbf{1 $\pm$ 1} & \textbf{1 $\pm$ 0} & \textbf{2 $\pm$ 1} \\
+VAE-INC & 11 $\pm$ 9 & 5 $\pm$ 5 & 6 $\pm$ 5 & 9 $\pm$ 5 & 9 $\pm$ 5 \\
+VAE-DFT & 5 $\pm$ 3 & 4 $\pm$ 3 & 4 $\pm$ 3 & 6 $\pm$ 1 & 5 $\pm$ 3 \\
+MAML-1 & 3 $\pm$ 2 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 3 $\pm$ 1 \\
+MSGD-1 & 3 $\pm$ 2 & \textbf{1 $\pm$ 1} & 1 $\pm$ 1 & 1 $\pm$ 0 & 2 $\pm$ 1 \\
+OML-A & 3 $\pm$ 2 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 3 $\pm$ 1 \\
+DAMAD & 62 $\pm$ 116 & 7 $\pm$ 6 & 9 $\pm$ 6 & 10 $\pm$ 5 & 10 $\pm$ 6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{detection latency (steps) on HAI by drift condition (K=5).}
+\label{tab:drift_latency_mean_hai}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 16 $\pm$ 0 & 16 $\pm$ 0 & 16 $\pm$ 0 & – & – \\
+VAE-S & 3 $\pm$ 0 & 1 $\pm$ 0 & 1 $\pm$ 0 & – & – \\
+VAE-FT & 3 $\pm$ 0 & 1 $\pm$ 0 & 1 $\pm$ 0 & – & – \\
+VAE-INC & 3 $\pm$ 0 & 2 $\pm$ 0 & 2 $\pm$ 0 & – & – \\
+VAE-DFT & \textbf{3 $\pm$ 0} & \textbf{1 $\pm$ 0} & 4 $\pm$ 0 & – & – \\
+MAML-1 & 4 $\pm$ 0 & 2 $\pm$ 0 & 2 $\pm$ 0 & – & – \\
+MSGD-1 & 4 $\pm$ 0 & 1 $\pm$ 0 & \textbf{1 $\pm$ 0} & – & – \\
+OML-A & 4 $\pm$ 0 & 2 $\pm$ 0 & – & – & – \\
+DAMAD & 4 $\pm$ 0 & 2 $\pm$ 0 & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{detection latency (steps) pooled over the four datasets, by drift condition (K=5).}
+\label{tab:drift_latency_mean_all}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 84 $\pm$ 52 & 14 $\pm$ 20 & 29 $\pm$ 50 & 7 $\pm$ 9 & 7 $\pm$ 8 \\
+VAE-S & 22 $\pm$ 8 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 3 $\pm$ 1 \\
+VAE-FT & \textbf{19 $\pm$ 10} & \textbf{1 $\pm$ 1} & \textbf{1 $\pm$ 1} & \textbf{1 $\pm$ 0} & \textbf{2 $\pm$ 1} \\
+VAE-INC & 27 $\pm$ 8 & 5 $\pm$ 5 & 6 $\pm$ 5 & 9 $\pm$ 5 & 9 $\pm$ 5 \\
+VAE-DFT & 21 $\pm$ 8 & 4 $\pm$ 3 & 4 $\pm$ 3 & 6 $\pm$ 1 & 5 $\pm$ 3 \\
+MAML-1 & 24 $\pm$ 6 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 3 $\pm$ 1 \\
+MSGD-1 & 22 $\pm$ 8 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 2 $\pm$ 1 \\
+OML-A & 24 $\pm$ 6 & 1 $\pm$ 1 & 1 $\pm$ 1 & 1 $\pm$ 0 & 3 $\pm$ 1 \\
+DAMAD & 31 $\pm$ 16 & 6 $\pm$ 6 & 9 $\pm$ 6 & 10 $\pm$ 5 & 10 $\pm$ 6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{segment detection rate on SKAB by drift condition (K=5).}
+\label{tab:drift_segment_detection_rate_skab}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 58.0 $\pm$ 4.5 & – & – & – & – \\
+VAE-S & 96.0 $\pm$ 8.9 & – & – & – & – \\
+VAE-FT & 98.0 $\pm$ 4.5 & – & – & – & – \\
+VAE-INC & 94.0 $\pm$ 8.9 & – & – & – & – \\
+VAE-DFT & 98.0 $\pm$ 4.5 & – & – & – & – \\
+MAML-1 & 98.0 $\pm$ 4.5 & – & – & – & – \\
+MSGD-1 & 98.0 $\pm$ 4.5 & – & – & – & – \\
+OML-A & 98.0 $\pm$ 4.5 & – & – & – & – \\
+DAMAD & \textbf{98.0 $\pm$ 4.5} & – & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{segment detection rate on SMD by drift condition (K=5).}
+\label{tab:drift_segment_detection_rate_smd}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 68.0 $\pm$ 5.7 & 78.8 $\pm$ 9.6 & 79.4 $\pm$ 9.7 & 82.6 $\pm$ 5.1 & 77.8 $\pm$ 3.3 \\
+VAE-S & 95.2 $\pm$ 2.8 & 96.1 $\pm$ 2.4 & 96.7 $\pm$ 1.9 & 95.8 $\pm$ 0.6 & 94.8 $\pm$ 1.0 \\
+VAE-FT & \textbf{97.6 $\pm$ 2.0} & \textbf{97.9 $\pm$ 1.6} & \textbf{98.5 $\pm$ 1.4} & \textbf{98.3 $\pm$ 0.8} & \textbf{97.3 $\pm$ 1.3} \\
+VAE-INC & 88.3 $\pm$ 7.4 & 93.3 $\pm$ 3.9 & 93.3 $\pm$ 4.1 & 89.0 $\pm$ 1.9 & 91.2 $\pm$ 1.2 \\
+VAE-DFT & 88.6 $\pm$ 8.6 & 89.4 $\pm$ 7.6 & 89.3 $\pm$ 7.0 & 90.7 $\pm$ 2.0 & 87.1 $\pm$ 8.3 \\
+MAML-1 & 96.5 $\pm$ 2.1 & 97.0 $\pm$ 1.8 & 97.3 $\pm$ 1.7 & 96.9 $\pm$ 0.6 & 95.9 $\pm$ 0.3 \\
+MSGD-1 & 96.8 $\pm$ 2.9 & 97.8 $\pm$ 1.6 & 97.8 $\pm$ 1.6 & 97.8 $\pm$ 0.9 & 96.3 $\pm$ 2.1 \\
+OML-A & 96.5 $\pm$ 2.1 & 96.7 $\pm$ 1.9 & 96.7 $\pm$ 1.9 & 96.9 $\pm$ 0.6 & 95.9 $\pm$ 0.3 \\
+DAMAD & 72.0 $\pm$ 19.6 & 73.2 $\pm$ 27.2 & 78.0 $\pm$ 9.4 & 83.0 $\pm$ 5.7 & 82.0 $\pm$ 3.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{segment detection rate on HAI by drift condition (K=5).}
+\label{tab:drift_segment_detection_rate_hai}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 12.5 $\pm$ 17.7 & 25.0 $\pm$ 0.0 & 25.0 $\pm$ 0.0 & – & – \\
+VAE-S & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & – & – \\
+VAE-FT & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & – & – \\
+VAE-INC & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & – & – \\
+VAE-DFT & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & – & – \\
+MAML-1 & 50.0 $\pm$ 0.0 & \textbf{75.0 $\pm$ 0.0} & \textbf{75.0 $\pm$ 0.0} & – & – \\
+MSGD-1 & \textbf{75.0 $\pm$ 0.0} & 75.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & – & – \\
+OML-A & 50.0 $\pm$ 0.0 & 75.0 $\pm$ 0.0 & – & – & – \\
+DAMAD & 50.0 $\pm$ 0.0 & 50.0 $\pm$ 0.0 & – & – & – \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{segment detection rate pooled over the four datasets, by drift condition (K=5).}
+\label{tab:drift_segment_detection_rate_all}
+\begin{tabular}{lccccc}
+\toprule
+Method & none & sudden & gradual & incremental & recurring \\
+\midrule
+IF & 61.3 $\pm$ 5.1 & 77.7 $\pm$ 10.0 & 78.2 $\pm$ 10.0 & 82.6 $\pm$ 5.1 & 77.8 $\pm$ 3.3 \\
+VAE-S & 95.3 $\pm$ 5.6 & 95.7 $\pm$ 2.6 & 96.2 $\pm$ 2.3 & 95.8 $\pm$ 0.6 & 94.8 $\pm$ 1.0 \\
+VAE-FT & \textbf{97.4 $\pm$ 2.7} & \textbf{97.4 $\pm$ 1.9} & \textbf{97.9 $\pm$ 1.6} & \textbf{98.3 $\pm$ 0.8} & \textbf{97.3 $\pm$ 1.3} \\
+VAE-INC & 91.4 $\pm$ 5.9 & 92.9 $\pm$ 4.0 & 92.9 $\pm$ 4.1 & 89.0 $\pm$ 1.9 & 91.2 $\pm$ 1.2 \\
+VAE-DFT & 93.7 $\pm$ 4.6 & 89.2 $\pm$ 7.8 & 89.0 $\pm$ 7.1 & 90.7 $\pm$ 2.0 & 87.1 $\pm$ 8.3 \\
+MAML-1 & 96.9 $\pm$ 3.7 & 96.5 $\pm$ 2.3 & 96.8 $\pm$ 2.3 & 96.9 $\pm$ 0.6 & 95.9 $\pm$ 0.3 \\
+MSGD-1 & 97.3 $\pm$ 2.9 & 97.2 $\pm$ 1.8 & 97.2 $\pm$ 1.8 & 97.8 $\pm$ 0.9 & 96.3 $\pm$ 2.1 \\
+OML-A & 96.9 $\pm$ 3.7 & 96.2 $\pm$ 2.3 & 96.7 $\pm$ 1.9 & 96.9 $\pm$ 0.6 & 95.9 $\pm$ 0.3 \\
+DAMAD & 90.5 $\pm$ 4.8 & 72.4 $\pm$ 26.9 & 78.0 $\pm$ 9.4 & 83.0 $\pm$ 5.7 & 82.0 $\pm$ 3.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 (\%) versus shots on SKAB.}
+\label{tab:shots_skab}
+\begin{tabular}{lccc}
+\toprule
+Method & 1-shot & 5-shot & 10-shot \\
+\midrule
+VAE-S & 64.2 $\pm$ 5.9 & 64.1 $\pm$ 5.9 & 63.6 $\pm$ 6.5 \\
+VAE-FT & \textbf{66.7 $\pm$ 6.0} & \textbf{65.6 $\pm$ 6.0} & \textbf{64.3 $\pm$ 7.4} \\
+MAML-1 & 64.1 $\pm$ 5.1 & 64.1 $\pm$ 4.9 & 63.2 $\pm$ 6.1 \\
+MSGD-1 & 64.2 $\pm$ 4.9 & 64.0 $\pm$ 5.1 & 63.2 $\pm$ 5.8 \\
+OML-A & 63.2 $\pm$ 5.0 & 62.8 $\pm$ 4.5 & 62.3 $\pm$ 5.7 \\
+DAMAD & 54.7 $\pm$ 5.0 & 54.9 $\pm$ 4.8 & 55.2 $\pm$ 5.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 (\%) versus shots on SMD.}
+\label{tab:shots_smd}
+\begin{tabular}{lccc}
+\toprule
+Method & 1-shot & 5-shot & 10-shot \\
+\midrule
+VAE-S & \textbf{35.5 $\pm$ 14.5} & \textbf{35.5 $\pm$ 14.5} & \textbf{35.5 $\pm$ 14.5} \\
+VAE-FT & 34.8 $\pm$ 15.0 & 35.1 $\pm$ 14.4 & 34.2 $\pm$ 13.4 \\
+MAML-1 & 28.7 $\pm$ 6.4 & 28.6 $\pm$ 6.5 & 28.7 $\pm$ 6.4 \\
+MSGD-1 & 29.0 $\pm$ 6.1 & 28.8 $\pm$ 6.1 & 28.8 $\pm$ 6.1 \\
+OML-A & 29.2 $\pm$ 6.6 & 32.1 $\pm$ 12.0 & 30.1 $\pm$ 7.8 \\
+DAMAD & 32.9 $\pm$ 6.0 & 29.1 $\pm$ 4.1 & 31.2 $\pm$ 3.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{F1 (\%) versus shots on HAI.}
+\label{tab:shots_hai}
+\begin{tabular}{lccc}
+\toprule
+Method & 1-shot & 5-shot & 10-shot \\
+\midrule
+VAE-S & 62.2 $\pm$ 0.0 & \textbf{62.2 $\pm$ 0.0} & 62.2 $\pm$ 0.0 \\
+VAE-FT & \textbf{62.2 $\pm$ 0.0} & 61.4 $\pm$ 1.1 & \textbf{62.2 $\pm$ 0.0} \\
+MAML-1 & 52.1 $\pm$ 0.0 & 52.1 $\pm$ 0.0 & 52.1 $\pm$ 0.0 \\
+MSGD-1 & 57.5 $\pm$ 0.0 & 58.2 $\pm$ 0.0 & 57.5 $\pm$ 0.0 \\
+OML-A & 52.1 $\pm$ 0.0 & 52.1 $\pm$ 0.0 & 52.1 $\pm$ 0.0 \\
+DAMAD & 52.1 $\pm$ 0.0 & 52.1 $\pm$ 0.0 & 52.1 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Ablations: F1 with the four drift conditions pooled (K=5).}
+\label{tab:abl_f1}
+\begin{tabular}{lccc}
+\toprule
+Variant & SKAB & SMD & HAI \\
+\midrule
+DAMAD & – & 24.1 $\pm$ 3.8 & 55.7 $\pm$ 0.0 \\
+DAMAD-rndM1 & – & 26.1 $\pm$ 7.5 & 28.9 $\pm$ 0.0 \\
+DAMAD-noM1 & – & 21.9 $\pm$ 2.2 & 25.8 $\pm$ 0.0 \\
+DAMAD+mmd & – & 23.2 $\pm$ 7.3 & 7.3 $\pm$ 0.0 \\
+DAMAD-mmd & – & 14.1 $\pm$ 6.3 & \textbf{59.8 $\pm$ 0.0} \\
+DAMAD-noM3 & – & 25.3 $\pm$ 7.8 & 55.7 $\pm$ 0.0 \\
+DAMAD-noM4 & – & 16.0 $\pm$ 8.7 & 59.2 $\pm$ 0.0 \\
+DAMAD-noAcc & – & 23.8 $\pm$ 2.7 & 55.7 $\pm$ 0.0 \\
+DAMAD-fo & – & \textbf{26.2 $\pm$ 5.5} & 51.3 $\pm$ 0.0 \\
+DAMAD-msgd & – & 25.9 $\pm$ 7.3 & 28.6 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Ablations: FPR under drift with the four drift conditions pooled (K=5).}
+\label{tab:abl_fpr_drift}
+\begin{tabular}{lccc}
+\toprule
+Variant & SKAB & SMD & HAI \\
+\midrule
+DAMAD & – & 15.8 $\pm$ 4.8 & \textbf{0.2 $\pm$ 0.0} \\
+DAMAD-rndM1 & – & 18.8 $\pm$ 4.3 & 5.2 $\pm$ 0.0 \\
+DAMAD-noM1 & – & 16.9 $\pm$ 5.2 & 4.0 $\pm$ 0.0 \\
+DAMAD+mmd & – & 20.6 $\pm$ 5.3 & 19.0 $\pm$ 0.0 \\
+DAMAD-mmd & – & 73.6 $\pm$ 15.1 & 0.6 $\pm$ 0.0 \\
+DAMAD-noM3 & – & 22.3 $\pm$ 4.1 & 0.2 $\pm$ 0.0 \\
+DAMAD-noM4 & – & 70.2 $\pm$ 9.1 & 0.6 $\pm$ 0.0 \\
+DAMAD-noAcc & – & \textbf{13.8 $\pm$ 4.9} & 0.2 $\pm$ 0.0 \\
+DAMAD-fo & – & 24.5 $\pm$ 21.4 & 0.3 $\pm$ 0.0 \\
+DAMAD-msgd & – & 19.0 $\pm$ 7.4 & 2.9 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Ablations: adaptation steps with the four drift conditions pooled (K=5).}
+\label{tab:abl_adaptation_steps}
+\begin{tabular}{lccc}
+\toprule
+Variant & SKAB & SMD & HAI \\
+\midrule
+DAMAD & – & 286 $\pm$ 145 & \textbf{99 $\pm$ 0} \\
+DAMAD-rndM1 & – & 282 $\pm$ 126 & 310 $\pm$ 0 \\
+DAMAD-noM1 & – & 341 $\pm$ 99 & 164 $\pm$ 0 \\
+DAMAD+mmd & – & 575 $\pm$ 276 & 99 $\pm$ 0 \\
+DAMAD-mmd & – & 2413 $\pm$ 528 & 99 $\pm$ 0 \\
+DAMAD-noM3 & – & 301 $\pm$ 121 & 99 $\pm$ 0 \\
+DAMAD-noM4 & – & 1497 $\pm$ 1005 & 99 $\pm$ 0 \\
+DAMAD-noAcc & – & 247 $\pm$ 66 & 99 $\pm$ 0 \\
+DAMAD-fo & – & \textbf{217 $\pm$ 76} & 99 $\pm$ 0 \\
+DAMAD-msgd & – & 387 $\pm$ 213 & 160 $\pm$ 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Computational cost per run.}
+\label{tab:cost}
+\begin{tabular}{lcccccc}
+\toprule
+Method & ms_per_window & adapt_s & meta_update_s & n_adapt & memory_kb & n_params \\
+\midrule
+IF & 0.017 & 0.24 & 0.0 & 1.0 & 0.0 & 0.0 \\
+VAE-S & 0.227 & 0.0 & 0.0 & 1.0 & 0.0 & 182296.0 \\
+VAE-FT & 0.229 & 0.114 & 0.0 & 1.0 & 0.0 & 182296.0 \\
+VAE-INC & 0.264 & 16.799 & 0.0 & 1.0 & 0.0 & 182296.0 \\
+VAE-DFT & 0.237 & 0.533 & 0.0 & 4.611 & 0.0 & 182296.0 \\
+MAML-1 & 0.223 & 0.01 & 0.0 & 1.0 & 0.0 & 182296.0 \\
+MSGD-1 & 0.227 & 0.01 & 0.0 & 1.0 & 0.0 & 182296.0 \\
+OML-A & 0.236 & 0.041 & 0.0 & 3.86 & 61.885 & 182296.0 \\
+DAMAD & 0.234 & 0.043 & 1.667 & 3.949 & 88.383 & 182296.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
