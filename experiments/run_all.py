@@ -42,8 +42,11 @@ W = 8
 DATASET_OVERRIDES = {
     # short SKAB runs need a shorter warm-up and refractory period
     "skab": dict(calib_len=100, refractory=100, confirm_horizon=100, memory_segment=150, shadow_len=200),
+    # NASA channels are 1k-9k windows long: shorter calibration and shadow periods
+    "smap": dict(calib_len=200, refractory=300, memory_segment=200, shadow_len=400),
+    "msl": dict(calib_len=200, refractory=300, memory_segment=200, shadow_len=400),
 }
-META_ITERS = {"smd": 400, "psm": 400, "hai": 400, "skab": 300}
+META_ITERS = {"smd": 400, "psm": 400, "hai": 400, "skab": 300, "swat": 400, "wadi": 400, "smap": 400, "msl": 400}
 STATIC_ITERS = 1500
 SHOT_SWEEP_METHODS = ["VAE-S", "VAE-FT", "MAML-1", "MSGD-1", "OML-A", "DAMAD"]
 TRACE_METHODS = ["VAE-S", "VAE-INC", "VAE-DFT", "MAML-1", "OML-A", "DAMAD"]
@@ -165,7 +168,7 @@ def run_job(dataset: str, seed: int, methods: List[str], drifts: List[str], shot
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--datasets", default="skab,smd,hai,psm")
+    ap.add_argument("--datasets", default="skab,smd,hai,psm,swat,wadi,smap,msl")
     ap.add_argument("--seeds", default="0,1,2,3,4")
     ap.add_argument("--methods", default="all")
     ap.add_argument("--drifts", default=",".join(DRIFTS))

@@ -17,8 +17,8 @@ import pandas as pd
 
 RAW = Path(os.environ.get("DAMAD_RAW", "results/raw"))
 OUT = Path("results/tables")
-DATASETS = ["skab", "smd", "psm", "hai"]
-DATASET_LABEL = {"skab": "SKAB", "smd": "SMD", "psm": "PSM", "hai": "HAI"}
+DATASETS = ["skab", "smd", "psm", "hai", "swat", "wadi", "smap", "msl"]
+DATASET_LABEL = {"skab": "SKAB", "smd": "SMD", "psm": "PSM", "hai": "HAI", "swat": "SWaT", "wadi": "WADI", "smap": "SMAP", "msl": "MSL"}
 BASELINE_ORDER = ["IF", "VAE-S", "VAE-FT", "VAE-INC", "VAE-DFT", "MAML-1", "MSGD-1", "OML-A", "DAMAD"]
 ABLATION_ORDER = ["DAMAD", "DAMAD-rndM1", "DAMAD-noM1", "DAMAD+mmd", "DAMAD-mmd", "DAMAD-noM3", "DAMAD-noM4", "DAMAD-noAcc", "DAMAD-fo", "DAMAD-msgd"]
 DRIFTS = ["none", "sudden", "gradual", "incremental", "recurring"]

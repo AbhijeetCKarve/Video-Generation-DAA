@@ -176,8 +176,10 @@ def load_hai(root: Path = DEFAULT_ROOT, step: int = 10) -> List[Entity]:
 
 # --------------------------------------------------------------- SMAP/MSL
 def load_nasa(which: str, root: Path = DEFAULT_ROOT) -> List[Entity]:
-    """Optional.  Expects data/raw/nasa/{train,test}/<chan>.npy and
-    data/raw/nasa/labeled_anomalies.csv from the telemanom release."""
+    """SMAP and MSL from the telemanom release (Hundman et al. 2018):
+    data/raw/nasa/{train,test}/<chan>.npy and labeled_anomalies.csv.
+    One entity per channel; the first column is the telemetry value and
+    the rest are command/one-hot features, all already in [-1, 1]."""
     base = root / "nasa"
     meta = base / "labeled_anomalies.csv"
     if not meta.exists():
@@ -197,6 +199,29 @@ def load_nasa(which: str, root: Path = DEFAULT_ROOT) -> List[Entity]:
     return ents
 
 
+# ---------------------------------------------------------- SWaT / WADI
+def _load_itrust(name: str, root: Path, startup_rows: int) -> List[Entity]:
+    """SWaT (51 tags) and WADI (123 tags after dropping four empty
+    channels), already downsampled to 10 s by stride and MinMax-scaled on
+    the normal trace (the arrays reconstructed bit-exactly from the iTrust
+    releases).  The first `startup_rows` of the SWaT normal trace are the
+    plant start-up transient and are dropped, as is usual."""
+    base = root / name
+    tr = np.load(base / f"{name}_normal.npy")[startup_rows:]
+    te = np.load(base / f"{name}_attack.npy")
+    y = np.load(base / f"{name}_attack_labels.npy").astype(int)
+    mu, sd, (tr, te) = _standardise(_clean(tr), _clean(te))
+    return [Entity(name, name, tr, te, y, mu, sd)]
+
+
+def load_swat(root: Path = DEFAULT_ROOT) -> List[Entity]:
+    return _load_itrust("swat", root, startup_rows=2160)      # first 6 h at 10 s
+
+
+def load_wadi(root: Path = DEFAULT_ROOT) -> List[Entity]:
+    return _load_itrust("wadi", root, startup_rows=0)
+
+
 LOADERS = {
     "smd": load_smd,
     "psm": load_psm,
@@ -204,6 +229,8 @@ LOADERS = {
     "hai": load_hai,
     "smap": lambda root=DEFAULT_ROOT: load_nasa("smap", root),
     "msl": lambda root=DEFAULT_ROOT: load_nasa("msl", root),
+    "swat": load_swat,
+    "wadi": load_wadi,
 }
 
 
@@ -216,7 +243,7 @@ def meta_split(ents: List[Entity], seed: int, holdout_frac: float = 0.3) -> Dict
     """Split entities into meta-train and held-out sets.  Single-entity
     datasets (psm) and HAI (shared training pool) return everything as
     held-out with the training pool used for meta-training."""
-    if len(ents) == 1 or ents[0].dataset == "hai":
+    if len(ents) == 1 or ents[0].dataset == "hai":      # psm, swat, wadi, hai
         return {"meta_train": ents, "held_out": ents}
     rng = np.random.default_rng(seed)
     idx = rng.permutation(len(ents))

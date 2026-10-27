@@ -31,7 +31,7 @@ plt.rcParams.update({"font.size": 9, "font.family": "DejaVu Sans", "axes.spines.
                      "figure.dpi": 150, "savefig.dpi": 300, "savefig.bbox": "tight"})
 C = {"VAE-S": "#8c8c8c", "VAE-FT": "#b5b5b5", "VAE-INC": "#d4a017", "VAE-DFT": "#1f77b4", "MAML-1": "#2ca02c",
      "MSGD-1": "#98df8a", "OML-A": "#9467bd", "DAMAD": "#d62728", "IF": "#c7c7c7"}
-DL = {"skab": "SKAB", "smd": "SMD", "psm": "PSM", "hai": "HAI"}
+DL = {"skab": "SKAB", "smd": "SMD", "psm": "PSM", "hai": "HAI", "swat": "SWaT", "wadi": "WADI", "smap": "SMAP", "msl": "MSL"}
 DRIFTS = ["none", "sudden", "gradual", "incremental", "recurring"]
 
 
@@ -158,7 +158,7 @@ def fig_shots(df):
     order = ["VAE-FT", "MAML-1", "MSGD-1", "OML-A", "DAMAD"]
     datasets = [d for d in DL if d in set(df.dataset)]
     sub = df[(df.drift == "none") & df.method.isin(order)]
-    fig, axes = plt.subplots(1, len(datasets), figsize=(1.8 * len(datasets) + 0.6, 2.3), sharey=True)
+    fig, axes = plt.subplots(1, len(datasets), figsize=(1.5 * len(datasets) + 0.6, 2.3), sharey=True)
     axes = np.atleast_1d(axes)
     for ax, d in zip(axes, datasets):
         a = per_seed(sub[sub.dataset == d], "f1", ["method", "k_shot"])
