@@ -1,3 +1,9 @@
+> **Research branch note.** This branch also carries the DAMAD research system
+> (`damad/`, `experiments/`, `results/`, `figures/`) and the journal manuscript
+> (`paper/`) for *Drift-aware meta-adaptive anomaly detection for few-shot,
+> non-stationary industrial IoT streams*. See `damad/README.md` for how to
+> reproduce the study and `paper/build.sh` for how the manuscript is built.
+
 # vedit — a simple video editing system
 
 Record with **Tella** → pick free music from **Pixabay Music**, **Mixkit** or **Thematic**

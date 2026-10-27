@@ -205,10 +205,7 @@ readings.</p>
 only, score by departure from learned normality. Reconstruction-based
 models dominate this formulation. An autoencoder or VAE <span class="citation" data-cites="kingma2014vae"><a href="#ref-kingma2014vae" role="doc-biblioref">[3]</a></span> learns to reproduce normal windows
 and scores a window by its reconstruction error,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo stretchy="false" form="prefix">∥</mo><mi>x</mi><mo>−</mo><mrow><mi mathvariant="normal">D</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">c</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex"> s(x) = \lVert x - \mathrm{Dec}(\mathrm{Enc}(x)) \rVert^2 . </annotation></semantics></math></p>
-<ol type="1">
-<li></li>
-</ol>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo stretchy="false" form="prefix">∥</mo><mi>x</mi><mo>−</mo><mrow><mi mathvariant="normal">D</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">c</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><msup><mo stretchy="false" form="postfix">∥</mo><mn>2</mn></msup><mspace width="2.0em"></mspace><mtext mathvariant="normal">(1)</mtext></mrow><annotation encoding="application/x-tex"> s(x) = \lVert x - \mathrm{Dec}(\mathrm{Enc}(x)) \rVert^2 \qquad \text{(1)} </annotation></semantics></math></p>
 <p>Every method in that family assumes that the training distribution is
 the deployment distribution. When it is not, the error in Eq. (1) rises
 for normal data too, and the model has no way of knowing that it is now
@@ -224,16 +221,10 @@ give a good model for task
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>T</mi><mi>i</mi></msub><annotation encoding="application/x-tex">T_i</annotation></semantics></math>.
 MAML <span class="citation" data-cites="finn2017maml"><a href="#ref-finn2017maml" role="doc-biblioref">[7]</a></span> writes this
 as an inner step,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>i</mi></msub><mi>′</mi><mo>=</mo><mi>θ</mi><mo>−</mo><mi>α</mi><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>ℒ</mi><msub><mi>S</mi><mi>i</mi></msub></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex"> \theta_i&#39; = \theta - \alpha \nabla_\theta \mathcal{L}_{S_i}(\theta), </annotation></semantics></math></p>
-<ol start="2" type="1">
-<li></li>
-</ol>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>i</mi></msub><mi>′</mi><mo>=</mo><mi>θ</mi><mo>−</mo><mi>α</mi><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>ℒ</mi><msub><mi>S</mi><mi>i</mi></msub></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="2.0em"></mspace><mtext mathvariant="normal">(2)</mtext></mrow><annotation encoding="application/x-tex"> \theta_i&#39; = \theta - \alpha \nabla_\theta \mathcal{L}_{S_i}(\theta) \qquad \text{(2)} </annotation></semantics></math></p>
 <p>and an outer step over tasks evaluated on their query sets
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mi>i</mi></msub><annotation encoding="application/x-tex">Q_i</annotation></semantics></math>,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>←</mo><mi>θ</mi><mo>−</mo><mi>β</mi><msub><mi>∇</mi><mi>θ</mi></msub><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>ℒ</mi><msub><mi>Q</mi><mi>i</mi></msub></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex"> \theta \leftarrow \theta - \beta \nabla_\theta \sum_i \mathcal{L}_{Q_i}(\theta_i&#39;). </annotation></semantics></math></p>
-<ol start="3" type="1">
-<li></li>
-</ol>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>←</mo><mi>θ</mi><mo>−</mo><mi>β</mi><msub><mi>∇</mi><mi>θ</mi></msub><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>ℒ</mi><msub><mi>Q</mi><mi>i</mi></msub></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="2.0em"></mspace><mtext mathvariant="normal">(3)</mtext></mrow><annotation encoding="application/x-tex"> \theta \leftarrow \theta - \beta \nabla_\theta \sum_i \mathcal{L}_{Q_i}(\theta_i&#39;) \qquad \text{(3)} </annotation></semantics></math></p>
 <p>MAML++ <span class="citation" data-cites="antoniou2019mamlpp"><a href="#ref-antoniou2019mamlpp" role="doc-biblioref">[15]</a></span>
 stabilises this with per-layer, per-step inner learning rates and a
 multi-step query loss; Meta-SGD <span class="citation" data-cites="li2017metasgd"><a href="#ref-li2017metasgd" role="doc-biblioref">[16]</a></span> learns a per-parameter inner
