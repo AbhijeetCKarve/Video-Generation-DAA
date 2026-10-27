@@ -175,7 +175,7 @@ Table 4. The benchmarking protocol.
 
 ## 5.1 Overview
 
-DAMAD has four modules arranged around a streaming VAE (Figure 2). In steady state every window $x_t$ is encoded, reconstructed and scored by @eq:score, and an alarm is raised if the score exceeds $\tau$. Module 1 watches the residual and the embedding for a regime change. When a change is confirmed, the next K windows become the support set, Module 2 adapts a fresh copy of $\theta^*$ to them in K gradient steps, Module 4 recalibrates $\tau$ on the residuals that follow, Module 3 stores the regime that just ended, and a replay meta-update refreshes $\theta^*$ from the new regime and a few remembered ones. A champion/challenger check runs in parallel for a while: the previous model keeps scoring in the shadow, and if it fits the stream better than the adapted one, the adaptation and the new threshold are undone.
+DAMAD has four modules arranged around a streaming VAE (Figure 2). In steady state every window $x_t$ is encoded, reconstructed and scored by @eq:score, and an alarm is raised if the score exceeds $\tau$. Module 1 watches the residual for a regime change. When a change is confirmed, the next K windows become the support set, Module 2 adapts a fresh copy of $\theta^*$ to them in K gradient steps, Module 4 recalibrates $\tau$ on the residuals that follow, Module 3 stores the regime that just ended, and a replay meta-update refreshes $\theta^*$ from the new regime and a few remembered ones. A champion/challenger check runs in parallel for a while: the previous model keeps scoring in the shadow, and if it fits the stream better than the adapted one, the adaptation and the new threshold are undone.
 
 ![Figure 2. DAMAD. Solid arrows are the steady-state path taken at every step; dashed arrows fire only after a confirmed regime change.](../figures/fig_architecture.png){#fig:arch width=100%}
 
@@ -191,7 +191,9 @@ Module 1 has two jobs: cutting the training streams into regimes for episode con
 
 *Training-time segmentation.* One ADWIN [@bifet2007adwin] runs per sensor on block means of ten steps. A regime boundary is placed when at least 20 % of the sensors have reported a change within the last 200 steps and the current regime is at least 400 steps long. Over-segmentation only costs episode diversity, so the vote is permissive. On SMD this yields 870 regimes with a median length of 400 steps from 20 training machines. The ablations replace this sampler with fixed chunks of the same median length and with regime-free random sampling.
 
-*Online gate.* Our PCEMS sketch ran ADWIN on the raw input. In the implementation that did not work: on real server and process streams the input statistics never stop moving, and a gate that fires on every input change adapts every few hundred steps whether or not the model has stopped fitting. The quantity that matters is whether the model still fits, so the primary detector is ADWIN on block means (ten windows) of the log residual, and only changes in which the retained window has the higher mean count, because a model that fits better than before needs no adaptation. A statistical change must also be material: the retained mean has to exceed the level recorded after the last adaptation by at least 0.5 log units, a 65 % rise in residual. The secondary detector is MMD [@gretton2012mmd] between the encoder embeddings of the last 64 windows and a reference set of 300 embeddings recorded after the last adaptation, with a Gaussian kernel at the median-distance bandwidth. Its threshold is 1.5 times the largest MMD² between any contiguous 64-window block of the reference set and the rest of it. A random-split null, which is the textbook choice, ignores the slow within-regime variation that real streams have and sets the bar far too low. The MMD branch needs two consecutive exceedances; the ADWIN branch needs one, because the block mean, the direction rule and the minimum shift already guard it. Either branch confirms a change, and a refractory period of 400 windows separates adaptations.
+*Online gate.* Our PCEMS sketch ran ADWIN on the raw input with MMD on the embeddings as a second detector. Neither survived contact with real streams in that form. On server and process data the input statistics never stop moving, so a gate that fires on input change adapts every few hundred steps whether or not the model has stopped fitting. The quantity that matters is whether the model still fits. The gate therefore runs ADWIN on block means (ten windows) of the log residual, and only changes in which the retained window has the higher mean count, because a model that fits better than before needs no adaptation. The change must also be material: the retained mean has to exceed the level recorded after the last adaptation by at least 0.5 log units, a 65 % rise in residual. One such hit confirms a change; the block mean, the direction rule and the minimum shift already guard against spikes. A refractory period of 400 windows separates adaptations.
+
+We also implemented the MMD branch [@gretton2012mmd]: the kernel two-sample statistic between the encoder embeddings of the last 64 windows and 300 reference embeddings recorded after the last adaptation, with a block-bootstrap null (the largest MMD² between any contiguous 64-window block of the reference set and the rest of it, times 1.5) and two consecutive exceedances required. Even with that conservative null it over-triggers on ordinary within-regime variation, and every adaptation it causes costs a fresh threshold calibration on a short window. Section 7.4 reports the variants with MMD alone and with both detectors; the full method uses the residual gate only.
 
 ## 5.4 Module 4: gated threshold
 
@@ -207,7 +209,7 @@ The three sub-problems interact through one confound: a long anomaly raises the 
 
 ## 5.7 Cost
 
-In steady state DAMAD does one forward pass per window plus O(log n) ADWIN work per ten windows and one 64 × 128 kernel evaluation per 32 windows. During the shadow period a second forward pass is added. Adaptation costs three gradient steps on K windows; a replay meta-update costs ten outer iterations on four episodes. The buffer holds at most eight regimes × 300 steps × d floats. Section 7.6 reports the measured figures.
+In steady state DAMAD does one forward pass per window plus O(log n) ADWIN work per ten windows. During the shadow period a second forward pass is added. Adaptation costs three gradient steps on K windows; a replay meta-update costs ten outer iterations on four episodes. The buffer holds at most eight regimes × 300 steps × d floats. Section 7.6 reports the measured figures.
 
 ## 5.8 Placement in the taxonomy
 
@@ -242,13 +244,13 @@ Table 6. Methods. "adapt once" means K-shot adaptation at the start of the strea
 | VAE-S | static VAE | none | – | – | – |
 | VAE-FT | static VAE | fine-tune once (30 Adam steps on K windows) | – | – | – |
 | VAE-INC | static VAE | one Adam step every 5 windows on the last 32 non-alarmed windows [@wahab2022online] | – | – | – |
-| VAE-DFT | static VAE | fine-tune on K post-change windows | ADWIN+MMD, acceptance test | – | yes |
+| VAE-DFT | static VAE | fine-tune on K post-change windows | residual ADWIN, acceptance test | – | yes |
 | MAML-1 | MAML++ θ* | adapt once [@moon2023mavae] | – | – | – |
 | MSGD-1 | Meta-SGD θ* | adapt once | – | – | – |
 | OML-A | MAML++ θ* | K-step adapt on change [@tian2024omlog] | MMD | – | – |
-| DAMAD | MAML++ θ* | K-step adapt on change | ADWIN+MMD, acceptance test | yes | yes |
+| DAMAD | MAML++ θ* | K-step adapt on change | residual ADWIN, acceptance test | yes | yes |
 
-VAE-DFT shares DAMAD's gate, acceptance test and recalibration and differs only in adapting from the static initialisation by fine-tuning; it therefore isolates the contribution of the meta-learned initialisation. OML-A differs from DAMAD in having no ADWIN branch, no memory, no recalibration and no acceptance test, which is the OMLog recipe.
+VAE-DFT shares DAMAD's gate, acceptance test and recalibration and differs only in adapting from the static initialisation by fine-tuning; it therefore isolates the contribution of the meta-learned initialisation. OML-A differs from DAMAD in using MMD on the embeddings as its only gate and in having no memory, no recalibration and no acceptance test, which is the OMLog recipe.
 
 The ablations (Table 7) remove or replace one element of DAMAD at a time.
 
@@ -258,7 +260,7 @@ Table 7. Ablations.
 |---|---|
 | DAMAD-rndM1 | episodes drawn from anywhere in the training stream, no regime boundaries |
 | DAMAD-noM1 | episodes from fixed chunks of the median ADWIN-regime length |
-| DAMAD-adwin | residual ADWIN only as the gate |
+| DAMAD+mmd | residual ADWIN and MMD both as the gate (the PCEMS sketch) |
 | DAMAD-mmd | MMD only as the gate |
 | DAMAD-noM3 | no replay meta-update |
 | DAMAD-noM4 | threshold never recalibrated after the initial calibration |
@@ -268,6 +270,6 @@ Table 7. Ablations.
 
 ## 6.3 Conditions, metrics and implementation
 
-Each held-out entity is run under five stream conditions: its original test stream and the four injected-drift versions of Table 4. The few-shot sweep (K = 1, 5, 10) is run on the original streams for the methods that adapt at the start; all drift conditions use K = 5. Metrics are those of Table 4. Detection latency is averaged over anomaly segments in which an alarm occurred, and the share of segments with any alarm is reported next to it. Adaptation steps use a rolling window of 100 steps and are capped at the length of the post-change segment if the rate never recovers.
+Each held-out entity of HAI, SMD and PSM is run under five stream conditions: its original test stream and the four injected-drift versions of Table 4. SKAB runs are about a thousand windows long, which is not enough to hold a 100-window calibration, a 200-window shadow period and a refractory period between two injected changes, so SKAB is used for the few-shot cold-start setting only. Ablations are scored under the drift conditions. The few-shot sweep (K = 1, 5, 10) is run on the original streams for the methods that adapt at the start; all drift conditions use K = 5. Metrics are those of Table 4. Detection latency is averaged over anomaly segments in which an alarm occurred, and the share of segments with any alarm is reported next to it. Adaptation steps use a rolling window of 100 steps and are capped at the length of the post-change segment if the rate never recovers.
 
 Everything is implemented in PyTorch 2 and NumPy and runs on CPU; one seed of the whole study takes about an hour per dataset on a four-core machine with one thread per job. Reported timings come from that machine. Five seeds change the network initialisation, the episode sampling, the drift realisation and the entity split.

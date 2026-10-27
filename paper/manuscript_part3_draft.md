@@ -1,0 +1,45 @@
+# 8 Discussion
+
+## 8.1 What the results say about the three findings
+
+Finding 1 of the review was that static methods are being applied to an online problem. The drift conditions make the cost of that visible: a static VAE whose threshold was set on the first regime alarms on almost every normal step after a sudden change, and the meta-learned model adapted once (MAML-1) does the same, because a good initialisation does not help a model that is never asked to adapt again. Finding 2 was that nobody updates the meta-level online. The replay meta-update is the smallest part of DAMAD in terms of effect size, and we say so in Section 7.4; the parts that matter most are the ones that decide *when* to adapt and *whether to keep* the adaptation. Finding 3 was the validation gap. HAI is the closest open relative of SWaT and WADI, and the loader accepts those datasets for anyone who holds the licence.
+
+## 8.2 What building DAMAD changed
+
+Three decisions in the implemented system differ from our conceptual sketch, and each came from a failure we could see in the traces.
+
+The gate moved from the input to the residual. An input-side detector asks whether the world changed; a residual-side detector asks whether the model stopped fitting. Only the second question is the one that should trigger retraining, and on real streams the two questions have very different answers.
+
+The MMD branch was demoted to an ablation. Two-sample tests on embeddings are sensitive by design, and a conservative null built from contiguous blocks of the reference set was still not conservative enough. Every false trigger costs a threshold calibration on a short window, and that is where recall is lost.
+
+The acceptance test was added. Sub-problem SP3 asks how to tell drift from a long anomaly without labels. Our answer is operational: adapt, then let the old model compete for a while, and undo the adaptation if the old model wins. The decision is wrong sometimes, mostly when the anomaly outlasts the shadow period, but it is checkable, which a one-shot decision rule is not.
+
+## 8.3 Limitations
+
+*Injected drift.* The drift conditions are synthetic affine shifts. They are reproducible and they do break static detectors in the way real drift does, but they are not real drift. The no-drift condition on SMD and PSM, where the streams carry their own nonstationarity, is the closest we get to the real case, and it is also the condition on which the methods are closest together.
+
+*Short calibration windows.* Every threshold in the study is set from 300 windows, which is what an operator would have after a change. With a 28 % anomaly rate (PSM) the calibration window is often contaminated and the recalibrated threshold is conservative. Robust calibration under contamination is an open problem and the reason our recall on PSM is lower than that of methods which never recalibrate.
+
+*The degenerate strategy.* On datasets with a high anomaly rate, alarming on everything scores a point-wise F1 of 2p/(1+p) where p is the anomaly rate: 0.44 on PSM and about 0.5 on SKAB. Several baselines reach their F1 that way under drift, with false-alarm rates close to one. This is why the protocol reports the false-alarm rate next to F1 and why we do not rank methods on F1 alone.
+
+*Licence-gated benchmarks.* SWaT and WADI were not used because they require a licence agreement, and SMAP/MSL were not reachable from our build environment. The loaders support all four.
+
+*One base learner.* All VAE-based methods share one small MLP architecture so that the comparison isolates the adaptation policy. A sequence model would score higher in absolute terms on every method.
+
+*Hyperparameters.* The gate's minimum shift (0.5 log units), the refractory period, the shadow length and the POT risk level were chosen on two SMD machines during development and then frozen for all datasets. They are reported, not tuned per dataset.
+
+## 8.4 Threats to validity
+
+Internal validity rests on every method running through the same loop with the same threshold procedure, the same warm-up and the same streams; we checked that by making each method a configuration rather than a separate implementation. External validity is limited by the four datasets and the synthetic drift. Construct validity of the streaming metrics is the main risk: adaptation steps depend on the rolling window and the margin, and detection latency is only defined for detected segments, which is why the detection rate is reported with it.
+
+# 9 Conclusion
+
+We set out to find a method that is few-shot capable, drift-aware and deployable online for industrial sensor streams, found none in 87 papers, and built one. The review and taxonomy locate the gap; the protocol says how a method in that gap should be measured; DAMAD shows that the gap can be filled with existing parts, provided three things are done that the parts do not do on their own: watch the residual rather than the input, keep the threshold still except after a confirmed change, and let the old model contest every adaptation. The remaining distance to a production system is in robust threshold calibration under contamination and in evaluation on real rather than injected drift, and the released code is arranged so that either can be tried by changing one configuration.
+
+# Data and code availability {.unnumbered}
+
+The implementation, the dataset loaders, the experiment runner and every result table in this paper are available at the project repository. HAI 21.03, SMD, SKAB and PSM are public; the loaders fetch them.
+
+# Declaration {.unnumbered}
+
+The authors declare no competing interests. This research received no specific grant.
