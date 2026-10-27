@@ -16,3 +16,9 @@ models/
 !music/generated-*.mp3
 projects/*/build*/
 *.log
+
+# DAMAD research data and outputs
+data/raw/
+data/cache/
+results/raw/
+results/quick/
