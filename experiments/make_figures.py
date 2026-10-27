@@ -178,8 +178,8 @@ def fig_shots(df):
 
 # ------------------------------------------------------------------ 5
 def fig_ablation(df):
-    order = ["DAMAD", "DAMAD-rndM1", "DAMAD-noM1", "DAMAD-adwin", "DAMAD-mmd", "DAMAD-noM3", "DAMAD-noM4", "DAMAD-noAcc", "DAMAD-fo", "DAMAD-msgd"]
-    labels = ["full", "random\nepisodes", "chunk\nepisodes", "ADWIN\nonly", "MMD\nonly", "no\nreplay", "no τ\nrecal.", "no accept.\ntest", "FOMAML\ninit", "Meta-SGD\ninit"]
+    order = ["DAMAD", "DAMAD-rndM1", "DAMAD-noM1", "DAMAD+mmd", "DAMAD-mmd", "DAMAD-noM3", "DAMAD-noM4", "DAMAD-noAcc", "DAMAD-fo", "DAMAD-msgd"]
+    labels = ["full", "random\nepisodes", "chunk\nepisodes", "ADWIN\n+ MMD", "MMD\nonly", "no\nreplay", "no τ\nrecal.", "no accept.\ntest", "FOMAML\ninit", "Meta-SGD\ninit"]
     sub = df[(df.k_shot == 5) & (df.drift != "none") & df.method.isin(order)]
     fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.4))
     for ax, metric, lab in zip(axes, ["f1", "fpr_drift", "adaptation_steps"], ["F1", "false-alarm rate after drift", "adaptation steps"]):

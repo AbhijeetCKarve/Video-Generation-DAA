@@ -121,12 +121,16 @@ def run_job(dataset: str, seed: int, methods: List[str], drifts: List[str], shot
     n_runs = 0
     for ent in ho:
         for drift in drifts:
+            if dataset == "skab" and drift != "none":
+                continue          # SKAB runs are too short for a calibration cycle between changes
             Xs, y, regime, cps = stream_for(ent, drift, seed)
             Xw = make_windows(Xs, W)
             yw = window_labels(y, W)
             regime_w = None if regime is None else regime[W - 1:]
             cps_w = None if cps is None else [c - (W - 1) for c in cps]
             for spec in specs:
+                if spec.group == "ablation" and drift == "none":
+                    continue      # ablations are scored under drift only
                 shot_list = shots if (drift == "none" and spec.name in SHOT_SWEEP_METHODS) else [5]
                 if drift != "none" and spec.name in ("IF",) and 5 not in shot_list:
                     shot_list = [5]

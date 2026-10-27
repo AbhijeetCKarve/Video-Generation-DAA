@@ -8,13 +8,15 @@ Naming used in the paper:
   VAE-S        VAE trained on pooled normal data, no adaptation
   VAE-FT       VAE-S fine-tuned on the K-shot support set, then static
   VAE-INC      VAE-S updated online on every non-alarmed window (Wahab-style)
-  VAE-DFT      drift-aware fine-tuning: ADWIN+MMD gate, fine-tune VAE-S on
-               the post-drift support, recalibrate tau (no meta-learning)
+  VAE-DFT      drift-aware fine-tuning: same residual-ADWIN gate as DAMAD,
+               fine-tune VAE-S on the post-drift support, recalibrate tau
+               (no meta-learning)
   MAML-1       MAML++-initialised VAE, adapted once at the start (MAVAE-style)
   MSGD-1       Meta-SGD-initialised VAE, adapted once at the start
   OML-A        MMD-triggered meta-adaptation, no memory, no recalibration
                (OMLog-style transfer of the idea to sensor streams)
-  DAMAD        the full method
+  DAMAD        the full method: residual-ADWIN gate, MAML++ adaptation,
+               regime replay, gated POT threshold, acceptance test
 
 Ablations:
   DAMAD-noM1   episodes from fixed chunks instead of ADWIN-bounded regimes
@@ -22,7 +24,7 @@ Ablations:
   DAMAD-noM3   no replay from the regime memory
   DAMAD-noM4   no threshold recalibration
   DAMAD-noAcc  no acceptance test on adaptations (SP3 disambiguation off)
-  DAMAD-adwin  ADWIN only as the gate
+  DAMAD+mmd    ADWIN and MMD both as the gate (the PCEMS sketch)
   DAMAD-mmd    MMD only as the gate
   DAMAD-fo     FOMAML initialisation instead of MAML++
   DAMAD-msgd   Meta-SGD initialisation instead of MAML++
@@ -44,14 +46,14 @@ class MethodSpec:
     group: str = "baseline"           # baseline | proposed | ablation
 
 
-_D = OnlineConfig(name="DAMAD")
+_D = OnlineConfig(name="DAMAD", detector="adwin")
 
 METHODS: Dict[str, MethodSpec] = {
     "IF": MethodSpec("IF", None, group="baseline"),
     "VAE-S": MethodSpec("VAE-S", OnlineConfig(name="VAE-S", init="static", adapt_on_start=False, drift_policy="none", detector="none")),
     "VAE-FT": MethodSpec("VAE-FT", OnlineConfig(name="VAE-FT", init="static", adapt_on_start=True, drift_policy="finetune", detector="none")),
     "VAE-INC": MethodSpec("VAE-INC", OnlineConfig(name="VAE-INC", init="static", adapt_on_start=False, drift_policy="incremental", detector="none", inc_every=5)),
-    "VAE-DFT": MethodSpec("VAE-DFT", OnlineConfig(name="VAE-DFT", init="static", adapt_on_start=True, drift_policy="finetune", detector="adwin+mmd", recalibrate=True)),
+    "VAE-DFT": MethodSpec("VAE-DFT", OnlineConfig(name="VAE-DFT", init="static", adapt_on_start=True, drift_policy="finetune", detector="adwin", recalibrate=True)),
     "MAML-1": MethodSpec("MAML-1", OnlineConfig(name="MAML-1", init="meta", adapt_on_start=True, drift_policy="none", detector="none"), meta_variant="mamlpp"),
     "MSGD-1": MethodSpec("MSGD-1", OnlineConfig(name="MSGD-1", init="meta", adapt_on_start=True, drift_policy="none", detector="none"), meta_variant="metasgd"),
     "OML-A": MethodSpec("OML-A", OnlineConfig(name="OML-A", init="meta", adapt_on_start=True, drift_policy="meta_adapt", detector="mmd", replay=False, recalibrate=False), meta_variant="mamlpp"),
@@ -61,7 +63,7 @@ METHODS: Dict[str, MethodSpec] = {
     "DAMAD-noM3": MethodSpec("DAMAD-noM3", replace(_D, name="DAMAD-noM3", replay=False), group="ablation"),
     "DAMAD-noM4": MethodSpec("DAMAD-noM4", replace(_D, name="DAMAD-noM4", recalibrate=False), group="ablation"),
     "DAMAD-noAcc": MethodSpec("DAMAD-noAcc", replace(_D, name="DAMAD-noAcc", accept_test=False), group="ablation"),
-    "DAMAD-adwin": MethodSpec("DAMAD-adwin", replace(_D, name="DAMAD-adwin", detector="adwin"), group="ablation"),
+    "DAMAD+mmd": MethodSpec("DAMAD+mmd", replace(_D, name="DAMAD+mmd", detector="adwin+mmd"), group="ablation"),
     "DAMAD-mmd": MethodSpec("DAMAD-mmd", replace(_D, name="DAMAD-mmd", detector="mmd"), group="ablation"),
     "DAMAD-fo": MethodSpec("DAMAD-fo", replace(_D, name="DAMAD-fo"), meta_variant="fomaml", group="ablation"),
     "DAMAD-msgd": MethodSpec("DAMAD-msgd", replace(_D, name="DAMAD-msgd"), meta_variant="metasgd", group="ablation"),

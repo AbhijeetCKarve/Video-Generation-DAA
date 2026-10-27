@@ -20,7 +20,7 @@ OUT = Path("results/tables")
 DATASETS = ["skab", "smd", "psm", "hai"]
 DATASET_LABEL = {"skab": "SKAB", "smd": "SMD", "psm": "PSM", "hai": "HAI"}
 BASELINE_ORDER = ["IF", "VAE-S", "VAE-FT", "VAE-INC", "VAE-DFT", "MAML-1", "MSGD-1", "OML-A", "DAMAD"]
-ABLATION_ORDER = ["DAMAD", "DAMAD-rndM1", "DAMAD-noM1", "DAMAD-adwin", "DAMAD-mmd", "DAMAD-noM3", "DAMAD-noM4", "DAMAD-noAcc", "DAMAD-fo", "DAMAD-msgd"]
+ABLATION_ORDER = ["DAMAD", "DAMAD-rndM1", "DAMAD-noM1", "DAMAD+mmd", "DAMAD-mmd", "DAMAD-noM3", "DAMAD-noM4", "DAMAD-noAcc", "DAMAD-fo", "DAMAD-msgd"]
 DRIFTS = ["none", "sudden", "gradual", "incremental", "recurring"]
 
 
