@@ -23,22 +23,37 @@ Two things in the table matter for what follows. First, the only quantity that s
 
 ## 5.2 Q3, within a plant: the meta-learned model does not beat the static one, and neither beats the magnitude of the window on three benchmarks
 
-Table 3 gives AUROC and AUPRC at K = 20 for every method; Figure 2 shows AUROC against K. The first row is the detector with no parameters: the mean squared standardised value of the window.
+Tables 3 and 4 give AUROC and AUPRC at K = 20 for every method; Figure 2 shows AUROC against K. The first row is the detector with no parameters: the mean squared standardised value of the window.
 
-Table 3. Within-plant detection at K = 20, AUROC and AUPRC, mean ± sd over five seeds. Scratch is a random LSTM autoencoder from a seed the meta-learner did not use.
+Table 3. Within-plant detection at K = 20, AUROC, mean ± sd over five seeds. Scratch is a random LSTM autoencoder from a seed the meta-learner did not use.
 
-| method | SWaT AUROC | SWaT AUPRC | WADI AUROC | WADI AUPRC | HAI AUROC | HAI AUPRC | SMAP AUROC | SMAP AUPRC | MSL AUROC | MSL AUPRC |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Magnitude | 0.859 ± 0.000 | 0.769 ± 0.000 | 0.673 ± 0.000 | 0.181 ± 0.000 | 0.855 ± 0.000 | 0.280 ± 0.000 | 0.605 ± 0.031 | 0.245 ± 0.046 | 0.610 ± 0.054 | 0.307 ± 0.054 |
-| Isolation Forest | 0.832 ± 0.001 | 0.726 ± 0.005 | 0.718 ± 0.007 | 0.200 ± 0.017 | 0.633 ± 0.006 | 0.053 ± 0.004 | 0.559 ± 0.030 | 0.181 ± 0.050 | 0.574 ± 0.055 | 0.244 ± 0.032 |
-| MLP-AE | 0.862 ± 0.004 | 0.776 ± 0.002 | 0.579 ± 0.008 | 0.100 ± 0.014 | 0.933 ± 0.001 | 0.344 ± 0.001 | 0.599 ± 0.060 | 0.245 ± 0.065 | 0.573 ± 0.059 | 0.241 ± 0.071 |
-| Static-AE | 0.867 ± 0.007 | 0.769 ± 0.008 | 0.584 ± 0.004 | 0.101 ± 0.011 | 0.901 ± 0.004 | 0.321 ± 0.008 | 0.587 ± 0.052 | 0.241 ± 0.059 | 0.592 ± 0.067 | 0.287 ± 0.059 |
-| Static-AE+FT (matched) | 0.867 ± 0.008 | 0.769 ± 0.009 | 0.582 ± 0.007 | 0.101 ± 0.013 | 0.900 ± 0.004 | 0.319 ± 0.008 | 0.592 ± 0.046 | 0.250 ± 0.064 | 0.585 ± 0.061 | 0.288 ± 0.058 |
-| MAML-AE, no adaptation | 0.858 ± 0.002 | 0.764 ± 0.003 | 0.589 ± 0.042 | 0.114 ± 0.026 | 0.845 ± 0.021 | 0.288 ± 0.004 | 0.567 ± 0.043 | 0.226 ± 0.050 | 0.588 ± 0.058 | 0.288 ± 0.059 |
-| MAML-AE (matched) | 0.859 ± 0.003 | 0.764 ± 0.004 | 0.592 ± 0.041 | 0.116 ± 0.024 | 0.846 ± 0.023 | 0.284 ± 0.006 | 0.597 ± 0.043 | 0.237 ± 0.054 | 0.589 ± 0.059 | 0.288 ± 0.060 |
-| MAML-AE (heavy) | 0.856 ± 0.003 | 0.762 ± 0.005 | 0.586 ± 0.047 | 0.116 ± 0.022 | 0.844 ± 0.031 | 0.283 ± 0.015 | 0.594 ± 0.044 | 0.255 ± 0.064 | 0.591 ± 0.057 | 0.288 ± 0.059 |
-| MAML-AE-broken (matched) | 0.858 ± 0.000 | 0.769 ± 0.000 | 0.672 ± 0.001 | 0.180 ± 0.001 | 0.854 ± 0.001 | 0.280 ± 0.001 | 0.605 ± 0.033 | 0.241 ± 0.050 | 0.606 ± 0.055 | 0.306 ± 0.054 |
-| Scratch (matched) | 0.859 ± 0.000 | 0.769 ± 0.000 | 0.672 ± 0.001 | 0.182 ± 0.001 | 0.854 ± 0.001 | 0.279 ± 0.001 | 0.607 ± 0.033 | 0.242 ± 0.049 | 0.609 ± 0.058 | 0.308 ± 0.054 |
+| method | SWaT | WADI | HAI | SMAP | MSL |
+|---|---|---|---|---|---|
+| Magnitude | 0.859 ± 0.000 | 0.673 ± 0.000 | 0.855 ± 0.000 | 0.605 ± 0.031 | 0.610 ± 0.054 |
+| Isolation Forest | 0.832 ± 0.001 | 0.718 ± 0.007 | 0.633 ± 0.006 | 0.559 ± 0.030 | 0.574 ± 0.055 |
+| MLP-AE | 0.862 ± 0.004 | 0.579 ± 0.008 | 0.933 ± 0.001 | 0.599 ± 0.060 | 0.573 ± 0.059 |
+| Static-AE | 0.867 ± 0.007 | 0.584 ± 0.004 | 0.901 ± 0.004 | 0.587 ± 0.052 | 0.592 ± 0.067 |
+| Static-AE+FT (matched) | 0.867 ± 0.008 | 0.582 ± 0.007 | 0.900 ± 0.004 | 0.592 ± 0.046 | 0.585 ± 0.061 |
+| MAML-AE, no adaptation | 0.858 ± 0.002 | 0.589 ± 0.042 | 0.845 ± 0.021 | 0.567 ± 0.043 | 0.588 ± 0.058 |
+| MAML-AE (matched) | 0.859 ± 0.003 | 0.592 ± 0.041 | 0.846 ± 0.023 | 0.597 ± 0.043 | 0.589 ± 0.059 |
+| MAML-AE (heavy) | 0.856 ± 0.003 | 0.586 ± 0.047 | 0.844 ± 0.031 | 0.594 ± 0.044 | 0.591 ± 0.057 |
+| MAML-AE-broken (matched) | 0.858 ± 0.000 | 0.672 ± 0.001 | 0.854 ± 0.001 | 0.605 ± 0.033 | 0.606 ± 0.055 |
+| Scratch (matched) | 0.859 ± 0.000 | 0.672 ± 0.001 | 0.854 ± 0.001 | 0.607 ± 0.033 | 0.609 ± 0.058 |
+
+Table 4. Within-plant detection at K = 20, AUPRC, mean ± sd over five seeds.
+
+| method | SWaT | WADI | HAI | SMAP | MSL |
+|---|---|---|---|---|---|
+| Magnitude | 0.769 ± 0.000 | 0.181 ± 0.000 | 0.280 ± 0.000 | 0.245 ± 0.046 | 0.307 ± 0.054 |
+| Isolation Forest | 0.726 ± 0.005 | 0.200 ± 0.017 | 0.053 ± 0.004 | 0.181 ± 0.050 | 0.244 ± 0.032 |
+| MLP-AE | 0.776 ± 0.002 | 0.100 ± 0.014 | 0.344 ± 0.001 | 0.245 ± 0.065 | 0.241 ± 0.071 |
+| Static-AE | 0.769 ± 0.008 | 0.101 ± 0.011 | 0.321 ± 0.008 | 0.241 ± 0.059 | 0.287 ± 0.059 |
+| Static-AE+FT (matched) | 0.769 ± 0.009 | 0.101 ± 0.013 | 0.319 ± 0.008 | 0.250 ± 0.064 | 0.288 ± 0.058 |
+| MAML-AE, no adaptation | 0.764 ± 0.003 | 0.114 ± 0.026 | 0.288 ± 0.004 | 0.226 ± 0.050 | 0.288 ± 0.059 |
+| MAML-AE (matched) | 0.764 ± 0.004 | 0.116 ± 0.024 | 0.284 ± 0.006 | 0.237 ± 0.054 | 0.288 ± 0.060 |
+| MAML-AE (heavy) | 0.762 ± 0.005 | 0.116 ± 0.022 | 0.283 ± 0.015 | 0.255 ± 0.064 | 0.288 ± 0.059 |
+| MAML-AE-broken (matched) | 0.769 ± 0.000 | 0.180 ± 0.001 | 0.280 ± 0.001 | 0.241 ± 0.050 | 0.306 ± 0.054 |
+| Scratch (matched) | 0.769 ± 0.000 | 0.182 ± 0.001 | 0.279 ± 0.001 | 0.242 ± 0.049 | 0.308 ± 0.054 |
 
 Three rows of the table say the same thing. The magnitude reference, the random network and the "meta-model" from the broken loop agree to three decimals on SWaT, WADI and HAI and to within 0.005 on the telemetry sets. The reason is mechanical: an untrained LSTM autoencoder emits an output of small, nearly constant amplitude, so its reconstruction error is the squared norm of the input up to an offset. On the first 6,000 test windows of each dataset the Spearman correlation between the error of a random network and the window magnitude is 0.996 to 1.000. A paper that evaluated the broken loop would therefore have reported the magnitude detector under the name of a meta-learned one, and on SWaT it would have reported a respectable 0.858.
 
@@ -50,9 +65,9 @@ The support size does nothing. Between K = 1 and K = 100 the AUROC of every meth
 
 ## 5.3 Q2: K-shot adaptation moves the autoencoder very little and reorders almost nothing
 
-Table 4 reports the three adaptation instruments pooled over datasets (per-dataset values are in Figure 3 and the released tables). At the draft setting, ten steps at 0.01, adaptation changes 0.2 % of the meta-model's parameter norm and 0.1 % of the static model's, and the rank correlation between scores before and after is 0.95–0.97 for the meta-model and 0.99 for the static one. The matched setting, the inner loop the meta-model was trained for, moves it by 0.5 % and reorders slightly more (ρ = 0.93–0.95). The heavy setting, fifty steps at 0.1, moves it by about 2 % and brings ρ down to 0.87–0.89, which is the only setting under which the evaluation ranking of windows changes in a way a reader would notice; on HAI the heavy setting takes ρ to 0.76 ± 0.13.
+Table 5 reports the three adaptation instruments pooled over datasets (per-dataset values are in Figure 3 and the released tables). At the draft setting, ten steps at 0.01, adaptation changes 0.2 % of the meta-model's parameter norm and 0.1 % of the static model's, and the rank correlation between scores before and after is 0.95–0.97 for the meta-model and 0.99 for the static one. The matched setting, the inner loop the meta-model was trained for, moves it by 0.5 % and reorders slightly more (ρ = 0.93–0.95). The heavy setting, fifty steps at 0.1, moves it by about 2 % and brings ρ down to 0.87–0.89, which is the only setting under which the evaluation ranking of windows changes in a way a reader would notice; on HAI the heavy setting takes ρ to 0.76 ± 0.13.
 
-Table 4. Adaptation instruments pooled over the five datasets (mean ± sd over seeds of dataset means). ΔAUROC is relative to the same model before adaptation on the same cell.
+Table 5. Adaptation instruments pooled over the five datasets (mean ± sd over seeds of dataset means). ΔAUROC is relative to the same model before adaptation on the same cell.
 
 | model / setting | K | rel. parameter change | score rank ρ | mean score ratio | ΔAUROC |
 |---|---|---|---|---|---|
@@ -74,13 +89,13 @@ What adaptation does change is the scale of the scores. For the meta-model the m
 
 The pooled ΔAUROC of +0.01 to +0.016 for the meta-model comes almost entirely from SMAP. There, adaptation at the matched setting lifts the meta-model from 0.567 to 0.597 (173 of 320 cells, p < 0.0001), and it does so because the un-adapted meta-model is the weakest neural detector on that dataset; the adapted model ends level with the static model (p = 0.29) and 0.014 below the magnitude reference. On the other four datasets the adapted and un-adapted meta-models differ by 0.0001–0.0035. The pattern is the one Raghu et al. [@raghu2020anil] reported for classification, in a sharper form: the inner loop that gives the method its name changes the ranking of windows by a few per cent and the AUROC by a few thousandths, and the detector that is being evaluated is, for practical purposes, the meta-initialisation.
 
-The broken-loop model and the Scratch model show what adaptation does to a network that has never been trained. At the matched setting their parameters move by 0.3–0.4 % and their scores keep ρ = 1.000 with the magnitude reference; at the heavy setting they move by 2.5–4 %, more than any trained model, and still keep ρ ≥ 0.96. Five to fifty gradient steps on at most a hundred windows do not make a detector out of a random network, and they do not make a different detector out of a trained one.
+The broken-loop model and the Scratch model show what adaptation does to a network that has never been trained. At the matched setting their parameters move by 0.3–0.4 % and their scores keep ρ = 1.000 with their own un-adapted scores, which are the magnitude reference; at the heavy setting they move by 2.5–4 %, more than any trained model, and still keep ρ ≥ 0.96. Five to fifty gradient steps on at most a hundred windows do not make a detector out of a random network, and they do not make a different detector out of a trained one.
 
 ## 5.4 The deployed threshold costs more than any modelling choice
 
-Table 5 sets the point-wise F1 at the label-free threshold beside the oracle best F1 for four detectors. The gap is between 0.15 and 0.26 F1 on every dataset, and it dwarfs every difference between methods in Table 3. On SWaT the static autoencoder reaches F1 0.56 with the threshold calibrated after 20 or 100 support windows but 0.39–0.40 when calibrated after 1 or 5, because the 300-window calibration stretch then starts a few windows earlier and happens to include a short stretch of quieter operation; nothing about the model changed. On WADI every autoencoder alarms on about 60 % of the evaluation stream against an anomaly rate of 6 %, because the calibration stretch at the start of the attack recording is not representative of the rest of it, which is the natural drift of that recording that we have described elsewhere; the threshold, not the ranking, is why its F1 is 0.11. On HAI, SMAP and MSL the deployed F1 is 0.15–0.22 against oracle values of 0.30–0.46.
+Table 6 sets the point-wise F1 at the label-free threshold beside the oracle best F1 for four detectors. The gap is 0.19 F1 on SWaT, 0.06–0.10 on WADI, 0.22–0.25 on HAI, 0.15–0.16 on SMAP and 0.12–0.13 on MSL, and on every dataset but WADI it dwarfs every difference between methods in Table 3. On SWaT the static autoencoder reaches F1 0.56 with the threshold calibrated after 20 or 100 support windows but 0.39–0.40 when calibrated after 1 or 5, because the 300-window calibration stretch then starts a few windows earlier and happens to include a short stretch of quieter operation; nothing about the model changed. On WADI every autoencoder alarms on about 60 % of the evaluation stream against an anomaly rate of 6 %, because the calibration stretch at the start of the attack recording is not representative of the rest of it, a drift inside the attack recording itself; the threshold, not the ranking, is why its F1 is 0.11. On HAI, SMAP and MSL the deployed F1 is 0.14–0.22 against oracle values of 0.30–0.46.
 
-Table 5. Deployed point-wise F1 at the peaks-over-threshold level against the oracle best F1, K = 20, mean over seeds. Alarm rate is the share of evaluation windows above the threshold; the anomaly rate is the share of labelled windows.
+Table 6. Deployed point-wise F1 at the peaks-over-threshold level against the oracle best F1, K = 20, mean over seeds. Alarm rate is the share of evaluation windows above the threshold; the anomaly rate is the share of labelled windows.
 
 | Dataset | method | F1 (deployed) | best F1 (oracle) | precision | recall | alarm rate | anomaly rate |
 |---|---|---|---|---|---|---|---|
@@ -108,9 +123,9 @@ The oracle column is the number most papers report. Read on its own it would say
 
 ## 5.5 Q3, across plants: transfer reaches the target-trained model only where the target is easy, and meta-training adds nothing
 
-Table 6 gives the six transfer directions at K = 20 and K = 100 (Figure 4 maps the K = 20 values). The target decides everything. With SWaT as target every model in the shared 32-component space, including the random network, is between 0.824 and 0.838, and the model trained on SWaT itself is at 0.835: in that space SWaT's attacks are detected by magnitude, as they were in the native space, and there is nothing for transfer to transfer. With WADI as target every model, including the one trained on WADI, is between 0.47 and 0.55: the 32 components keep 91 % of WADI's normal-operation variance but not the part of it that separates attacks, and no source helps. With HAI as target the two source-trained models reach 0.87 from either SWaT or WADI, against 0.895 for the target-trained model and 0.78 for the random network; this is the one direction in which pre-training on another plant carries over something that K target windows cannot supply.
+Table 7 gives the six transfer directions at K = 20 and K = 100 (Figure 4 maps the K = 20 values). The target decides everything. With SWaT as target every model in the shared 32-component space, including the random network, is between 0.824 and 0.838, and the model trained on SWaT itself is at 0.835: in that space SWaT's attacks are detected by magnitude, as they were in the native space, and there is nothing for transfer to transfer. With WADI as target every model, including the one trained on WADI, is between 0.47 and 0.55: the 32 components keep 91 % of WADI's normal-operation variance but not the part of it that separates attacks, and no source helps. With HAI as target the two source-trained models reach 0.87 from either SWaT or WADI, against 0.895 for the target-trained model and 0.78 for the random network; this is the one direction in which pre-training on another plant carries over something that K target windows cannot supply.
 
-Table 6. Cross-plant transfer, AUROC on the target's attack recording(s), mean ± sd over five seeds, matched adaptation. Source-static is the static autoencoder trained on the source plant and adapted on K target windows; MAML-transfer is the meta-model trained on the source plant's regimes and adapted the same way.
+Table 7. Cross-plant transfer, AUROC on the target's attack recording(s), mean ± sd over five seeds, matched adaptation. Source-static is the static autoencoder trained on the source plant and adapted on K target windows; MAML-transfer is the meta-model trained on the source plant's regimes and adapted the same way.
 
 | method / K | HAI→SWaT | HAI→WADI | SWaT→HAI | SWaT→WADI | WADI→HAI | WADI→SWaT |
 |---|---|---|---|---|---|---|

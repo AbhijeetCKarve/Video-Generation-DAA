@@ -84,33 +84,35 @@ first-order MAML on regimes carved from normal operation, on five public
 benchmarks (the SWaT, WADI and HAI 21.03 testbeds and the SMAP and MSL
 telemetry sets), with five seeds, support sizes from 1 to 100 windows,
 within-plant and cross-plant evaluation, strictly point-wise metrics, a
-threshold set without labels, and paired tests on 10,000 cells. Four
-instruments were added to the usual protocol: the norm of the
-meta-update per outer step, with a control that reproduces a common
-gradient-path fault in first-order MAML code that silently leaves the
-meta-model at its initialisation; the relative parameter change and the
-rank correlation of anomaly scores before and after adaptation, at three
-adaptation strengths; a parameter-free reference, the squared magnitude
-of the standardised window; and a per-stream task-diversity score. The
-corrected meta-learner trains, and the broken one leaves a signature
-only in the update norm, which was exactly zero in all 25 control runs
-while its loss curve looked ordinary. K-shot adaptation moved the
-autoencoder by 0.1–0.6 % of its parameter norm at the settings in use
-and left the ranking of windows with a rank correlation of 0.93–0.99; it
-changed AUROC by a few thousandths everywhere except SMAP, where it
-repaired a poor meta-initialisation to the level of a static model. The
-meta-learned detector never beat the static autoencoder by more than
-0.01 AUROC within a plant, was 0.056 worse on HAI, and matched a
-statically pre-trained source model in all six transfer directions. On
-four of the five benchmarks no autoencoder, trained or meta-trained,
-beat the window magnitude, which a random untrained network reproduces
-with rank correlation 0.996–1.000; only HAI rewarded training, and there
-a flat autoencoder beat the recurrent one. The label-free threshold cost
-0.15–0.26 F1 against the oracle, more than any modelling choice. Task
-diversity did not predict the meta-learning gain across 120 telemetry
-channels (Spearman −0.20). We release the code and tables and propose
-five measurements that a report of a meta-learned detector should
-include so that adaptation can be told from decoration.</p>
+threshold set without labels, and paired tests on every (seed, stream,
+K) cell of 11,180 result rows. Four instruments were added to the usual
+protocol: the norm of the meta-update per outer step, with a control
+that reproduces a common gradient-path fault in first-order MAML code
+that silently leaves the meta-model at its initialisation; the relative
+parameter change and the rank correlation of anomaly scores before and
+after adaptation, at three adaptation strengths; a parameter-free
+reference, the squared magnitude of the standardised window; and a
+per-stream task-diversity score. The corrected meta-learner trains, and
+the broken one leaves a signature only in the update norm, which was
+exactly zero in all 25 control runs while its loss curve looked
+ordinary. K-shot adaptation moved the autoencoder by 0.1–0.6 % of its
+parameter norm at the settings in use and left the ranking of windows
+with a rank correlation of 0.93–0.99; it changed AUROC by a few
+thousandths everywhere except SMAP, where it repaired a poor
+meta-initialisation to the level of a static model. The meta-learned
+detector never beat the static autoencoder by more than 0.01 AUROC
+within a plant, was 0.056 worse on HAI, and matched a statically
+pre-trained source model in all six transfer directions. On four of the
+five benchmarks no autoencoder, trained or meta-trained, beat the window
+magnitude, which a random untrained network reproduces with rank
+correlation 0.996–1.000; only HAI rewarded training, and there a flat
+autoencoder beat the recurrent one. The label-free threshold cost
+0.06–0.25 F1 against the oracle, on four of the five benchmarks more
+than any modelling choice. Task diversity did not predict the
+meta-learning gain across 120 telemetry channels (Spearman −0.20). We
+release the code and tables and propose five measurements that a report
+of a meta-learned detector should include so that adaptation can be told
+from decoration.</p>
 <p><strong>Keywords:</strong> meta-learning; MAML; LSTM autoencoder;
 anomaly detection; industrial control systems; spacecraft telemetry;
 few-shot adaptation; reproducibility.</p>
@@ -288,11 +290,11 @@ anecdote.</p>
 <p>This paper is deliberately an offline study: the meta-model is
 trained once, adapted once with K windows, and scored on a fixed test
 stream. Online adaptation on a drifting stream, where a drift detector
-decides when to adapt, is a different problem with its own protocol, and
-we have treated it separately <span class="citation" data-cites="kermenov2023drift gama2014drift"><a href="#ref-kermenov2023drift" role="doc-biblioref">[29]</a>, <a href="#ref-gama2014drift" role="doc-biblioref">[30]</a></span>. Keeping
-the two apart is part of the point: the measurements here are about the
-meta-learner itself, with no gate, memory or threshold logic in the
-way.</p>
+decides when to adapt, is a different problem with its own literature
+<span class="citation" data-cites="gama2014drift kermenov2023drift"><a href="#ref-gama2014drift" role="doc-biblioref">[29]</a>, <a href="#ref-kermenov2023drift" role="doc-biblioref">[30]</a></span>, and
+we keep it out of this study. Keeping the two apart is part of the
+point: the measurements here are about the meta-learner itself, with no
+gate, memory or threshold logic in the way.</p>
 <h1 id="detector-meta-learner-control-and-instruments">3 Detector,
 meta-learner, control and instruments</h1>
 <h2 id="the-lstm-autoencoder">3.1 The LSTM autoencoder</h2>
@@ -679,170 +681,214 @@ zero on every dataset.</figcaption>
 <h2 id="q3-within-a-plant-the-meta-learned-model-does-not-beat-the-static-one-and-neither-beats-the-magnitude-of-the-window-on-three-benchmarks">5.2
 Q3, within a plant: the meta-learned model does not beat the static one,
 and neither beats the magnitude of the window on three benchmarks</h2>
-<p>Table 3 gives AUROC and AUPRC at K = 20 for every method; Figure 2
-shows AUROC against K. The first row is the detector with no parameters:
-the mean squared standardised value of the window.</p>
-<p>Table 3. Within-plant detection at K = 20, AUROC and AUPRC, mean ± sd
-over five seeds. Scratch is a random LSTM autoencoder from a seed the
-meta-learner did not use.</p>
-<table>
+<p>Tables 3 and 4 give AUROC and AUPRC at K = 20 for every method;
+Figure 2 shows AUROC against K. The first row is the detector with no
+parameters: the mean squared standardised value of the window.</p>
+<p>Table 3. Within-plant detection at K = 20, AUROC, mean ± sd over five
+seeds. Scratch is a random LSTM autoencoder from a seed the meta-learner
+did not use.</p>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th>method</th>
-<th>SWaT AUROC</th>
-<th>SWaT AUPRC</th>
-<th>WADI AUROC</th>
-<th>WADI AUPRC</th>
-<th>HAI AUROC</th>
-<th>HAI AUPRC</th>
-<th>SMAP AUROC</th>
-<th>SMAP AUPRC</th>
-<th>MSL AUROC</th>
-<th>MSL AUPRC</th>
+<th>SWaT</th>
+<th>WADI</th>
+<th>HAI</th>
+<th>SMAP</th>
+<th>MSL</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Magnitude</td>
 <td>0.859 ± 0.000</td>
-<td>0.769 ± 0.000</td>
 <td>0.673 ± 0.000</td>
-<td>0.181 ± 0.000</td>
 <td>0.855 ± 0.000</td>
-<td>0.280 ± 0.000</td>
 <td>0.605 ± 0.031</td>
-<td>0.245 ± 0.046</td>
 <td>0.610 ± 0.054</td>
-<td>0.307 ± 0.054</td>
 </tr>
 <tr class="even">
 <td>Isolation Forest</td>
 <td>0.832 ± 0.001</td>
-<td>0.726 ± 0.005</td>
 <td>0.718 ± 0.007</td>
-<td>0.200 ± 0.017</td>
 <td>0.633 ± 0.006</td>
-<td>0.053 ± 0.004</td>
 <td>0.559 ± 0.030</td>
-<td>0.181 ± 0.050</td>
 <td>0.574 ± 0.055</td>
-<td>0.244 ± 0.032</td>
 </tr>
 <tr class="odd">
 <td>MLP-AE</td>
 <td>0.862 ± 0.004</td>
-<td>0.776 ± 0.002</td>
 <td>0.579 ± 0.008</td>
-<td>0.100 ± 0.014</td>
 <td>0.933 ± 0.001</td>
-<td>0.344 ± 0.001</td>
 <td>0.599 ± 0.060</td>
-<td>0.245 ± 0.065</td>
 <td>0.573 ± 0.059</td>
-<td>0.241 ± 0.071</td>
 </tr>
 <tr class="even">
 <td>Static-AE</td>
 <td>0.867 ± 0.007</td>
-<td>0.769 ± 0.008</td>
 <td>0.584 ± 0.004</td>
-<td>0.101 ± 0.011</td>
 <td>0.901 ± 0.004</td>
-<td>0.321 ± 0.008</td>
 <td>0.587 ± 0.052</td>
-<td>0.241 ± 0.059</td>
 <td>0.592 ± 0.067</td>
-<td>0.287 ± 0.059</td>
 </tr>
 <tr class="odd">
 <td>Static-AE+FT (matched)</td>
 <td>0.867 ± 0.008</td>
-<td>0.769 ± 0.009</td>
 <td>0.582 ± 0.007</td>
-<td>0.101 ± 0.013</td>
 <td>0.900 ± 0.004</td>
-<td>0.319 ± 0.008</td>
 <td>0.592 ± 0.046</td>
-<td>0.250 ± 0.064</td>
 <td>0.585 ± 0.061</td>
-<td>0.288 ± 0.058</td>
 </tr>
 <tr class="even">
 <td>MAML-AE, no adaptation</td>
 <td>0.858 ± 0.002</td>
-<td>0.764 ± 0.003</td>
 <td>0.589 ± 0.042</td>
-<td>0.114 ± 0.026</td>
 <td>0.845 ± 0.021</td>
-<td>0.288 ± 0.004</td>
 <td>0.567 ± 0.043</td>
-<td>0.226 ± 0.050</td>
 <td>0.588 ± 0.058</td>
-<td>0.288 ± 0.059</td>
 </tr>
 <tr class="odd">
 <td>MAML-AE (matched)</td>
 <td>0.859 ± 0.003</td>
-<td>0.764 ± 0.004</td>
 <td>0.592 ± 0.041</td>
-<td>0.116 ± 0.024</td>
 <td>0.846 ± 0.023</td>
-<td>0.284 ± 0.006</td>
 <td>0.597 ± 0.043</td>
-<td>0.237 ± 0.054</td>
 <td>0.589 ± 0.059</td>
-<td>0.288 ± 0.060</td>
 </tr>
 <tr class="even">
 <td>MAML-AE (heavy)</td>
 <td>0.856 ± 0.003</td>
-<td>0.762 ± 0.005</td>
 <td>0.586 ± 0.047</td>
-<td>0.116 ± 0.022</td>
 <td>0.844 ± 0.031</td>
-<td>0.283 ± 0.015</td>
 <td>0.594 ± 0.044</td>
-<td>0.255 ± 0.064</td>
 <td>0.591 ± 0.057</td>
-<td>0.288 ± 0.059</td>
 </tr>
 <tr class="odd">
 <td>MAML-AE-broken (matched)</td>
 <td>0.858 ± 0.000</td>
-<td>0.769 ± 0.000</td>
 <td>0.672 ± 0.001</td>
-<td>0.180 ± 0.001</td>
 <td>0.854 ± 0.001</td>
-<td>0.280 ± 0.001</td>
 <td>0.605 ± 0.033</td>
-<td>0.241 ± 0.050</td>
 <td>0.606 ± 0.055</td>
-<td>0.306 ± 0.054</td>
 </tr>
 <tr class="even">
 <td>Scratch (matched)</td>
 <td>0.859 ± 0.000</td>
-<td>0.769 ± 0.000</td>
 <td>0.672 ± 0.001</td>
-<td>0.182 ± 0.001</td>
 <td>0.854 ± 0.001</td>
-<td>0.279 ± 0.001</td>
 <td>0.607 ± 0.033</td>
-<td>0.242 ± 0.049</td>
 <td>0.609 ± 0.058</td>
+</tr>
+</tbody>
+</table>
+<p>Table 4. Within-plant detection at K = 20, AUPRC, mean ± sd over five
+seeds.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>method</th>
+<th>SWaT</th>
+<th>WADI</th>
+<th>HAI</th>
+<th>SMAP</th>
+<th>MSL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Magnitude</td>
+<td>0.769 ± 0.000</td>
+<td>0.181 ± 0.000</td>
+<td>0.280 ± 0.000</td>
+<td>0.245 ± 0.046</td>
+<td>0.307 ± 0.054</td>
+</tr>
+<tr class="even">
+<td>Isolation Forest</td>
+<td>0.726 ± 0.005</td>
+<td>0.200 ± 0.017</td>
+<td>0.053 ± 0.004</td>
+<td>0.181 ± 0.050</td>
+<td>0.244 ± 0.032</td>
+</tr>
+<tr class="odd">
+<td>MLP-AE</td>
+<td>0.776 ± 0.002</td>
+<td>0.100 ± 0.014</td>
+<td>0.344 ± 0.001</td>
+<td>0.245 ± 0.065</td>
+<td>0.241 ± 0.071</td>
+</tr>
+<tr class="even">
+<td>Static-AE</td>
+<td>0.769 ± 0.008</td>
+<td>0.101 ± 0.011</td>
+<td>0.321 ± 0.008</td>
+<td>0.241 ± 0.059</td>
+<td>0.287 ± 0.059</td>
+</tr>
+<tr class="odd">
+<td>Static-AE+FT (matched)</td>
+<td>0.769 ± 0.009</td>
+<td>0.101 ± 0.013</td>
+<td>0.319 ± 0.008</td>
+<td>0.250 ± 0.064</td>
+<td>0.288 ± 0.058</td>
+</tr>
+<tr class="even">
+<td>MAML-AE, no adaptation</td>
+<td>0.764 ± 0.003</td>
+<td>0.114 ± 0.026</td>
+<td>0.288 ± 0.004</td>
+<td>0.226 ± 0.050</td>
+<td>0.288 ± 0.059</td>
+</tr>
+<tr class="odd">
+<td>MAML-AE (matched)</td>
+<td>0.764 ± 0.004</td>
+<td>0.116 ± 0.024</td>
+<td>0.284 ± 0.006</td>
+<td>0.237 ± 0.054</td>
+<td>0.288 ± 0.060</td>
+</tr>
+<tr class="even">
+<td>MAML-AE (heavy)</td>
+<td>0.762 ± 0.005</td>
+<td>0.116 ± 0.022</td>
+<td>0.283 ± 0.015</td>
+<td>0.255 ± 0.064</td>
+<td>0.288 ± 0.059</td>
+</tr>
+<tr class="odd">
+<td>MAML-AE-broken (matched)</td>
+<td>0.769 ± 0.000</td>
+<td>0.180 ± 0.001</td>
+<td>0.280 ± 0.001</td>
+<td>0.241 ± 0.050</td>
+<td>0.306 ± 0.054</td>
+</tr>
+<tr class="even">
+<td>Scratch (matched)</td>
+<td>0.769 ± 0.000</td>
+<td>0.182 ± 0.001</td>
+<td>0.279 ± 0.001</td>
+<td>0.242 ± 0.049</td>
 <td>0.308 ± 0.054</td>
 </tr>
 </tbody>
@@ -890,7 +936,7 @@ the first sign that the adapting ones barely adapt.</p>
 <h2 id="q2-k-shot-adaptation-moves-the-autoencoder-very-little-and-reorders-almost-nothing">5.3
 Q2: K-shot adaptation moves the autoencoder very little and reorders
 almost nothing</h2>
-<p>Table 4 reports the three adaptation instruments pooled over datasets
+<p>Table 5 reports the three adaptation instruments pooled over datasets
 (per-dataset values are in Figure 3 and the released tables). At the
 draft setting, ten steps at 0.01, adaptation changes 0.2 % of the
 meta-model’s parameter norm and 0.1 % of the static model’s, and the
@@ -902,7 +948,7 @@ moves it by about 2 % and brings ρ down to 0.87–0.89, which is the only
 setting under which the evaluation ranking of windows changes in a way a
 reader would notice; on HAI the heavy setting takes ρ to 0.76 ±
 0.13.</p>
-<p>Table 4. Adaptation instruments pooled over the five datasets (mean ±
+<p>Table 5. Adaptation instruments pooled over the five datasets (mean ±
 sd over seeds of dataset means). ΔAUROC is relative to the same model
 before adaptation on the same cell.</p>
 <table style="width:100%;">
@@ -1045,17 +1091,18 @@ and the detector that is being evaluated is, for practical purposes, the
 meta-initialisation.</p>
 <p>The broken-loop model and the Scratch model show what adaptation does
 to a network that has never been trained. At the matched setting their
-parameters move by 0.3–0.4 % and their scores keep ρ = 1.000 with the
-magnitude reference; at the heavy setting they move by 2.5–4 %, more
-than any trained model, and still keep ρ ≥ 0.96. Five to fifty gradient
-steps on at most a hundred windows do not make a detector out of a
-random network, and they do not make a different detector out of a
-trained one.</p>
+parameters move by 0.3–0.4 % and their scores keep ρ = 1.000 with their
+own un-adapted scores, which are the magnitude reference; at the heavy
+setting they move by 2.5–4 %, more than any trained model, and still
+keep ρ ≥ 0.96. Five to fifty gradient steps on at most a hundred windows
+do not make a detector out of a random network, and they do not make a
+different detector out of a trained one.</p>
 <h2 id="the-deployed-threshold-costs-more-than-any-modelling-choice">5.4
 The deployed threshold costs more than any modelling choice</h2>
-<p>Table 5 sets the point-wise F1 at the label-free threshold beside the
-oracle best F1 for four detectors. The gap is between 0.15 and 0.26 F1
-on every dataset, and it dwarfs every difference between methods in
+<p>Table 6 sets the point-wise F1 at the label-free threshold beside the
+oracle best F1 for four detectors. The gap is 0.19 F1 on SWaT, 0.06–0.10
+on WADI, 0.22–0.25 on HAI, 0.15–0.16 on SMAP and 0.12–0.13 on MSL, and
+on every dataset but WADI it dwarfs every difference between methods in
 Table 3. On SWaT the static autoencoder reaches F1 0.56 with the
 threshold calibrated after 20 or 100 support windows but 0.39–0.40 when
 calibrated after 1 or 5, because the 300-window calibration stretch then
@@ -1063,11 +1110,11 @@ starts a few windows earlier and happens to include a short stretch of
 quieter operation; nothing about the model changed. On WADI every
 autoencoder alarms on about 60 % of the evaluation stream against an
 anomaly rate of 6 %, because the calibration stretch at the start of the
-attack recording is not representative of the rest of it, which is the
-natural drift of that recording that we have described elsewhere; the
-threshold, not the ranking, is why its F1 is 0.11. On HAI, SMAP and MSL
-the deployed F1 is 0.15–0.22 against oracle values of 0.30–0.46.</p>
-<p>Table 5. Deployed point-wise F1 at the peaks-over-threshold level
+attack recording is not representative of the rest of it, a drift inside
+the attack recording itself; the threshold, not the ranking, is why its
+F1 is 0.11. On HAI, SMAP and MSL the deployed F1 is 0.14–0.22 against
+oracle values of 0.30–0.46.</p>
+<p>Table 6. Deployed point-wise F1 at the peaks-over-threshold level
 against the oracle best F1, K = 20, mean over seeds. Alarm rate is the
 share of evaluation windows above the threshold; the anomaly rate is the
 share of labelled windows.</p>
@@ -1299,7 +1346,7 @@ its oracle F1 is level with the magnitude reference.</p>
 <h2 id="q3-across-plants-transfer-reaches-the-target-trained-model-only-where-the-target-is-easy-and-meta-training-adds-nothing">5.5
 Q3, across plants: transfer reaches the target-trained model only where
 the target is easy, and meta-training adds nothing</h2>
-<p>Table 6 gives the six transfer directions at K = 20 and K = 100
+<p>Table 7 gives the six transfer directions at K = 20 and K = 100
 (Figure 4 maps the K = 20 values). The target decides everything. With
 SWaT as target every model in the shared 32-component space, including
 the random network, is between 0.824 and 0.838, and the model trained on
@@ -1313,7 +1360,7 @@ source-trained models reach 0.87 from either SWaT or WADI, against 0.895
 for the target-trained model and 0.78 for the random network; this is
 the one direction in which pre-training on another plant carries over
 something that K target windows cannot supply.</p>
-<p>Table 6. Cross-plant transfer, AUROC on the target’s attack
+<p>Table 7. Cross-plant transfer, AUROC on the target’s attack
 recording(s), mean ± sd over five seeds, matched adaptation.
 Source-static is the static autoencoder trained on the source plant and
 adapted on K target windows; MAML-transfer is the meta-model trained on
@@ -1580,11 +1627,11 @@ the level of a static model. And it does not detect better than a static
 autoencoder within a plant or across plants, while on four of five
 benchmarks neither of them detects better than the squared magnitude of
 the standardised window. The deployed threshold, set without labels,
-costs 0.15–0.26 F1 against the oracle, more than any modelling choice in
-the study. We release the loaders, the meta-learner with its control,
-the runner and every table, and we propose that reports of meta-learned
-detectors include the five measurements that made these conclusions
-possible.</p>
+costs 0.06–0.25 F1 against the oracle, which on four of the five
+benchmarks is more than any modelling choice in the study. We release
+the loaders, the meta-learner with its control, the runner and every
+table, and we propose that reports of meta-learned detectors include the
+five measurements that made these conclusions possible.</p>
 <h1 class="unnumbered" id="data-and-code-availability">Data and code
 availability</h1>
 <p>HAI 21.03, SMAP and MSL are public. SWaT and WADI are available from
@@ -1784,18 +1831,18 @@ J. Rousseeuw, <span>“Silhouettes: A graphical aid to the interpretation
 and validation of cluster analysis,”</span> <em>Journal of Computational
 and Applied Mathematics</em>, vol. 20, pp. 53–65, 1987, doi: <a href="https://doi.org/10.1016/0377-0427(87)90125-7">10.1016/0377-0427(87)90125-7</a>.</div>
 </div>
+<div id="ref-gama2014drift" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[29] </div><div class="csl-right-inline">J.
+Gama, I. Žliobaitė, A. Bifet, M. Pechenizkiy, and A. Bouchachia,
+<span>“A survey on concept drift adaptation,”</span> <em>ACM Computing
+Surveys</em>, vol. 46, no. 4, pp. 44:1–44:37, 2014.</div>
+</div>
 <div id="ref-kermenov2023drift" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[29] </div><div class="csl-right-inline">R.
+<div class="csl-left-margin">[30] </div><div class="csl-right-inline">R.
 Kermenov, G. Nabissi, S. Longhi, and A. Bonci, <span>“Anomaly detection
 and concept drift adaptation for dynamic systems: A general method with
 practical implementation using an industrial collaborative
 robot,”</span> <em>Sensors</em>, vol. 23, no. 6, p. 3260, 2023, doi: <a href="https://doi.org/10.3390/s23063260">10.3390/s23063260</a>.</div>
-</div>
-<div id="ref-gama2014drift" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[30] </div><div class="csl-right-inline">J.
-Gama, I. Žliobaitė, A. Bifet, M. Pechenizkiy, and A. Bouchachia,
-<span>“A survey on concept drift adaptation,”</span> <em>ACM Computing
-Surveys</em>, vol. 46, no. 4, pp. 44:1–44:37, 2014.</div>
 </div>
 <div id="ref-hochreiter1997lstm" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[31] </div><div class="csl-right-inline">S.
