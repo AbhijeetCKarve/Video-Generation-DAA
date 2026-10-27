@@ -36,15 +36,18 @@
 | HAI | Static-AE | Magnitude | 100 | 0.0462 | 88 | 12 | 0.0000 |
 | HAI | MAML-AE (matched) | Magnitude | 100 | -0.0094 | 49 | 51 | 0.0252 |
 | HAI | Scratch-noadapt | Magnitude | 100 | 0.0000 | 44 | 56 | 0.4453 |
-| SMAP | MAML-AE (matched) | Static-AE | 288 | 0.0086 | 130 | 134 | 0.0834 |
-| SMAP | MAML-AE (matched) | Static-AE+FT (matched) | 288 | 0.0073 | 120 | 145 | 0.7309 |
-| SMAP | MAML-AE (matched) | MAML-AE-noadapt | 288 | 0.0200 | 159 | 102 | 0.0000 |
-| SMAP | MAML-AE (matched) | MAML-AE-broken (matched) | 288 | -0.0138 | 96 | 168 | 0.0001 |
-| SMAP | MAML-AE (matched) | IsoForest | 288 | 0.0276 | 147 | 141 | 0.0038 |
-| SMAP | MAML-AE (matched) | MLP-AE | 288 | -0.0019 | 157 | 115 | 0.2742 |
-| SMAP | Static-AE | MLP-AE | 288 | -0.0105 | 104 | 168 | 0.0000 |
-| SMAP | MAML-AE (heavy) | MAML-AE-noadapt | 288 | 0.0221 | 155 | 109 | 0.0000 |
-| SMAP | MAML-AE-broken (matched) | Scratch (matched) | 288 | -0.0028 | 141 | 114 | 0.6687 |
+| SMAP | MAML-AE (matched) | Static-AE | 320 | 0.0051 | 137 | 159 | 0.2852 |
+| SMAP | MAML-AE (matched) | Static-AE+FT (matched) | 320 | 0.0039 | 132 | 164 | 0.3967 |
+| SMAP | MAML-AE (matched) | MAML-AE-noadapt | 320 | 0.0248 | 173 | 120 | 0.0000 |
+| SMAP | MAML-AE (matched) | MAML-AE-broken (matched) | 320 | -0.0129 | 104 | 192 | 0.0000 |
+| SMAP | MAML-AE (matched) | IsoForest | 320 | 0.0328 | 166 | 154 | 0.0008 |
+| SMAP | MAML-AE (matched) | MLP-AE | 320 | -0.0070 | 166 | 138 | 0.9802 |
+| SMAP | Static-AE | MLP-AE | 320 | -0.0121 | 120 | 184 | 0.0000 |
+| SMAP | MAML-AE (heavy) | MAML-AE-noadapt | 320 | 0.0250 | 171 | 125 | 0.0003 |
+| SMAP | MAML-AE-broken (matched) | Scratch (matched) | 320 | -0.0024 | 145 | 140 | 0.1925 |
+| SMAP | Static-AE | Magnitude | 320 | -0.0187 | 96 | 200 | 0.0000 |
+| SMAP | MAML-AE (matched) | Magnitude | 320 | -0.0136 | 109 | 187 | 0.0001 |
+| SMAP | Scratch-noadapt | Magnitude | 320 | -0.0007 | 126 | 160 | 0.2101 |
 | MSL | MAML-AE (matched) | Static-AE | 160 | -0.0034 | 108 | 52 | 0.0003 |
 | MSL | MAML-AE (matched) | Static-AE+FT (matched) | 160 | 0.0046 | 110 | 50 | 0.0000 |
 | MSL | MAML-AE (matched) | MAML-AE-noadapt | 160 | 0.0006 | 109 | 51 | 0.0004 |
