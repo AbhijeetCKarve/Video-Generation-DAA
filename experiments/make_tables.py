@@ -34,9 +34,13 @@ def load_all() -> pd.DataFrame:
 
 
 def agg(df: pd.DataFrame, metric: str, by: List[str]) -> pd.DataFrame:
-    """mean over entities within a seed, then mean and std over seeds."""
-    per_seed = df.groupby(by + ["seed"])[metric].mean().reset_index()
-    g = per_seed.groupby(by)[metric]
+    """mean over entities within (dataset, seed); when pooling across
+    datasets, mean over datasets within a seed (each dataset weighted
+    equally); then mean and std over seeds."""
+    keys = by + (["dataset"] if "dataset" not in by else []) + ["seed"]
+    per = df.groupby(keys, observed=True)[metric].mean().reset_index()
+    per_seed = per.groupby(by + ["seed"], observed=True)[metric].mean().reset_index()
+    g = per_seed.groupby(by, observed=True)[metric]
     out = g.agg(["mean", "std", "count"]).reset_index()
     return out
 

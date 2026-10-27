@@ -49,7 +49,9 @@ def load_df() -> pd.DataFrame:
 
 
 def per_seed(df, metric, by):
-    s = df.groupby(by + ["seed"])[metric].mean().reset_index()
+    keys = by + (["dataset"] if "dataset" not in by else []) + ["seed"]
+    per = df.groupby(keys)[metric].mean().reset_index()
+    s = per.groupby(by + ["seed"])[metric].mean().reset_index()
     return s.groupby(by)[metric].agg(["mean", "std"]).reset_index()
 
 
