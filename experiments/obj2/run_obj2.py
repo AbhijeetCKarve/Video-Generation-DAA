@@ -152,7 +152,7 @@ def make_val(groups: List[np.ndarray], cfg: FOMAMLConfig, torch, seed: int):
 
 
 # ------------------------------------------------------------------ within
-def run_within(dataset: str, seed: int, quick: bool) -> str:
+def run_within(dataset: str, seed: int, quick: bool, outer_steps: int = 600, tag: str = "") -> str:
     import torch
     torch.set_num_threads(1)
     t0 = time.time()
@@ -164,10 +164,10 @@ def run_within(dataset: str, seed: int, quick: bool) -> str:
         ho = ho[:2]
     d = ents[0].d
     rng = np.random.default_rng(seed)
-    outer = 60 if quick else 600
+    outer = 60 if quick else outer_steps
     static_steps = 200 if quick else 2000
     fcfg = FOMAMLConfig(outer_steps=outer)
-    meta: Dict = {"dataset": dataset, "seed": seed, "n_meta_train": len(mt), "n_held_out": len(ho), "d": d}
+    meta: Dict = {"dataset": dataset, "seed": seed, "outer_steps": outer, "tag": tag, "n_meta_train": len(mt), "n_held_out": len(ho), "d": d}
 
     # ---- training windows and tasks
     if dataset in PLANTS:
@@ -242,7 +242,7 @@ def run_within(dataset: str, seed: int, quick: bool) -> str:
 
     # ---- evaluation
     OUT.mkdir(parents=True, exist_ok=True)
-    fout = open(OUT / f"within_{dataset}.jsonl", "a")
+    fout = open(OUT / f"within{tag}_{dataset}.jsonl", "a")
     n = 0
     for ent in ho:
         Xw = windows3d(ent.X_test)
@@ -281,7 +281,7 @@ def run_within(dataset: str, seed: int, quick: bool) -> str:
             fout.flush()
         log(f"{ent.name}: done ({n} rows)")
     fout.close()
-    with open(OUT / f"meta_{dataset}_s{seed}.json", "w") as f:
+    with open(OUT / f"meta{tag}_{dataset}_s{seed}.json", "w") as f:
         json.dump(meta, f, default=float)
     return f"within {dataset} seed {seed}: {n} rows in {time.time() - t0:.0f}s"
 
@@ -393,11 +393,13 @@ def main():
     ap.add_argument("--within", default="1")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--quick", action="store_true")
+    ap.add_argument("--outer", type=int, default=600, help="outer steps of meta-training (within jobs)")
+    ap.add_argument("--tag", default="", help="suffix for the within output files, e.g. _long")
     a = ap.parse_args()
     seeds = [int(s) for s in a.seeds.split(",")]
     jobs = []
     if a.within == "1":
-        jobs += [("within", (d, s, a.quick)) for d in a.datasets.split(",") for s in seeds]
+        jobs += [("within", (d, s, a.quick, a.outer, a.tag)) for d in a.datasets.split(",") for s in seeds]
     if a.transfer == "1":
         plants = [p for p in PLANTS if p in a.datasets.split(",")]
         jobs += [("transfer", (s_, t_, s, a.quick)) for s_ in plants for t_ in plants if s_ != t_ for s in seeds]

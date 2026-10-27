@@ -30,8 +30,15 @@ METRICS = ["auroc", "auprc", "f1", "precision", "recall", "best_f1"]
 def load(pattern: str) -> pd.DataFrame:
     rows = []
     for f in sorted(RAW.glob(pattern)):
+        tag = f.stem.replace("within_", "").replace("magnitude_", "")
+        tag = tag.split("_")[0] if "_" in tag else ""      # e.g. within_long_hai -> "long"
         with open(f) as fh:
-            rows += [json.loads(l) for l in fh if l.strip()]
+            for l in fh:
+                if l.strip():
+                    r = json.loads(l)
+                    if tag:
+                        r["method"] = r["method"] + f" [{tag}]"
+                    rows.append(r)
     df = pd.DataFrame(rows)
     if len(df):
         df["key"] = df["method"] + np.where(df["adapt"].eq("none"), "", " (" + df["adapt"] + ")")
