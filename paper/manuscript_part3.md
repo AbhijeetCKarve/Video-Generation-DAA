@@ -2,7 +2,9 @@
 
 ## 8.1 What the results say about the three findings
 
-Finding 1 of the review was that static methods are being applied to an online problem. The drift conditions make the cost of that visible: a static VAE whose threshold was set on the first regime alarms on almost every normal step after a sudden change, and the meta-learned model adapted once (MAML-1) does the same, because a good initialisation does not help a model that is never asked to adapt again. Finding 2 was that nobody updates the meta-level online. The replay meta-update is the smallest part of DAMAD in terms of effect size, and we say so in Section 7.4; the parts that matter most are the ones that decide *when* to adapt and *whether to keep* the adaptation. Finding 3 was the validation gap. HAI is the closest open relative of SWaT and WADI, and the loader accepts those datasets for anyone who holds the licence.
+Finding 1 of the review was that static methods are being applied to an online problem. The drift conditions make the cost of that visible: a static VAE whose threshold was set on the first regime alarms on 94 % of normal steps on SMD and 100 % on PSM after a sudden change, and the meta-learned model adapted once (MAML-1) does the same, because a good initialisation does not help a model that is never asked to adapt again. Finding 2 was that nobody updates the meta-level online. We did, and the honest summary is that the online meta-update (replay) is the smallest part of DAMAD in effect size; the parts that matter are the ones that decide *when* to adapt, *whether to keep* the adaptation, and *where to put the threshold afterwards*. Finding 3 was the validation gap. HAI is the closest open relative of SWaT and WADI, and it is also the dataset on which DAMAD helps least: its static thresholds are already high relative to the injected shift, so there is less of a false-alarm flood to prevent, and every recalibration on a window that contains an attack costs recall.
+
+A fourth point is not in the review but comes out of Section 7.1 clearly enough to state on its own. For a small reconstruction model, the meta-learned initialisation is not what limits few-shot anomaly detection on these streams. One support window gives the same F1 as ten, and a static VAE trained on pooled normal data is as good a starting point as MAML++ or Meta-SGD. The few-shot literature we reviewed measures the quality of the initialisation; the deployment problem is dominated by what happens in the hours after it.
 
 ## 8.2 What building DAMAD changed
 
@@ -20,7 +22,11 @@ The acceptance test was added. Sub-problem SP3 asks how to tell drift from a lon
 
 *Short calibration windows.* Every threshold in the study is set from 300 windows, which is what an operator would have after a change. With a 28 % anomaly rate (PSM) the calibration window is often contaminated and the recalibrated threshold is conservative. Robust calibration under contamination is an open problem and the reason our recall on PSM is lower than that of methods which never recalibrate.
 
-*The degenerate strategy.* On datasets with a high anomaly rate, alarming on everything scores a point-wise F1 of 2p/(1+p) where p is the anomaly rate: 0.44 on PSM and about 0.5 on SKAB. Several baselines reach their F1 that way under drift, with false-alarm rates close to one. This is why the protocol reports the false-alarm rate next to F1 and why we do not rank methods on F1 alone.
+*The degenerate strategy.* On datasets with a high anomaly rate, alarming on everything scores a point-wise F1 of 2p/(1+p) where p is the anomaly rate: 0.44 on PSM and about 0.5 on SKAB. Under drift on PSM every baseline sits within a few points of 0.44 with a false-alarm rate of 92--100 %, which is that strategy by another name. This is why the protocol reports the false-alarm rate next to F1 and why we do not rank methods on F1 alone.
+
+*Persistent faults.* When an anomalous state lasts until the end of the stream, as on SKAB, no unsupervised rule can tell it from a regime change; DAMAD adapts to it and loses recall, and the acceptance test cannot help because the old regime never returns. A detector that must handle such faults needs either a bound on how long an anomaly can last, supplied by the operator, or a label.
+
+*Latency.* Recalibrated thresholds are higher than a threshold set once on a quiet first regime, and the first alarm in an anomaly segment comes four to five windows later on average, with a lower share of segments detected. The trade is explicit in Table 12 and Section 7.2.
 
 *Licence-gated benchmarks.* SWaT and WADI were not used because they require a licence agreement, and SMAP/MSL were not reachable from our build environment. The loaders support all four.
 
