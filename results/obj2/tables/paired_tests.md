@@ -36,15 +36,15 @@
 | HAI | Static-AE | Magnitude | 100 | 0.0462 | 88 | 12 | 0.0000 |
 | HAI | MAML-AE (matched) | Magnitude | 100 | -0.0094 | 49 | 51 | 0.0252 |
 | HAI | Scratch-noadapt | Magnitude | 100 | 0.0000 | 44 | 56 | 0.4453 |
-| SMAP | MAML-AE (matched) | Static-AE | 64 | 0.0083 | 29 | 27 | 0.0050 |
-| SMAP | MAML-AE (matched) | Static-AE+FT (matched) | 64 | -0.0081 | 23 | 32 | 0.4068 |
-| SMAP | MAML-AE (matched) | MAML-AE-noadapt | 64 | 0.0018 | 35 | 17 | 0.0396 |
-| SMAP | MAML-AE (matched) | MAML-AE-broken (matched) | 64 | -0.0163 | 9 | 47 | 0.0000 |
-| SMAP | MAML-AE (matched) | IsoForest | 64 | 0.0366 | 20 | 44 | 0.9254 |
-| SMAP | MAML-AE (matched) | MLP-AE | 64 | 0.0056 | 40 | 16 | 0.0046 |
-| SMAP | Static-AE | MLP-AE | 64 | -0.0027 | 28 | 28 | 0.5570 |
-| SMAP | MAML-AE (heavy) | MAML-AE-noadapt | 64 | 0.0191 | 34 | 18 | 0.0158 |
-| SMAP | MAML-AE-broken (matched) | Scratch (matched) | 64 | 0.0006 | 45 | 11 | 0.0035 |
+| SMAP | MAML-AE (matched) | Static-AE | 288 | 0.0086 | 130 | 134 | 0.0834 |
+| SMAP | MAML-AE (matched) | Static-AE+FT (matched) | 288 | 0.0073 | 120 | 145 | 0.7309 |
+| SMAP | MAML-AE (matched) | MAML-AE-noadapt | 288 | 0.0200 | 159 | 102 | 0.0000 |
+| SMAP | MAML-AE (matched) | MAML-AE-broken (matched) | 288 | -0.0138 | 96 | 168 | 0.0001 |
+| SMAP | MAML-AE (matched) | IsoForest | 288 | 0.0276 | 147 | 141 | 0.0038 |
+| SMAP | MAML-AE (matched) | MLP-AE | 288 | -0.0019 | 157 | 115 | 0.2742 |
+| SMAP | Static-AE | MLP-AE | 288 | -0.0105 | 104 | 168 | 0.0000 |
+| SMAP | MAML-AE (heavy) | MAML-AE-noadapt | 288 | 0.0221 | 155 | 109 | 0.0000 |
+| SMAP | MAML-AE-broken (matched) | Scratch (matched) | 288 | -0.0028 | 141 | 114 | 0.6687 |
 | MSL | MAML-AE (matched) | Static-AE | 160 | -0.0034 | 108 | 52 | 0.0003 |
 | MSL | MAML-AE (matched) | Static-AE+FT (matched) | 160 | 0.0046 | 110 | 50 | 0.0000 |
 | MSL | MAML-AE (matched) | MAML-AE-noadapt | 160 | 0.0006 | 109 | 51 | 0.0004 |
