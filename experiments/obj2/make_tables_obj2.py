@@ -30,6 +30,8 @@ METRICS = ["auroc", "auprc", "f1", "precision", "recall", "best_f1"]
 def load(pattern: str) -> pd.DataFrame:
     rows = []
     for f in sorted(RAW.glob(pattern)):
+        if f.stem.startswith("within_long") and "long" not in pattern:
+            continue                                   # the long variant has its own table
         tag = f.stem.replace("within_", "").replace("magnitude_", "")
         tag = tag.split("_")[0] if "_" in tag else ""      # e.g. within_long_hai -> "long"
         with open(f) as fh:
@@ -220,6 +222,22 @@ if len(W):
                          for (d, k, key), r in m.iterrows()}
     summary["n_within_rows"] = int(len(W))
     summary["within_entities"] = {d: int(W[W.dataset == d].entity.nunique()) for d in DS_ORDER if (W.dataset == d).any()}
+
+# ------------------------------------------------------------ long variant
+LG = load("within_long_*.jsonl")
+if len(LG) and len(W):
+    seeds = sorted(LG.seed.unique())
+    keys = ["MAML-AE-noadapt", "MAML-AE (matched)", "MAML-AE (heavy)", "Static-AE"]
+    rows = []
+    for d in sorted(LG.dataset.unique()):
+        for k in keys:
+            a = LG[(LG.dataset == d) & (LG.key.str.replace(" [long]", "", regex=False) == k)]
+            b = W[(W.dataset == d) & (W.key == k) & W.seed.isin(seeds)]
+            rows.append({"dataset": DS_NAME[d], "method": k, "AUROC 600 steps": b.groupby("seed").auroc.mean().mean(),
+                         "AUROC 3000 steps": a.groupby("seed").auroc.mean().mean(),
+                         "AUPRC 600": b.groupby("seed").auprc.mean().mean(), "AUPRC 3000": a.groupby("seed").auprc.mean().mean()})
+    md_table(pd.DataFrame(rows).set_index("dataset"), TAB / "long_variant.md")
+    summary["long_variant_seeds"] = [int(x) for x in seeds]
 
 # ---------------------------------------------------------------- transfer
 T = load("transfer.jsonl")

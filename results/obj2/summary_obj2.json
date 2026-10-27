@@ -6,10 +6,10 @@
  },
  "diversity_by_dataset": {
   "hai": {
-   "silhouette_mean": 0.22904900312423707,
-   "silhouette_sd": 0.008647806421776068,
-   "gain_mean": -0.05557834639700861,
-   "n": 5
+   "silhouette_mean": 0.22731381016118185,
+   "silhouette_sd": 0.009779587292435924,
+   "gain_mean": -0.04699077521312105,
+   "n": 7
   },
   "msl": {
    "silhouette_mean": 0.38674098178744315,
@@ -24,23 +24,23 @@
    "n": 80
   },
   "swat": {
-   "silhouette_mean": 0.30523821115493777,
-   "silhouette_sd": 0.002425297560353261,
-   "gain_mean": -0.008689925650702767,
-   "n": 5
+   "silhouette_mean": 0.30562367609569,
+   "silhouette_sd": 0.0024789832282758563,
+   "gain_mean": -0.009065470588854327,
+   "n": 7
   },
   "wadi": {
-   "silhouette_mean": 0.1755647510290146,
-   "silhouette_sd": 0.0028016722611427,
-   "gain_mean": 0.00837580035916013,
-   "n": 5
+   "silhouette_mean": 0.17509514944893972,
+   "silhouette_sd": 0.0032333485295226354,
+   "gain_mean": 0.010733297577629043,
+   "n": 7
   }
  },
  "control": {
-  "n_runs": 25,
+  "n_runs": 31,
   "broken_zero_frac_min": 1.0,
   "broken_max_abs_diff_max": 0.0,
-  "corrected_step_mean": 0.09625134079207978
+  "corrected_step_mean": 0.09249084543661083
  },
  "within": {
   "swat|1|IsoForest": {
@@ -2292,6 +2292,10 @@
   "smap": 46,
   "msl": 24
  },
+ "long_variant_seeds": [
+  0,
+  1
+ ],
  "transfer": {
   "HAI\u2192SWaT|20|MAML-transfer (heavy)": {
    "auroc": 0.8286667219470916,

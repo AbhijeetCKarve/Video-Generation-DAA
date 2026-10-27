@@ -58,3 +58,22 @@ numbers in the paper are the numbers an operator would see.
 | MSGD-1     | meta   | nothing            | –           | –      | –         | Meta-SGD initialisation, adapt once     |
 | OML-A      | meta   | K-step adapt       | MMD         | –      | –         | OMLog idea on sensor streams            |
 | DAMAD      | meta   | K-step adapt       | ADWIN+MMD   | yes    | yes       | proposed                                |
+
+## Offline meta-learning study (paper2/)
+
+A second study uses the same loaders, metrics and threshold rule for an
+offline question: does an LSTM autoencoder trained with first-order MAML
+actually train, adapt and detect?  Its code is `damad/models/lstm_ae.py`,
+`damad/models/fomaml.py` (corrected FOMAML plus the broken-gradient-path
+control), `damad/data/regimes.py` (k-means regimes as tasks) and
+`experiments/obj2/`.
+
+```
+python experiments/obj2/run_obj2.py --workers 4            # 25 within-plant + 30 transfer jobs
+python experiments/obj2/run_obj2.py --datasets hai,swat,wadi --seeds 0,1 --transfer 0 --outer 3000 --tag _long
+python experiments/obj2/add_magnitude_baseline.py          # parameter-free reference rows
+python experiments/obj2/make_tables_obj2.py                # results/obj2/tables, figures/obj2
+```
+
+Raw rows go to `results/obj2/*.jsonl` (not tracked); tables and the
+meta-training logs (`results/obj2/meta_*.json`) are tracked.

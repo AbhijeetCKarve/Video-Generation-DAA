@@ -24,5 +24,3 @@ results/raw/
 results/quick/
 results/traces/
 results/obj2/*.jsonl
-# temporary while the obj2 run is in progress
-results/obj2/meta_*.json
