@@ -136,7 +136,7 @@ def fig_trace(dataset="smd", drift="sudden"):
 def fig_drift(df):
     order = ["VAE-S", "VAE-INC", "VAE-DFT", "MAML-1", "OML-A", "DAMAD"]
     sub = df[(df.k_shot == 5) & df.method.isin(order)]
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.6))
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.8), gridspec_kw={"wspace": 0.3})
     for ax, metric, lab in zip(axes, ["f1", "fpr_drift"], ["F1 (point-wise)", "false-alarm rate after drift"]):
         a = per_seed(sub, metric, ["method", "drift"])
         drifts = [d for d in DRIFTS if not (metric == "fpr_drift" and d == "none")]
@@ -146,7 +146,7 @@ def fig_drift(df):
             r = a[a.method == m].set_index("drift").reindex(drifts)
             ax.bar(x + (i - len(order) / 2 + 0.5) * wdt, r["mean"], wdt, yerr=r["std"].fillna(0), color=C[m], label=m, error_kw=dict(lw=0.6, capsize=1.5))
         ax.set_xticks(x)
-        ax.set_xticklabels(drifts)
+        ax.set_xticklabels(drifts, rotation=20, fontsize=8)
         ax.set_ylabel(lab)
         ax.set_ylim(0, 1)
     axes[0].legend(fontsize=6.5, ncol=2, frameon=False)
@@ -181,14 +181,14 @@ def fig_ablation(df):
     order = ["DAMAD", "DAMAD-rndM1", "DAMAD-noM1", "DAMAD+mmd", "DAMAD-mmd", "DAMAD-noM3", "DAMAD-noM4", "DAMAD-noAcc", "DAMAD-fo", "DAMAD-msgd"]
     labels = ["full", "random\nepisodes", "chunk\nepisodes", "ADWIN\n+ MMD", "MMD\nonly", "no\nreplay", "no τ\nrecal.", "no accept.\ntest", "FOMAML\ninit", "Meta-SGD\ninit"]
     sub = df[(df.k_shot == 5) & (df.drift != "none") & df.method.isin(order)]
-    fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.4))
+    fig, axes = plt.subplots(1, 3, figsize=(7.4, 2.9), gridspec_kw={"wspace": 0.42})
     for ax, metric, lab in zip(axes, ["f1", "fpr_drift", "adaptation_steps"], ["F1", "false-alarm rate after drift", "adaptation steps"]):
         a = per_seed(sub, metric, ["method"]).set_index("method").reindex(order)
         cols = ["#d62728"] + ["#7f7f7f"] * (len(order) - 1)
         ax.bar(np.arange(len(order)), a["mean"], yerr=a["std"].fillna(0), color=cols, error_kw=dict(lw=0.6, capsize=1.5))
         ax.set_xticks(np.arange(len(order)))
-        ax.set_xticklabels(labels, fontsize=6)
-        ax.set_ylabel(lab)
+        ax.set_xticklabels([l.replace("\n", " ") for l in labels], fontsize=6, rotation=55, ha="right")
+        ax.set_ylabel(lab, fontsize=8)
     save(fig, "fig_ablation")
 
 
