@@ -50,7 +50,7 @@ def fmt(m, s):
 
 
 def md_table(df: pd.DataFrame, path: Path, floatfmt="{:.3f}"):
-    cols = list(df.columns)
+    cols = [str(c) for c in df.columns]
     lines = ["| " + " | ".join([df.index.name or ""] + cols) + " |",
              "|" + "---|" * (len(cols) + 1)]
     for idx, row in df.iterrows():
@@ -64,7 +64,7 @@ W = load("within_*.jsonl")
 summary = {}
 if len(W):
     W["dataset"] = pd.Categorical(W["dataset"], DS_ORDER)
-    main_keys = ["IsoForest", "MLP-AE", "Static-AE", "Static-AE+FT (matched)", "MAML-AE-noadapt", "MAML-AE (matched)",
+    main_keys = ["Magnitude", "IsoForest", "MLP-AE", "Static-AE", "Static-AE+FT (matched)", "MAML-AE-noadapt", "MAML-AE (matched)",
                  "MAML-AE (heavy)", "MAML-AE-broken (matched)", "Scratch-noadapt", "Scratch (matched)"]
     for metric in ["auroc", "auprc", "f1", "best_f1"]:
         m, s, _ = seed_mean(W[W.key.isin(main_keys)], ["dataset", "k_shot", "key"], [metric])
@@ -121,7 +121,8 @@ if len(W):
     pairs = [("MAML-AE (matched)", "Static-AE"), ("MAML-AE (matched)", "Static-AE+FT (matched)"),
              ("MAML-AE (matched)", "MAML-AE-noadapt"), ("MAML-AE (matched)", "MAML-AE-broken (matched)"),
              ("MAML-AE (matched)", "IsoForest"), ("MAML-AE (matched)", "MLP-AE"), ("Static-AE", "MLP-AE"),
-             ("MAML-AE (heavy)", "MAML-AE-noadapt"), ("MAML-AE-broken (matched)", "Scratch (matched)")]
+             ("MAML-AE (heavy)", "MAML-AE-noadapt"), ("MAML-AE-broken (matched)", "Scratch (matched)"), ("Static-AE", "Magnitude"), ("MAML-AE (matched)", "Magnitude"),
+             ("Scratch-noadapt", "Magnitude")]
     rows = []
     for d in DS_ORDER:
         if d not in cell.index.get_level_values(0):
@@ -198,7 +199,7 @@ if len(W):
                               "corrected_step_mean": float(C["corrected |dθ| per step"].mean())}
 
     # ---- deployed vs oracle threshold
-    m, s, _ = seed_mean(W[W.key.isin(["Static-AE", "MAML-AE (matched)", "IsoForest"])], ["dataset", "key", "k_shot"],
+    m, s, _ = seed_mean(W[W.key.isin(["Static-AE", "MAML-AE (matched)", "IsoForest", "Magnitude"])], ["dataset", "key", "k_shot"],
                         ["f1", "best_f1", "precision", "recall", "alarm_rate", "anomaly_rate"])
     out = m.copy()
     out.index = [f"{DS_NAME[a]} / {b} / K={c}" for a, b, c in out.index]
@@ -266,7 +267,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False})
 COL = {"Static-AE": "#4477AA", "Static-AE+FT (matched)": "#66CCEE", "MAML-AE-noadapt": "#CCBB44",
        "MAML-AE (matched)": "#EE6677", "MAML-AE (heavy)": "#AA3377", "MAML-AE-broken (matched)": "#BBBBBB",
-       "Scratch (matched)": "#000000", "IsoForest": "#228833", "MLP-AE": "#999933"}
+       "Scratch (matched)": "#000000", "IsoForest": "#228833", "MLP-AE": "#999933", "Magnitude": "#DDAA33"}
 
 # Fig 1: AUROC vs K per dataset
 m, s, _ = seed_mean(W, ["dataset", "k_shot", "key"], ["auroc"])
