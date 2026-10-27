@@ -41,10 +41,14 @@ def build_regimes(windows: np.ndarray, seed: int, k_range: Tuple[int, int] = (2,
         if k >= len(fit_idx):
             break
         km = KMeans(n_clusters=k, n_init=4, random_state=seed).fit(F[fit_idx])
+        if len(np.unique(km.labels_)) < 2:        # constant or near-constant stream
+            continue
         s = float(silhouette_score(F[fit_idx], km.labels_))
         curve[k] = s
         if s > best_s:
             best_k, best_s, best_km = k, s, km
+    if best_km is None:                            # no clustering with two populated clusters
+        return RegimeSet(np.zeros(len(F), dtype=int), 1, 0.0, curve, {0: len(F)})
     labels = best_km.predict(F)
     sizes = {int(c): int((labels == c).sum()) for c in range(best_k)}
     return RegimeSet(labels, best_k, best_s, curve, sizes)
