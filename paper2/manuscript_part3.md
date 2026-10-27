@@ -1,0 +1,44 @@
+
+# 6 Discussion
+
+## 6.1 What the three questions came to
+
+The meta-learner trains (Q1), and the only quantity that shows it is the one almost nobody reports. The broken loop is not an exotic mistake: it is the natural way to write first-order MAML on top of a framework whose optimisers act on parameter objects, and it produces a run whose loss curve, validation loss and final score table all look like a result. The 25 control runs give its signature, a parameter update of exactly zero at every outer step, and that signature costs one line of logging. We think a paper that reports a MAML-trained detector should print the norm of the meta-update, or the distance between the final meta-parameters and the initialisation, in the same table as its scores.
+
+K-shot adaptation does almost nothing to this detector (Q2). At the settings that the literature uses and that we used ourselves before this study, it moves the autoencoder by a tenth to half of one per cent of its parameter norm and leaves the ranking of windows with a rank correlation above 0.93. A fifty-step adaptation at ten times the learning rate moves it by two per cent and reorders a little more, and still changes AUROC by a few thousandths. The one dataset on which adaptation produced a measurable gain, SMAP, is the one on which the un-adapted meta-model was the worst neural detector; adaptation repaired a poor initialisation to the level of the static model, which is a different claim from the one usually made. The reason is not mysterious. A recurrent autoencoder with 70–100 thousand parameters, a clipped gradient and a handful of normal windows has nowhere to go in five or fifty steps: the support loss on those windows falls, as it did in every run, but the function the network computes on the rest of the stream is the function it computed before. If the practical promise of meta-learning is that a deployed detector can be pulled into a new regime with a few windows, then for this class of model the promise is not kept, and the right fix is not a better meta-initialisation but a different adaptation mechanism, for example one that updates the threshold and the normalisation statistics, which are the parts of the detector that a few windows can inform.
+
+On detection itself (Q3), the meta-learned model never beat the static autoencoder by more than 0.01 AUROC within a plant and was worse by 0.056 on HAI; across plants it matched the statically pre-trained source model in every direction and never exceeded it. These are the findings of our earlier draft, now with five seeds, paired tests, five benchmarks and the two controls in place, and we stand by them. What the instruments added is the part we did not expect: on SWaT, WADI, SMAP and MSL the squared magnitude of the standardised window, with no parameters at all, is level with or better than every autoencoder, trained or meta-trained, and only HAI shows a clear benefit from training (and there the flat autoencoder beats the recurrent one). The random network is the magnitude detector in disguise, which is why the broken loop's "meta-model" scored 0.858 on SWaT. Wu and Keogh [@wu2023flawed] argued that the standard benchmarks are solved by trivial detectors; our numbers are a concrete instance, with the trivial detector named and the margin measured, on the two testbeds that industrial meta-learning papers most often use.
+
+## 6.2 Why the task-diversity explanation did not hold
+
+It is tempting, when a meta-learner fails to help, to say that the tasks were too alike for meta-learning to have anything to learn across. We said it ourselves. The per-channel diversity scores over 120 telemetry cells do not support it: the correlation between the silhouette of a channel's regimes and the meta-model's gain over the static model is weakly negative. A more likely account is in Section 5.1: the meta-objective is the post-adaptation reconstruction loss on a held-out regime, and after 600 outer steps that loss is still far above what plain training on the pooled windows reaches, so the meta-model is a worse reconstructor that adaptation cannot repair in five steps. Section 5.7 tests whether more meta-training closes the gap. Either way, a diversity argument should come with a diversity measurement and a sample size, and when it does, in this case it fails.
+
+## 6.3 What to report when reporting a meta-learned detector
+
+The study suggests five things a reader needs in order to tell adaptation from decoration, none of which costs more than a few lines of code.
+
+1. The norm of the meta-parameter update per outer step, or the distance between the final meta-parameters and the initialisation, so that a silent gradient-path fault is visible.
+2. The relative parameter change and the rank correlation of anomaly scores before and after K-shot adaptation, at the adaptation setting actually used.
+3. The un-adapted meta-model and a random initialisation adapted the same way, as rows of the main table.
+4. A parameter-free reference, such as the window magnitude, so that the share of a score that comes from the data rather than the model is known.
+5. The F1 at a threshold set without labels beside the oracle best F1, with the alarm rate, so that a reader can see what a deployment would have seen.
+
+Together with seeds and paired tests, which Henderson et al. [@henderson2018matters] and Pineau et al. [@pineau2021reproducibility] have asked for across machine learning, these would have changed the conclusions of our own earlier draft and, we suspect, of some published ones.
+
+## 6.4 Limitations
+
+The detector is one architecture at one size, and the meta-learner is one first-order variant with fixed inner learning rates; MAML++ or Meta-SGD learn those rates and might adapt more, though they would meet the same ceiling from the magnitude reference. Meta-training was limited to 600 outer steps in the main study and 3,000 in Section 5.7, on CPU; longer or larger runs are possible but the gap to plain training (Table 2) is not a matter of a factor of two. The regime tasks come from one clustering method with one window summary; a different task construction could give the meta-learner different things to learn across, which is exactly the experiment the diversity instrument makes possible. The transfer bridge is a linear projection fitted on normal data, and the WADI result in particular shows that the bridge can destroy what the target's attacks look like; a learned bridge might behave differently. The two testbeds contribute one attack recording each, so their numbers rest on five seeds of model training over the same stream, and their paired tests have 20 cells; the telemetry sets and HAI carry the statistical weight. Everything here is offline: the model is adapted once and scored on a fixed stream. Whether a detector that adapts repeatedly as a stream drifts needs meta-learning is a separate question with a separate protocol, and nothing in this paper settles it.
+
+# 7 Conclusion
+
+We asked whether a meta-learned LSTM autoencoder for few-shot anomaly detection trains, adapts and detects, and we measured each rather than inferring it from a score table. It trains, once a one-line gradient-path fault is fixed, and a control that leaves the fault in shows that the fault is invisible to every quantity usually reported except the size of the meta-update. It barely adapts: K-shot adaptation at the settings in use moves the network by less than one per cent and leaves the anomaly ranking essentially unchanged on all five benchmarks, with one dataset on which adaptation repairs a poor initialisation to the level of a static model. And it does not detect better than a static autoencoder within a plant or across plants, while on four of five benchmarks neither of them detects better than the squared magnitude of the standardised window. The deployed threshold, set without labels, costs 0.15–0.26 F1 against the oracle, more than any modelling choice in the study. We release the loaders, the meta-learner with its control, the runner and every table, and we propose that reports of meta-learned detectors include the five measurements that made these conclusions possible.
+
+# Data and code availability {.unnumbered}
+
+HAI 21.03, SMAP and MSL are public. SWaT and WADI are available from iTrust on request under their data-use agreement and are not part of our release. The code (loaders, the LSTM autoencoder, the first-order MAML implementation with the broken-pattern control, the regime construction, the runner and the table and figure scripts) and every result table are available at the repository named in the submission.
+
+# Declaration {.unnumbered}
+
+The authors have no competing interests to declare. The work received no external funding.
+
+# References {.unnumbered}
