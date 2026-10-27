@@ -143,7 +143,7 @@ an initialisation, an embedding or a memory that adapts to a new task
 from very little data <span class="citation" data-cites="finn2017maml snell2017proto hospedales2022meta"><a href="#ref-finn2017maml" role="doc-biblioref">[7]</a>, <a href="#ref-snell2017proto" role="doc-biblioref">[8]</a>, <a href="#ref-hospedales2022meta" role="doc-biblioref">[9]</a></span>.
 Treating each operating regime, or each fault type, as a task makes the
 application to IIoT straightforward in principle. A few papers have done
-exactly that <span class="citation" data-cites="moon2023mavae feng2025metauad tian2024omlog"><a href="#ref-moon2023mavae" role="doc-biblioref">[10]</a>, <a href="#ref-feng2025metauad" role="doc-biblioref">[11]</a>, <a href="#ref-tian2024omlog" role="doc-biblioref">[12]</a></span>. What we
+exactly that <span class="citation" data-cites="moon2023mavae feng2024metauad tian2024omlog"><a href="#ref-moon2023mavae" role="doc-biblioref">[10]</a>, <a href="#ref-feng2024metauad" role="doc-biblioref">[11]</a>, <a href="#ref-tian2024omlog" role="doc-biblioref">[12]</a></span>. What we
 found when we reviewed the field systematically is that the
 meta-learning methods are trained offline and never updated, the
 streaming methods do not meta-learn, and almost none of either group is
@@ -247,20 +247,20 @@ differs from that at
 patterns are usually distinguished: sudden, gradual (the two regimes are
 mixed over a transition period), incremental (a slow monotone shift) and
 recurring (earlier regimes return). Detection methods fall into three
-classes. Error-rate monitors need labelled feedback and are out of reach
-in unsupervised AD. Distribution monitors such as ADWIN <span class="citation" data-cites="bifet2007adwin"><a href="#ref-bifet2007adwin" role="doc-biblioref">[18]</a></span> watch a
+classes. Error-rate monitors such as DDM <span class="citation" data-cites="gama2004ddm"><a href="#ref-gama2004ddm" role="doc-biblioref">[18]</a></span> need labelled feedback and are out
+of reach in unsupervised AD. Distribution monitors such as ADWIN <span class="citation" data-cites="bifet2007adwin"><a href="#ref-bifet2007adwin" role="doc-biblioref">[19]</a></span> watch a
 statistic of the stream and come with bounds on false positives and
 false negatives. Representation monitors watch the model’s own internal
 state, for example by comparing kernel embeddings with maximum mean
-discrepancy (MMD) <span class="citation" data-cites="gretton2012mmd"><a href="#ref-gretton2012mmd" role="doc-biblioref">[19]</a></span>. Hinder
-et al. survey detection and adaptation in detail <span class="citation" data-cites="hinder2024a hinder2024b"><a href="#ref-hinder2024a" role="doc-biblioref">[20]</a>, <a href="#ref-hinder2024b" role="doc-biblioref">[21]</a></span>. Continual learning supplies the
-tools for updating a model without forgetting what it knew <span class="citation" data-cites="kirkpatrick2017ewc rolnick2019replay wang2024continual"><a href="#ref-kirkpatrick2017ewc" role="doc-biblioref">[22]</a>, <a href="#ref-rolnick2019replay" role="doc-biblioref">[23]</a>, <a href="#ref-wang2024continual" role="doc-biblioref">[24]</a></span>; the
+discrepancy (MMD) <span class="citation" data-cites="gretton2012mmd"><a href="#ref-gretton2012mmd" role="doc-biblioref">[20]</a></span>. Hinder
+et al. survey detection and adaptation in detail <span class="citation" data-cites="hinder2024a hinder2024b"><a href="#ref-hinder2024a" role="doc-biblioref">[21]</a>, <a href="#ref-hinder2024b" role="doc-biblioref">[22]</a></span>. Continual learning supplies the
+tools for updating a model without forgetting what it knew <span class="citation" data-cites="kirkpatrick2017ewc rolnick2019replay wang2024continual"><a href="#ref-kirkpatrick2017ewc" role="doc-biblioref">[23]</a>, <a href="#ref-rolnick2019replay" role="doc-biblioref">[24]</a>, <a href="#ref-wang2024continual" role="doc-biblioref">[25]</a></span>; the
 connection to meta-learning, where a distribution shift becomes a change
 of task distribution, is the one this paper exploits.</p>
 <h1 id="systematic-review-and-taxonomy">3 Systematic review and
 taxonomy</h1>
 <h2 id="method">3.1 Method</h2>
-<p>The review followed the PRISMA 2020 guidelines <span class="citation" data-cites="page2021prisma"><a href="#ref-page2021prisma" role="doc-biblioref">[25]</a></span>. We searched IEEE Xplore, Scopus,
+<p>The review followed the PRISMA 2020 guidelines <span class="citation" data-cites="page2021prisma"><a href="#ref-page2021prisma" role="doc-biblioref">[26]</a></span>. We searched IEEE Xplore, Scopus,
 Web of Science, the ACM Digital Library and Google Scholar for January
 2018 to December 2025, the period since MAML <span class="citation" data-cites="finn2017maml"><a href="#ref-finn2017maml" role="doc-biblioref">[7]</a></span> started the current wave of
 gradient-based meta-learning. Two search strings were used. The primary
@@ -371,7 +371,7 @@ duplicated submissions</td>
 taxonomy</h2>
 <p>Earlier surveys classify AD methods along one axis, usually algorithm
 family <span class="citation" data-cites="chandola2009survey pang2021deep"><a href="#ref-chandola2009survey" role="doc-biblioref">[1]</a>, <a href="#ref-pang2021deep" role="doc-biblioref">[2]</a></span> or
-application domain <span class="citation" data-cites="belay2023iot"><a href="#ref-belay2023iot" role="doc-biblioref">[26]</a></span>. One axis
+application domain <span class="citation" data-cites="belay2023iot"><a href="#ref-belay2023iot" role="doc-biblioref">[27]</a></span>. One axis
 hides trade-offs that matter here: a method can be excellent at few-shot
 adaptation and completely static, or drift-aware and never tested on
 industrial hardware. We classify every paper in the corpus along four
@@ -390,7 +390,7 @@ awareness. DAW: detects distribution shift and triggers adaptation. OMA:
 online meta-adaptive, meaning the meta-level itself (the initialisation
 or the task distribution) is updated as the stream evolves.</p>
 <p><em>D4, industrial validation.</em> IIV: evaluated on an established
-industrial process benchmark (SWaT <span class="citation" data-cites="goh2016swat"><a href="#ref-goh2016swat" role="doc-biblioref">[27]</a></span>, WADI <span class="citation" data-cites="ahmed2017wadi"><a href="#ref-ahmed2017wadi" role="doc-biblioref">[28]</a></span>, HAI <span class="citation" data-cites="shin2021hai"><a href="#ref-shin2021hai" role="doc-biblioref">[29]</a></span>, SMAP/MSL <span class="citation" data-cites="hundman2018smap"><a href="#ref-hundman2018smap" role="doc-biblioref">[30]</a></span>). IOV: evaluated on broader IoT or
+industrial process benchmark (SWaT <span class="citation" data-cites="goh2016swat"><a href="#ref-goh2016swat" role="doc-biblioref">[28]</a></span>, WADI <span class="citation" data-cites="ahmed2017wadi"><a href="#ref-ahmed2017wadi" role="doc-biblioref">[29]</a></span>, HAI <span class="citation" data-cites="shin2021hai"><a href="#ref-shin2021hai" role="doc-biblioref">[30]</a></span>, SMAP/MSL <span class="citation" data-cites="hundman2018smap"><a href="#ref-hundman2018smap" role="doc-biblioref">[31]</a></span>). IOV: evaluated on broader IoT or
 network data. GEN: generic datasets. THE: theory or simulation only.</p>
 <p>Table 3 places representative papers on the grid, and Figure 1 plots
 the whole corpus on the D1 × D3 plane. Optimisation-based methods
@@ -434,8 +434,8 @@ model-based for 10 (11 %) and hybrid for 2 (2 %).</p>
 <td>GEN</td>
 </tr>
 <tr class="odd">
-<td>Feng et al. <span class="citation" data-cites="feng2025metauad"><a href="#ref-feng2025metauad" role="doc-biblioref">[11]</a></span></td>
-<td>2025</td>
+<td>Feng et al. <span class="citation" data-cites="feng2024metauad"><a href="#ref-feng2024metauad" role="doc-biblioref">[11]</a></span></td>
+<td>2024</td>
 <td>OPT/Meta-SGD</td>
 <td>DIS</td>
 <td>STA</td>
@@ -458,7 +458,7 @@ model-based for 10 (11 %) and hybrid for 2 (2 %).</p>
 <td>IOV</td>
 </tr>
 <tr class="even">
-<td>Zhang et al. <span class="citation" data-cites="zhang2023prn"><a href="#ref-zhang2023prn" role="doc-biblioref">[31]</a></span></td>
+<td>Zhang et al. <span class="citation" data-cites="zhang2023prn"><a href="#ref-zhang2023prn" role="doc-biblioref">[32]</a></span></td>
 <td>2023</td>
 <td>MET</td>
 <td>DIS</td>
@@ -474,7 +474,7 @@ model-based for 10 (11 %) and hybrid for 2 (2 %).</p>
 <td>IIV</td>
 </tr>
 <tr class="even">
-<td>Belay et al. <span class="citation" data-cites="belay2023iot"><a href="#ref-belay2023iot" role="doc-biblioref">[26]</a></span></td>
+<td>Belay et al. <span class="citation" data-cites="belay2023iot"><a href="#ref-belay2023iot" role="doc-biblioref">[27]</a></span></td>
 <td>2023</td>
 <td>none</td>
 <td>REC+DIS</td>
@@ -482,7 +482,7 @@ model-based for 10 (11 %) and hybrid for 2 (2 %).</p>
 <td>IIV</td>
 </tr>
 <tr class="odd">
-<td>Wang et al. <span class="citation" data-cites="wang2024fewshot"><a href="#ref-wang2024fewshot" role="doc-biblioref">[32]</a></span></td>
+<td>Yan et al. <span class="citation" data-cites="yan2024fewshot"><a href="#ref-yan2024fewshot" role="doc-biblioref">[33]</a></span></td>
 <td>2024</td>
 <td>MET</td>
 <td>DIS</td>
@@ -516,7 +516,7 @@ empty for all four paradigms and for all eight years.</p>
 <p><em>Finding 3, the validation gap.</em> The papers that use SWaT,
 WADI, HAI or SMAP/MSL do not meta-learn; the papers that meta-learn do
 not use them. The only datasets on which meta-learning AD has been
-reported are network traffic (CIC-IDS <span class="citation" data-cites="feng2025metauad"><a href="#ref-feng2025metauad" role="doc-biblioref">[11]</a></span>) and software logs (HDFS/BGL <span class="citation" data-cites="tian2024omlog"><a href="#ref-tian2024omlog" role="doc-biblioref">[12]</a></span>).</p>
+reported are network traffic (CIC-IDS <span class="citation" data-cites="feng2024metauad"><a href="#ref-feng2024metauad" role="doc-biblioref">[11]</a></span>) and software logs (HDFS/BGL <span class="citation" data-cites="tian2024omlog"><a href="#ref-tian2024omlog" role="doc-biblioref">[12]</a></span>).</p>
 <p>Two papers deserve mention because they come closest. MAVAE <span class="citation" data-cites="moon2023mavae"><a href="#ref-moon2023mavae" role="doc-biblioref">[10]</a></span> wraps a VAE in a MAML outer loop
 and shows that five labelled normal windows suffice to adapt to a new
 sensor type. It is trained offline and never updated. OMLog <span class="citation" data-cites="tian2024omlog"><a href="#ref-tian2024omlog" role="doc-biblioref">[12]</a></span> uses MMD on log-sequence embeddings
@@ -541,7 +541,7 @@ The initialisation
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>θ</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\theta^*</annotation></semantics></math>
 must keep up with the stream if it is to remain a useful starting point,
 but updating it on the newest regime alone overwrites what it knew about
-earlier regimes. This is catastrophic forgetting at the meta level <span class="citation" data-cites="kirkpatrick2017ewc"><a href="#ref-kirkpatrick2017ewc" role="doc-biblioref">[22]</a></span>.</p>
+earlier regimes. This is catastrophic forgetting at the meta level <span class="citation" data-cites="kirkpatrick2017ewc"><a href="#ref-kirkpatrick2017ewc" role="doc-biblioref">[23]</a></span>.</p>
 <p><em>SP3, threshold recalibration under drift without labels.</em>
 Drift and anomalies both raise the reconstruction error. Only one of
 them should move the threshold
@@ -557,7 +557,7 @@ first is point-adjust scoring, under which one true positive anywhere
 inside an anomalous segment counts the whole segment as detected.
 Point-adjust F1 can sit 15–30 points above point-wise F1 on the same
 scores, and a random scorer can reach high point-adjust F1 on long
-segments <span class="citation" data-cites="kim2022rigorous garg2022evaluation wu2023flawed"><a href="#ref-kim2022rigorous" role="doc-biblioref">[33]</a>, <a href="#ref-garg2022evaluation" role="doc-biblioref">[34]</a>, <a href="#ref-wu2023flawed" role="doc-biblioref">[35]</a></span>. The
+segments <span class="citation" data-cites="kim2022rigorous garg2022evaluation wu2023flawed"><a href="#ref-kim2022rigorous" role="doc-biblioref">[34]</a>, <a href="#ref-garg2022evaluation" role="doc-biblioref">[35]</a>, <a href="#ref-wu2023flawed" role="doc-biblioref">[36]</a></span>. The
 second is that no reviewed paper reports a streaming metric: how long
 detection takes, how fast the detector recovers after a change, or how
 many false alarms the change itself causes.</p>
@@ -623,7 +623,7 @@ scoring.</td>
 </tr>
 <tr class="odd">
 <td>Threshold</td>
-<td>Peaks-over-threshold <span class="citation" data-cites="siffer2017pot"><a href="#ref-siffer2017pot" role="doc-biblioref">[36]</a></span> at risk q = 10<sup>-2</sup> for
+<td>Peaks-over-threshold <span class="citation" data-cites="siffer2017pot"><a href="#ref-siffer2017pot" role="doc-biblioref">[37]</a></span> at risk q = 10<sup>-2</sup> for
 every method, so that threshold selection is not a confound.</td>
 </tr>
 <tr class="even">
@@ -709,7 +709,7 @@ regime boundaries and the drift gate</h2>
 <p>Module 1 has two jobs: cutting the training streams into regimes for
 episode construction (SP1), and deciding online when the deployed model
 should adapt.</p>
-<p><em>Training-time segmentation.</em> One ADWIN <span class="citation" data-cites="bifet2007adwin"><a href="#ref-bifet2007adwin" role="doc-biblioref">[18]</a></span> runs per sensor on block means of
+<p><em>Training-time segmentation.</em> One ADWIN <span class="citation" data-cites="bifet2007adwin"><a href="#ref-bifet2007adwin" role="doc-biblioref">[19]</a></span> runs per sensor on block means of
 ten steps. A regime boundary is placed when at least 20 % of the sensors
 have reported a change within the last 200 steps and the current regime
 is at least 400 steps long. Over-segmentation only costs episode
@@ -732,7 +732,7 @@ units, a 65 % rise in residual. One such hit confirms a change; the
 block mean, the direction rule and the minimum shift already guard
 against spikes. A refractory period of 400 windows separates
 adaptations.</p>
-<p>We also implemented the MMD branch <span class="citation" data-cites="gretton2012mmd"><a href="#ref-gretton2012mmd" role="doc-biblioref">[19]</a></span>: the kernel two-sample statistic
+<p>We also implemented the MMD branch <span class="citation" data-cites="gretton2012mmd"><a href="#ref-gretton2012mmd" role="doc-biblioref">[20]</a></span>: the kernel two-sample statistic
 between the encoder embeddings of the last 64 windows and 300 reference
 embeddings recorded after the last adaptation, with a block-bootstrap
 null (the largest MMD² between any contiguous 64-window block of the
@@ -744,7 +744,7 @@ reports the variants with MMD alone and with both detectors; the full
 method uses the residual gate only.</p>
 <h2 id="module-4-gated-threshold">5.4 Module 4: gated threshold</h2>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
-is set by the peaks-over-threshold method <span class="citation" data-cites="siffer2017pot"><a href="#ref-siffer2017pot" role="doc-biblioref">[36]</a></span>: a generalised Pareto distribution
+is set by the peaks-over-threshold method <span class="citation" data-cites="siffer2017pot"><a href="#ref-siffer2017pot" role="doc-biblioref">[37]</a></span>: a generalised Pareto distribution
 is fitted to the residual excesses above the 98th empirical percentile
 of a calibration window and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
@@ -769,7 +769,7 @@ After an adaptation has been accepted,
 is refreshed by ten outer iterations of the meta-learner on episodes
 drawn from the current regime and up to three remembered regimes,
 sampled with probability proportional to a similarity term (closeness of
-the regime means) plus a recency bonus. This is experience replay <span class="citation" data-cites="rolnick2019replay"><a href="#ref-rolnick2019replay" role="doc-biblioref">[23]</a></span> at
+the regime means) plus a recency bonus. This is experience replay <span class="citation" data-cites="rolnick2019replay"><a href="#ref-rolnick2019replay" role="doc-biblioref">[24]</a></span> at
 the level of regimes rather than records, which keeps the buffer at a
 few hundred kilobytes.</p>
 <h2 id="the-acceptance-test">5.6 The acceptance test</h2>
@@ -789,7 +789,7 @@ adaptation, the new
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
 and the memory entry are undone. A first check at the end of the
 calibration window catches the obvious cases early. The idea has a
-precedent in paired learners for concept drift <span class="citation" data-cites="bach2008paired"><a href="#ref-bach2008paired" role="doc-biblioref">[37]</a></span>, where a stable and a reactive
+precedent in paired learners for concept drift <span class="citation" data-cites="bach2008paired"><a href="#ref-bach2008paired" role="doc-biblioref">[38]</a></span>, where a stable and a reactive
 learner compete. Here the competition decides whether the thing that
 moved was the regime or an anomaly, which is SP3 stated
 operationally.</p>
@@ -816,17 +816,17 @@ meta-learner never saw. Values are standardised with the entity’s own
 training statistics and clipped to ±10 standard deviations; without the
 clipping a sensor that barely moves in training turns ordinary test
 noise into values in the thousands.</p>
-<p><em>HAI 21.03</em> <span class="citation" data-cites="shin2021hai"><a href="#ref-shin2021hai" role="doc-biblioref">[29]</a></span> comes from
+<p><em>HAI 21.03</em> <span class="citation" data-cites="shin2021hai"><a href="#ref-shin2021hai" role="doc-biblioref">[30]</a></span> comes from
 a hardware-in-the-loop testbed with a boiler, a turbine and a
 water-treatment process, 79 tags at 1 Hz, three attack-free training
 campaigns and five test campaigns with labelled attacks. We average the
 signals over 10-second blocks, pool the training campaigns (keeping them
 as separate streams for regime segmentation, since they were recorded
 weeks apart) and treat each test campaign as an entity. <em>SMD</em>
-<span class="citation" data-cites="su2019omnianomaly"><a href="#ref-su2019omnianomaly" role="doc-biblioref">[38]</a></span> has
+<span class="citation" data-cites="su2019omnianomaly"><a href="#ref-su2019omnianomaly" role="doc-biblioref">[39]</a></span> has
 28 server machines with 38 metrics at one-minute resolution; each
 machine is an entity, and 30 % of the machines are held out per seed.
-<em>SKAB</em> <span class="citation" data-cites="katser2020skab"><a href="#ref-katser2020skab" role="doc-biblioref">[39]</a></span> is a
+<em>SKAB</em> <span class="citation" data-cites="katser2020skab"><a href="#ref-katser2020skab" role="doc-biblioref">[40]</a></span> is a
 water-circulation rig with 8 sensors at 1 Hz and 34 short runs in which
 a valve or the pump is manipulated. The anomaly-free recording sits at a
 very different flow level from most runs, so each run is standardised
@@ -834,7 +834,7 @@ with its own normal prefix, which becomes its training stream; one run
 with almost no prefix is dropped, and 30 % of runs are held out per
 seed. This makes SKAB a genuine few-shot setting: the detector meets a
 new run with a few hundred seconds of normal operation. <em>PSM</em>
-<span class="citation" data-cites="abdulaal2021psm"><a href="#ref-abdulaal2021psm" role="doc-biblioref">[40]</a></span> is a
+<span class="citation" data-cites="abdulaal2021psm"><a href="#ref-abdulaal2021psm" role="doc-biblioref">[41]</a></span> is a
 single stream of 25 server metrics; regimes for meta-training are carved
 from its training part, and its test part is the held-out stream.</p>
 <p>Table 5. Datasets. Test lengths are in windows after preprocessing;
@@ -2356,7 +2356,7 @@ Audibert, P. Michiardi, F. Guyard, S. Marti, and M. A. Zuluaga,
 <span>“<span>USAD</span>: Unsupervised anomaly detection on multivariate
 time series,”</span> in <em>Proceedings of the 26th ACM SIGKDD
 international conference on knowledge discovery &amp; data mining</em>,
-2020, pp. 3395–3404.</div>
+2020, pp. 3395–3404. doi: <a href="https://doi.org/10.1145/3394486.3403392">10.1145/3394486.3403392</a>.</div>
 </div>
 <div id="ref-gama2014drift" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[5] </div><div class="csl-right-inline">J.
@@ -2368,7 +2368,7 @@ Surveys</em>, vol. 46, no. 4, pp. 44:1–44:37, 2014.</div>
 <div class="csl-left-margin">[6] </div><div class="csl-right-inline">J.
 Lu, A. Liu, F. Dong, F. Gu, J. Gama, and G. Zhang, <span>“Learning under
 concept drift: A review,”</span> <em>IEEE Transactions on Knowledge and
-Data Engineering</em>, vol. 31, no. 12, pp. 2346–2363, 2019.</div>
+Data Engineering</em>, vol. 31, no. 12, pp. 2346–2363, 2019, doi: <a href="https://doi.org/10.1109/TKDE.2018.2876857">10.1109/TKDE.2018.2876857</a>.</div>
 </div>
 <div id="ref-finn2017maml" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[7] </div><div class="csl-right-inline">C.
@@ -2392,17 +2392,16 @@ no. 9, pp. 5149–5169, 2022.</div>
 </div>
 <div id="ref-moon2023mavae" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[10] </div><div class="csl-right-inline">J.
-Moon, Y. Noh, S. Jung, J. Lee, and J. Hwang, <span>“Anomaly detection
+Moon, Y. Noh, S. Jung, J. Lee, and E. Hwang, <span>“Anomaly detection
 using a model-agnostic meta-learning-based variational auto-encoder for
 facility management,”</span> <em>Journal of Building Engineering</em>,
 vol. 68, p. 106099, 2023, doi: <a href="https://doi.org/10.1016/j.jobe.2023.106099">10.1016/j.jobe.2023.106099</a>.</div>
 </div>
-<div id="ref-feng2025metauad" class="csl-entry" role="listitem">
+<div id="ref-feng2024metauad" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[11] </div><div class="csl-right-inline">T.
 Feng, Q. Qi, L. Guo, and J. Wang, <span>“<span>Meta-UAD</span>: A
 meta-learning scheme for user-level network traffic anomaly
-detection,”</span> in <em>2025 IEEE international conference on
-acoustics, speech and signal processing (ICASSP)</em>, 2025.</div>
+detection.”</span> 2024.</div>
 </div>
 <div id="ref-tian2024omlog" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[12] </div><div class="csl-right-inline">J.
@@ -2440,61 +2439,68 @@ to learn quickly for few-shot learning.”</span> 2017.</div>
 Nichol, J. Achiam, and J. Schulman, <span>“On first-order meta-learning
 algorithms.”</span> 2018.</div>
 </div>
+<div id="ref-gama2004ddm" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[18] </div><div class="csl-right-inline">J.
+Gama, P. Medas, G. Castillo, and P. Rodrigues, <span>“Learning with
+drift detection,”</span> in <em>Advances in artificial intelligence –
+SBIA 2004</em>, in Lecture notes in computer science, vol. 3171.
+Springer, 2004, pp. 286–295. doi: <a href="https://doi.org/10.1007/978-3-540-28645-5_29">10.1007/978-3-540-28645-5_29</a>.</div>
+</div>
 <div id="ref-bifet2007adwin" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[18] </div><div class="csl-right-inline">A.
+<div class="csl-left-margin">[19] </div><div class="csl-right-inline">A.
 Bifet and R. Gavaldà, <span>“Learning from time-changing data with
 adaptive windowing,”</span> in <em>Proceedings of the 2007 SIAM
-international conference on data mining</em>, 2007, pp. 443–448.</div>
+international conference on data mining</em>, 2007, pp. 443–448. doi: <a href="https://doi.org/10.1137/1.9781611972771.42">10.1137/1.9781611972771.42</a>.</div>
 </div>
 <div id="ref-gretton2012mmd" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[19] </div><div class="csl-right-inline">A.
+<div class="csl-left-margin">[20] </div><div class="csl-right-inline">A.
 Gretton, K. M. Borgwardt, M. J. Rasch, B. Schölkopf, and A. Smola,
 <span>“A kernel two-sample test,”</span> <em>Journal of Machine Learning
 Research</em>, vol. 13, pp. 723–773, 2012.</div>
 </div>
 <div id="ref-hinder2024a" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[20] </div><div class="csl-right-inline">F.
-Hinder, V. Vaquet, and B. Hammer, <span>“One or two things we know about
-concept drift—a survey of monitoring in evolving environments.
-<span>P</span>art <span>A</span>: Detecting concept drift,”</span>
-<em>Frontiers in Artificial Intelligence</em>, vol. 7, p. 1330257,
-2024.</div>
-</div>
-<div id="ref-hinder2024b" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[21] </div><div class="csl-right-inline">F.
 Hinder, V. Vaquet, and B. Hammer, <span>“One or two things we know about
 concept drift—a survey of monitoring in evolving environments.
-<span>P</span>art <span>B</span>: Adapting to concept drift,”</span>
-<em>Frontiers in Artificial Intelligence</em>, vol. 7, p. 1338265,
-2024.</div>
+<span>P</span>art <span>A</span>: Detecting concept drift,”</span>
+<em>Frontiers in Artificial Intelligence</em>, vol. 7, p. 1330257, 2024,
+doi: <a href="https://doi.org/10.3389/frai.2024.1330257">10.3389/frai.2024.1330257</a>.</div>
+</div>
+<div id="ref-hinder2024b" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[22] </div><div class="csl-right-inline">F.
+Hinder, V. Vaquet, and B. Hammer, <span>“One or two things we know about
+concept drift—a survey of monitoring in evolving environments.
+<span>P</span>art <span>B</span>: Locating and explaining concept
+drift,”</span> <em>Frontiers in Artificial Intelligence</em>, vol. 7, p.
+1330258, 2024, doi: <a href="https://doi.org/10.3389/frai.2024.1330258">10.3389/frai.2024.1330258</a>.</div>
 </div>
 <div id="ref-kirkpatrick2017ewc" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[22] </div><div class="csl-right-inline">J.
+<div class="csl-left-margin">[23] </div><div class="csl-right-inline">J.
 Kirkpatrick <em>et al.</em>, <span>“Overcoming catastrophic forgetting
 in neural networks,”</span> <em>Proceedings of the National Academy of
 Sciences</em>, vol. 114, no. 13, pp. 3521–3526, 2017.</div>
 </div>
 <div id="ref-rolnick2019replay" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[23] </div><div class="csl-right-inline">D.
+<div class="csl-left-margin">[24] </div><div class="csl-right-inline">D.
 Rolnick, A. Ahuja, J. Schwarz, T. Lillicrap, and G. Wayne,
 <span>“Experience replay for continual learning,”</span> in <em>Advances
 in neural information processing systems</em>, 2019.</div>
 </div>
 <div id="ref-wang2024continual" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[24] </div><div class="csl-right-inline">L.
+<div class="csl-left-margin">[25] </div><div class="csl-right-inline">L.
 Wang, X. Zhang, H. Su, and J. Zhu, <span>“A comprehensive survey of
 continual learning: Theory, method and application,”</span> <em>IEEE
 Transactions on Pattern Analysis and Machine Intelligence</em>, vol. 46,
 no. 8, pp. 5362–5383, 2024.</div>
 </div>
 <div id="ref-page2021prisma" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[25] </div><div class="csl-right-inline">M.
+<div class="csl-left-margin">[26] </div><div class="csl-right-inline">M.
 J. Page <em>et al.</em>, <span>“The <span>PRISMA</span> 2020 statement:
 An updated guideline for reporting systematic reviews,”</span>
 <em>BMJ</em>, vol. 372, p. n71, 2021.</div>
 </div>
 <div id="ref-belay2023iot" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[26] </div><div class="csl-right-inline">M.
+<div class="csl-left-margin">[27] </div><div class="csl-right-inline">M.
 A. Belay, S. S. Blakseth, A. Rasheed, and P. Salvo Rossi,
 <span>“Unsupervised anomaly detection for <span>IoT</span>-based
 multivariate time series: Existing solutions, performance analysis and
@@ -2502,7 +2508,7 @@ future directions,”</span> <em>Sensors</em>, vol. 23, no. 5, p. 2844,
 2023, doi: <a href="https://doi.org/10.3390/s23052844">10.3390/s23052844</a>.</div>
 </div>
 <div id="ref-goh2016swat" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[27] </div><div class="csl-right-inline">J.
+<div class="csl-left-margin">[28] </div><div class="csl-right-inline">J.
 Goh, S. Adepu, K. N. Junejo, and A. Mathur, <span>“A dataset to support
 research in the design of secure water treatment systems,”</span> in
 <em>Critical information infrastructures security (CRITIS 2016)</em>, in
@@ -2510,7 +2516,7 @@ Lecture notes in computer science, vol. 10242. Springer, 2017, pp.
 88–99.</div>
 </div>
 <div id="ref-ahmed2017wadi" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[28] </div><div class="csl-right-inline">C.
+<div class="csl-left-margin">[29] </div><div class="csl-right-inline">C.
 M. Ahmed, V. R. Palleti, and A. P. Mathur, <span>“<span>WADI</span>: A
 water distribution testbed for research in the design of secure cyber
 physical systems,”</span> in <em>Proceedings of the 3rd international
@@ -2518,88 +2524,88 @@ workshop on cyber-physical systems for smart water networks</em>, 2017,
 pp. 25–28.</div>
 </div>
 <div id="ref-shin2021hai" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[29] </div><div class="csl-right-inline">H.-K. Shin, W. Lee, J.-H. Yun, and B.-G. Min,
+<div class="csl-left-margin">[30] </div><div class="csl-right-inline">H.-K. Shin, W. Lee, J.-H. Yun, and B.-G. Min,
 <span>“Two <span>ICS</span> security datasets and anomaly detection
 contest on the <span>HIL</span>-based augmented <span>ICS</span>
 testbed,”</span> in <em>Cyber security experimentation and test workshop
 (CSET ’21)</em>, 2021, pp. 36–40.</div>
 </div>
 <div id="ref-hundman2018smap" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[30] </div><div class="csl-right-inline">K.
+<div class="csl-left-margin">[31] </div><div class="csl-right-inline">K.
 Hundman, V. Constantinou, C. Laporte, I. Colwell, and T. Soderstrom,
 <span>“Detecting spacecraft anomalies using <span>LSTMs</span> and
 nonparametric dynamic thresholding,”</span> in <em>Proceedings of the
 24th ACM SIGKDD international conference on knowledge discovery &amp;
-data mining</em>, 2018, pp. 387–395.</div>
+data mining</em>, 2018, pp. 387–395. doi: <a href="https://doi.org/10.1145/3219819.3219845">10.1145/3219819.3219845</a>.</div>
 </div>
 <div id="ref-zhang2023prn" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[31] </div><div class="csl-right-inline">H.
+<div class="csl-left-margin">[32] </div><div class="csl-right-inline">H.
 Zhang, Z. Wu, Z. Wang, Z. Chen, and Y.-G. Jiang, <span>“Prototypical
 residual networks for anomaly detection and localization,”</span> in
 <em>Proceedings of the IEEE/CVF conference on computer vision and
 pattern recognition</em>, 2023, pp. 16281–16291.</div>
 </div>
-<div id="ref-wang2024fewshot" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[32] </div><div class="csl-right-inline">Y.
-Wang, Z. Zhang, K. Zhao, P. Wang, and W. Wu, <span>“A few-shot learning
-based method for industrial internet intrusion detection,”</span>
-<em>International Journal of Information Security</em>, vol. 23, no. 5,
-pp. 3241–3252, 2024, doi: <a href="https://doi.org/10.1007/s10207-024-00889-x">10.1007/s10207-024-00889-x</a>.</div>
+<div id="ref-yan2024fewshot" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[33] </div><div class="csl-right-inline">Y.
+Yan, Y. Yang, F. Shen, M. Gao, and Y. Gu, <span>“Meta learning-based
+few-shot intrusion detection for <span>5G</span>-enabled industrial
+internet,”</span> <em>Complex &amp; Intelligent Systems</em>, vol. 10,
+no. 3, pp. 4589–4608, 2024, doi: <a href="https://doi.org/10.1007/s40747-024-01388-1">10.1007/s40747-024-01388-1</a>.</div>
 </div>
 <div id="ref-kim2022rigorous" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[33] </div><div class="csl-right-inline">S.
+<div class="csl-left-margin">[34] </div><div class="csl-right-inline">S.
 Kim, K. Choi, H.-S. Choi, B. Lee, and S. Yoon, <span>“Towards a rigorous
 evaluation of time-series anomaly detection,”</span> in <em>Proceedings
 of the AAAI conference on artificial intelligence</em>, 2022, pp.
-7194–7201.</div>
+7194–7201. doi: <a href="https://doi.org/10.1609/aaai.v36i7.20680">10.1609/aaai.v36i7.20680</a>.</div>
 </div>
 <div id="ref-garg2022evaluation" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[34] </div><div class="csl-right-inline">A.
+<div class="csl-left-margin">[35] </div><div class="csl-right-inline">A.
 Garg, W. Zhang, J. Samaran, R. Savitha, and C.-S. Foo, <span>“An
 evaluation of anomaly detection and diagnosis in multivariate time
 series,”</span> <em>IEEE Transactions on Neural Networks and Learning
-Systems</em>, vol. 33, no. 6, pp. 2508–2517, 2022.</div>
+Systems</em>, vol. 33, no. 6, pp. 2508–2517, 2022, doi: <a href="https://doi.org/10.1109/TNNLS.2021.3105827">10.1109/TNNLS.2021.3105827</a>.</div>
 </div>
 <div id="ref-wu2023flawed" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[35] </div><div class="csl-right-inline">R.
+<div class="csl-left-margin">[36] </div><div class="csl-right-inline">R.
 Wu and E. J. Keogh, <span>“Current time series anomaly detection
 benchmarks are flawed and are creating the illusion of progress,”</span>
 <em>IEEE Transactions on Knowledge and Data Engineering</em>, vol. 35,
-no. 3, pp. 2421–2429, 2023.</div>
+no. 3, pp. 2421–2429, 2023, doi: <a href="https://doi.org/10.1109/TKDE.2021.3112126">10.1109/TKDE.2021.3112126</a>.</div>
 </div>
 <div id="ref-siffer2017pot" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[36] </div><div class="csl-right-inline">A.
+<div class="csl-left-margin">[37] </div><div class="csl-right-inline">A.
 Siffer, P.-A. Fouque, A. Termier, and C. Largouet, <span>“Anomaly
 detection in streams with extreme value theory,”</span> in
 <em>Proceedings of the 23rd ACM SIGKDD international conference on
 knowledge discovery and data mining</em>, 2017, pp. 1067–1075.</div>
 </div>
 <div id="ref-bach2008paired" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[37] </div><div class="csl-right-inline">S.
+<div class="csl-left-margin">[38] </div><div class="csl-right-inline">S.
 H. Bach and M. A. Maloof, <span>“Paired learners for concept
 drift,”</span> in <em>2008 eighth IEEE international conference on data
 mining</em>, 2008, pp. 23–32.</div>
 </div>
 <div id="ref-su2019omnianomaly" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[38] </div><div class="csl-right-inline">Y.
+<div class="csl-left-margin">[39] </div><div class="csl-right-inline">Y.
 Su, Y. Zhao, C. Niu, R. Liu, W. Sun, and D. Pei, <span>“Robust anomaly
 detection for multivariate time series through stochastic recurrent
 neural network,”</span> in <em>Proceedings of the 25th ACM SIGKDD
 international conference on knowledge discovery &amp; data mining</em>,
-2019, pp. 2828–2837.</div>
+2019, pp. 2828–2837. doi: <a href="https://doi.org/10.1145/3292500.3330672">10.1145/3292500.3330672</a>.</div>
 </div>
 <div id="ref-katser2020skab" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[39] </div><div class="csl-right-inline">I.
+<div class="csl-left-margin">[40] </div><div class="csl-right-inline">I.
 D. Katser and V. O. Kozitsin, <span>“Skoltech anomaly benchmark
 (<span>SKAB</span>).”</span> <a href="https://github.com/waico/SKAB" class="uri">https://github.com/waico/SKAB</a>, 2020. doi: <a href="https://doi.org/10.34740/kaggle/dsv/1693952">10.34740/kaggle/dsv/1693952</a>.</div>
 </div>
 <div id="ref-abdulaal2021psm" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[40] </div><div class="csl-right-inline">A.
+<div class="csl-left-margin">[41] </div><div class="csl-right-inline">A.
 Abdulaal, Z. Liu, and T. Lancewicki, <span>“Practical approach to
 asynchronous multivariate time series anomaly detection and
 localization,”</span> in <em>Proceedings of the 27th ACM SIGKDD
 conference on knowledge discovery &amp; data mining</em>, 2021, pp.
-2485–2494.</div>
+2485–2494. doi: <a href="https://doi.org/10.1145/3447548.3467174">10.1145/3447548.3467174</a>.</div>
 </div>
 </div>
 </body>
