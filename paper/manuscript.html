@@ -141,10 +141,10 @@ training. New failure modes appear, and the detector is expected to flag
 them from a handful of examples. Each problem has its own literature.
 What is missing is a method, and an evaluation, for the case where all
 three hold together.</p>
-<p>Meta-learning is the natural starting point for the few-shot side. A
-meta-learner is trained over a distribution of tasks and comes out with
-an initialisation, an embedding or a memory that adapts to a new task
-from very little data <span class="citation" data-cites="finn2017maml snell2017proto hospedales2022meta"><a href="#ref-finn2017maml" role="doc-biblioref">[7]</a>, <a href="#ref-snell2017proto" role="doc-biblioref">[8]</a>, <a href="#ref-hospedales2022meta" role="doc-biblioref">[9]</a></span>.
+<p>Meta-learning is the natural starting point for the few-shot side.
+Train one learner across many tasks instead of one, and what comes out
+is an initialisation, an embedding or a memory that fits a fresh task
+from a handful of examples <span class="citation" data-cites="finn2017maml snell2017proto hospedales2022meta"><a href="#ref-finn2017maml" role="doc-biblioref">[7]</a>, <a href="#ref-snell2017proto" role="doc-biblioref">[8]</a>, <a href="#ref-hospedales2022meta" role="doc-biblioref">[9]</a></span>.
 Treating each operating regime, or each fault type, as a task makes the
 application to IIoT straightforward in principle. A few papers have done
 exactly that <span class="citation" data-cites="moon2023mavae feng2024metauad tian2024omlog"><a href="#ref-moon2023mavae" role="doc-biblioref">[10]</a>, <a href="#ref-feng2024metauad" role="doc-biblioref">[11]</a>, <a href="#ref-tian2024omlog" role="doc-biblioref">[12]</a></span>. What we
@@ -158,7 +158,7 @@ resulting taxonomy. It did not build or evaluate it. This paper does. We
 kept the taxonomy and the review findings, rewrote the protocol around
 what we learned while running it, and report what it took to make the
 architecture work on four public datasets.</p>
-<p>The contributions are as follows.</p>
+<p>Five things come out of this work.</p>
 <ol type="1">
 <li>A four-dimensional taxonomy of meta-learning AD methods (paradigm,
 detection mechanism, streaming capability, industrial validation)
@@ -183,12 +183,12 @@ where they are not.</li>
 is a configuration of one streaming loop, so the comparison is like for
 like.</li>
 </ol>
-<p>The paper is organised as follows. Section 2 gives background on AD,
-meta-learning and concept drift. Section 3 summarises the systematic
-review, the taxonomy and the gap map. Section 4 states the three
-sub-problems and the protocol. Section 5 presents DAMAD. Section 6
-describes the experimental setup, Section 7 the results, Section 8
-discusses limitations and Section 9 concludes.</p>
+<p>The rest of the paper runs in this order. Section 2 covers the
+background on AD, meta-learning and drift. Section 3 condenses the
+review into the taxonomy and the gap map. Section 4 sets out the three
+sub-problems and the protocol, and Section 5 presents DAMAD. The setup
+is in Section 6 and the results in Section 7; Section 8 goes through the
+limitations and Section 9 closes.</p>
 <h1 id="background">2 Background</h1>
 <h2 id="anomaly-detection-on-multivariate-streams">2.1 Anomaly detection
 on multivariate streams</h2>
@@ -237,11 +237,11 @@ learning rate; first-order variants <span class="citation" data-cites="nichol201
 (3). Because the learner can be any differentiable model, an autoencoder
 works as the base learner, which is what makes optimisation-based
 meta-learning the right paradigm for reconstruction-based AD.
-Metric-based methods <span class="citation" data-cites="snell2017proto"><a href="#ref-snell2017proto" role="doc-biblioref">[8]</a></span> learn an embedding in which a query
-is classified by distance to class prototypes; model-based methods use
-an external memory and adapt with a forward pass. Both are cheap at
-inference time but, as Section 3 shows, neither has been combined with
-streaming adaptation.</p>
+Metric-based methods <span class="citation" data-cites="snell2017proto"><a href="#ref-snell2017proto" role="doc-biblioref">[8]</a></span> instead learn a space in which a
+query takes the label of whichever class prototype sits closest to it;
+model-based methods keep an external memory and adapt in a single
+forward pass. Both are cheap at inference time but, as Section 3 shows,
+neither has been combined with streaming adaptation.</p>
 <h2 id="concept-drift">2.3 Concept drift</h2>
 <p>A stream exhibits concept drift when the joint distribution of
 readings and labels at time
@@ -254,11 +254,11 @@ mixed over a transition period), incremental (a slow monotone shift) and
 recurring (earlier regimes return). Detection methods fall into three
 classes. Error-rate monitors such as DDM <span class="citation" data-cites="gama2004ddm"><a href="#ref-gama2004ddm" role="doc-biblioref">[18]</a></span> need labelled feedback and are out
 of reach in unsupervised AD. Distribution monitors such as ADWIN <span class="citation" data-cites="bifet2007adwin"><a href="#ref-bifet2007adwin" role="doc-biblioref">[19]</a></span> watch a
-statistic of the stream and come with bounds on false positives and
-false negatives. Representation monitors watch the model’s own internal
-state, for example by comparing kernel embeddings with maximum mean
-discrepancy (MMD) <span class="citation" data-cites="gretton2012mmd"><a href="#ref-gretton2012mmd" role="doc-biblioref">[20]</a></span>. Hinder
-et al. survey detection and adaptation in detail <span class="citation" data-cites="hinder2024a hinder2024b"><a href="#ref-hinder2024a" role="doc-biblioref">[21]</a>, <a href="#ref-hinder2024b" role="doc-biblioref">[22]</a></span>. Continual learning supplies the
+statistic of the stream and carry guarantees on both kinds of mistake, a
+false alarm and a missed change. Representation monitors watch the
+model’s own internal state, for example by comparing kernel embeddings
+with maximum mean discrepancy (MMD) <span class="citation" data-cites="gretton2012mmd"><a href="#ref-gretton2012mmd" role="doc-biblioref">[20]</a></span>. Hinder et al. survey detection and
+adaptation in detail <span class="citation" data-cites="hinder2024a hinder2024b"><a href="#ref-hinder2024a" role="doc-biblioref">[21]</a>, <a href="#ref-hinder2024b" role="doc-biblioref">[22]</a></span>. Continual learning supplies the
 tools for updating a model without forgetting what it knew <span class="citation" data-cites="kirkpatrick2017ewc rolnick2019replay wang2024continual"><a href="#ref-kirkpatrick2017ewc" role="doc-biblioref">[23]</a>, <a href="#ref-rolnick2019replay" role="doc-biblioref">[24]</a>, <a href="#ref-wang2024continual" role="doc-biblioref">[25]</a></span>; the
 connection to meta-learning, where a distribution shift becomes a change
 of task distribution, is the one this paper exploits.</p>
@@ -308,8 +308,8 @@ retrieved by either string, MAVAE <span class="citation" data-cites="moon2023mav
 detector of Yan et al. <span class="citation" data-cites="yan2024fewshot"><a href="#ref-yan2024fewshot" role="doc-biblioref">[27]</a></span>, were added from our reference
 list. The corpus is 66 papers. One in 2020, three in 2021, five in 2022,
 13 in 2023, 13 in 2024 and 31 in 2025: 86 % of it is from 2023 onwards,
-and nothing before 2020 survived screening. Appendix A lists every paper
-with its DOI and its codes.</p>
+and nothing before 2020 survived screening. Supplementary Table S1 lists
+every paper with its DOI and its codes.</p>
 <p>Two limits of the procedure should be stated. No full-text stage was
 carried out, so the taxonomy codes in Section 3.2 come from titles,
 abstracts and keywords; where an abstract names a method (“MAML”,
@@ -319,7 +319,7 @@ screening was done by one author, so the inter-rater agreement that a
 two-reader review reports is not available; the screening sheet with a
 one-line reason for every decision is released with the code so that any
 reader can audit it.</p>
-<p>Table 1. Inclusion (IC) and exclusion (EC) criteria as applied.</p>
+<p>Table 1. The criteria used to keep (IC) or drop (EC) a record.</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -334,8 +334,9 @@ reader can audit it.</p>
 <tbody>
 <tr class="odd">
 <td>IC1</td>
-<td>Proposes or evaluates meta-learning or few-shot learning for anomaly
-or fault detection on sensor, telemetry, network or log data</td>
+<td>The paper puts forward, or tests, a meta-learning or few-shot method
+whose job is to find anomalies or faults in sensor, telemetry, network
+or log data</td>
 </tr>
 <tr class="even">
 <td>IC2</td>
@@ -818,22 +819,23 @@ The encoder has two hidden layers (128 and 64 units, ELU) producing a
 16-dimensional Gaussian posterior; the decoder mirrors it. The training
 loss is the negative ELBO with the KL term weighted by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\beta = 0.1</annotation></semantics></math>;
-the anomaly score is the mean squared reconstruction error through the
-posterior mean, which is deterministic.</p>
+the anomaly score is the squared gap between a window and its
+reconstruction from the posterior mean, averaged over the window, so the
+score carries no sampling noise.</p>
 <p>Meta-training follows MAML++ <span class="citation" data-cites="antoniou2019mamlpp"><a href="#ref-antoniou2019mamlpp" role="doc-biblioref">[15]</a></span>. A task is a regime (Section 5.3).
 An episode draws K support windows from the first half of the regime and
 32 query windows from the second half, so that the inner loop cannot see
 the query steps. Three inner steps are taken with learnable per-layer,
-per-step learning rates, and the outer loss is a weighted sum of the
-query loss after each inner step, annealed over the first 200 outer
-iterations towards the final step only. We use the first-order
-approximation <span class="citation" data-cites="nichol2018fomaml"><a href="#ref-nichol2018fomaml" role="doc-biblioref">[17]</a></span>; for a
-model of this size on CPU the second-order term buys little. The inner
-gradient is clipped to norm 10 before the step. Without the clipping a
-support set that happens to hold a few windows at the edge of the
-clipping range throws the adapted parameters far away and meta-training
-diverges, which is what happened in our first runs. Meta-training runs
-400 outer iterations with a meta-batch of four regimes and Adam at
+per-step learning rates, and the outer loss adds up the query loss
+measured after every inner step, with weights that shift over the first
+200 outer iterations until only the last step counts. We use the
+first-order approximation <span class="citation" data-cites="nichol2018fomaml"><a href="#ref-nichol2018fomaml" role="doc-biblioref">[17]</a></span>; for a model of this size on CPU
+the second-order term buys little. The inner gradient is clipped to norm
+10 before the step. Without the clipping a support set that happens to
+hold a few windows at the edge of the clipping range throws the adapted
+parameters far away and meta-training diverges, which is what happened
+in our first runs. Meta-training runs 400 outer iterations with a
+meta-batch of four regimes and Adam at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">10^{-3}</annotation></semantics></math>.
 At deployment, adaptation is the same three inner steps from
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>θ</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\theta^*</annotation></semantics></math>
@@ -950,41 +952,37 @@ meta-learner never saw. Values are standardised with the entity’s own
 training statistics and clipped to ±10 standard deviations; without the
 clipping a sensor that barely moves in training turns ordinary test
 noise into values in the thousands.</p>
-<p><em>HAI 21.03</em> <span class="citation" data-cites="shin2021hai"><a href="#ref-shin2021hai" role="doc-biblioref">[31]</a></span> comes from
-a hardware-in-the-loop testbed with a boiler, a turbine and a
-water-treatment process, 79 tags at 1 Hz, three attack-free training
-campaigns and five test campaigns with labelled attacks. We average the
-signals over 10-second blocks, pool the training campaigns (keeping them
-as separate streams for regime segmentation, since they were recorded
-weeks apart) and treat each test campaign as an entity. <em>SMD</em>
-<span class="citation" data-cites="su2019omnianomaly"><a href="#ref-su2019omnianomaly" role="doc-biblioref">[47]</a></span> has
-28 server machines with 38 metrics at one-minute resolution; each
-machine is an entity, and 30 % of the machines are held out per seed.
-<em>SKAB</em> <span class="citation" data-cites="katser2020skab"><a href="#ref-katser2020skab" role="doc-biblioref">[48]</a></span> is a
-water-circulation rig with 8 sensors at 1 Hz and 34 short runs in which
-a valve or the pump is manipulated. The anomaly-free recording sits at a
-very different flow level from most runs, so each run is standardised
-with its own normal prefix, which becomes its training stream; one run
-with almost no prefix is dropped, and 30 % of runs are held out per
-seed. This makes SKAB a genuine few-shot setting: the detector meets a
-new run with a few hundred seconds of normal operation. <em>PSM</em>
-<span class="citation" data-cites="abdulaal2021psm"><a href="#ref-abdulaal2021psm" role="doc-biblioref">[49]</a></span> is a
-single stream of 25 server metrics; regimes for meta-training are carved
-from its training part, and its test part is the held-out stream.
-<em>SWaT</em> <span class="citation" data-cites="goh2016swat"><a href="#ref-goh2016swat" role="doc-biblioref">[29]</a></span> and
-<em>WADI</em> <span class="citation" data-cites="ahmed2017wadi"><a href="#ref-ahmed2017wadi" role="doc-biblioref">[30]</a></span> are the
-iTrust water-treatment (51 tags, 36 attacks) and water-distribution (123
-tags after dropping four empty channels, 15 attacks) testbeds, used
-under the iTrust data-use agreement; both are downsampled to 10 s by
-stride, the first six hours of SWaT’s normal trace are dropped as the
-plant start-up transient, and each is one entity treated like PSM.
-<em>SMAP</em> and <em>MSL</em> <span class="citation" data-cites="hundman2018smap"><a href="#ref-hundman2018smap" role="doc-biblioref">[32]</a></span> are the NASA telemetry channels of
-the telemanom release: 55 SMAP channels with 25 features and 27 MSL
-channels with 55 features, each with its own training and labelled test
-stream, one entity per channel and 30 % of channels held out per seed.
-Their test streams are 1,100 to 8,600 windows long, so these two
-datasets use a 200-window calibration and a 400-window shadow
-period.</p>
+<p><em>HAI 21.03</em> <span class="citation" data-cites="shin2021hai"><a href="#ref-shin2021hai" role="doc-biblioref">[31]</a></span> is recorded
+on a hardware-in-the-loop rig that joins three processes, a boiler, a
+turbine and water treatment, into one plant: 79 tags at 1 Hz, three
+attack-free training campaigns and five test campaigns with labelled
+attacks. We average the signals over 10-second blocks, pool the training
+campaigns (keeping them as separate streams for regime segmentation,
+since they were recorded weeks apart) and treat each test campaign as an
+entity. <em>SMD</em> <span class="citation" data-cites="su2019omnianomaly"><a href="#ref-su2019omnianomaly" role="doc-biblioref">[47]</a></span> has 28 server machines with 38
+metrics at one-minute resolution; each machine is an entity, and 30 % of
+the machines are held out per seed. <em>SKAB</em> <span class="citation" data-cites="katser2020skab"><a href="#ref-katser2020skab" role="doc-biblioref">[48]</a></span> is a water-circulation rig with 8
+sensors at 1 Hz and 34 short runs in which a valve or the pump is
+manipulated. The anomaly-free recording sits at a very different flow
+level from most runs, so each run is standardised with its own normal
+prefix, which becomes its training stream; one run with almost no prefix
+is dropped, and 30 % of runs are held out per seed. This makes SKAB a
+genuine few-shot setting: the detector meets a new run with a few
+hundred seconds of normal operation. <em>PSM</em> <span class="citation" data-cites="abdulaal2021psm"><a href="#ref-abdulaal2021psm" role="doc-biblioref">[49]</a></span> is a single stream of 25 server
+metrics; regimes for meta-training are carved from its training part,
+and its test part is the held-out stream. <em>SWaT</em> <span class="citation" data-cites="goh2016swat"><a href="#ref-goh2016swat" role="doc-biblioref">[29]</a></span> and <em>WADI</em> <span class="citation" data-cites="ahmed2017wadi"><a href="#ref-ahmed2017wadi" role="doc-biblioref">[30]</a></span> are the iTrust water-treatment (51
+tags, 36 attacks) and water-distribution (123 tags after dropping four
+empty channels, 15 attacks) testbeds, used under the iTrust data-use
+agreement; both are downsampled to 10 s by stride, the first six hours
+of SWaT’s normal trace are dropped as the plant start-up transient, and
+each is one entity treated like PSM. <em>SMAP</em> and <em>MSL</em>
+<span class="citation" data-cites="hundman2018smap"><a href="#ref-hundman2018smap" role="doc-biblioref">[32]</a></span> are the
+NASA telemetry channels of the telemanom release: 55 SMAP channels with
+25 features and 27 MSL channels with 55 features, each with its own
+training and labelled test stream, one entity per channel and 30 % of
+channels held out per seed. Their test streams are 1,100 to 8,600
+windows long, so these two datasets use a 200-window calibration and a
+400-window shadow period.</p>
 <p>Table 5. Datasets. Test lengths are in windows after preprocessing;
 anomaly rate is the share of labelled steps.</p>
 <table style="width:100%;">
@@ -2841,910 +2839,14 @@ availability</h1>
 <p>The implementation, the dataset loaders, the experiment runner and
 every result table in this paper are available at the project
 repository. HAI 21.03, SMD, SKAB, PSM, SMAP and MSL are public and the
-loaders fetch or read them; SWaT and WADI must be requested from
-iTrust.</p>
+loaders fetch or read them; SWaT and WADI must be requested from iTrust.
+The full corpus of the review, with a code on each taxonomy axis for
+every paper, is given as Table S1 in the supplementary file.</p>
 <h1 class="unnumbered" id="declaration">Declaration</h1>
-<p>The authors declare no competing interests. This research received no
-specific grant. SWaT and WADI data were obtained from iTrust, Singapore
-University of Technology and Design, under its data-use agreement.</p>
-<h1 class="unnumbered" id="appendix-a.-the-review-corpus">Appendix A.
-The review corpus</h1>
-<p>The 66 papers of Section 3 with the codes of the four taxonomy axes
-(D1 paradigm, D2 mechanism, D3 streaming capability, D4 validation;
-abbreviations as in Section 3.2). The screening sheet with every
-excluded record and its reason is released with the code.</p>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Year</th>
-<th>First author</th>
-<th>Title</th>
-<th>Venue</th>
-<th>D1</th>
-<th>D2</th>
-<th>D3</th>
-<th>D4</th>
-<th>DOI</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>2020</td>
-<td>Shen Zhang</td>
-<td>Few-Shot Bearing Anomaly Detection Based on Model-Agnostic
-Meta-Learning</td>
-<td>2020 International Conference on Electrical Machines and Sys</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.23919/ICEMS50442.2020.9291099</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>2021</td>
-<td>Jinglin Zhang</td>
-<td>Diagnosis of Interturn Short-Circuit Faults in Permanent Magnet
-Synchronous Motors Based on Few-Shot Learning Under a Federated Learning
-Framework</td>
-<td>IEEE Transactions on Industrial Informatics</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tii.2021.3067915</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>2021</td>
-<td>Xiaokang Zhou</td>
-<td>Siamese Neural Network Based Few-Shot Learning for Anomaly Detection
-in Industrial Cyber-Physical Systems</td>
-<td>IEEE Transactions on Industrial Informatics</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tii.2020.3047675</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>2021</td>
-<td>G. Yu</td>
-<td>Subspace-based domain adaptation for few-shot fault diagnosis</td>
-<td>2021 CAA Symposium on Fault Detection, Supervision, and Safe</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/safeprocess52771.2021.9693695</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>2022</td>
-<td>Mohamed-Ali Tnani</td>
-<td>Efficient Feature Learning Approach for Raw Industrial Vibration
-Data Using Two-Stage Learning Framework.</td>
-<td>Sensors (Basel, Switzerland)</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.3390/s22134813</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>2022</td>
-<td>Yi-Cheng Yu</td>
-<td>Fast Adaption for Multi Motor Anomaly Detection via Meta Learning
-and deep unsupervised learning</td>
-<td>2022 IEEE 31st International Symposium on Industrial Electro</td>
-<td>OPT</td>
-<td>REC</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/isie51582.2022.9831559</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td>2022</td>
-<td>Y. Liu</td>
-<td>The Adaptive Personalized Federated Meta-Learning for Anomaly
-Detection of Industrial Equipment</td>
-<td>IEEE Journal of Radio Frequency Identification</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/jrfid.2022.3209657</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td>2022</td>
-<td>Shreshth Tuli</td>
-<td>TranAD</td>
-<td>Proceedings of the VLDB Endowment</td>
-<td>OPT</td>
-<td>REC</td>
-<td>STA</td>
-<td>IIV</td>
-<td>10.14778/3514061.3514067</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td>2022</td>
-<td>T. Ye</td>
-<td>FLAG: Few-Shot Latent Dirichlet Generative Learning for
-Semantic-Aware Traffic Detection</td>
-<td>IEEE Transactions on Network and Service Management</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tnsm.2021.3131266</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td>2023</td>
-<td>Moon Noh Jung Lee Hwang</td>
-<td>Anomaly detection using a model-agnostic meta-learning-based
-variational auto-encoder for facility management</td>
-<td>Journal of Building Engineering</td>
-<td>OPT</td>
-<td>REC</td>
-<td>STA</td>
-<td>GEN</td>
-<td>10.1016/j.jobe.2023.106099</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td>2023</td>
-<td>Farhan Md. Siraj</td>
-<td>A Few-Shot Learning Based Fault Diagnosis Model Using Sensors Data
-from Industrial Machineries</td>
-<td>Vibration</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.3390/vibration6040059</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td>2023</td>
-<td>Chandana Priya Nivarthi</td>
-<td>Towards Few-Shot Time Series Anomaly Detection with Temporal
-Attention and Dynamic Thresholding</td>
-<td>2023 International Conference on Machine Learning and Applic</td>
-<td>NML</td>
-<td>REC</td>
-<td>STA</td>
-<td>GEN</td>
-<td>10.1109/icmla58977.2023.00218</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td>2023</td>
-<td>Ke Yue</td>
-<td>An Emerging Fault Diagnosis Framework with Incremental Meta-Learning
-for Rotating Machinery</td>
-<td>2023 International Conference on Sensing, Measurement &amp;
-Data</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>INC</td>
-<td>IOV</td>
-<td>10.1109/icsmd60522.2023.10490806</td>
-</tr>
-<tr class="even">
-<td>14</td>
-<td>2023</td>
-<td>L. Cheng</td>
-<td>MMFSL: A Novel Multimodal Few-Shot Learning Framework for Fault
-Diagnosis of Industrial Bearings</td>
-<td>IEEE Transactions on Instrumentation and Measurement</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tim.2023.3289549</td>
-</tr>
-<tr class="odd">
-<td>15</td>
-<td>2023</td>
-<td>Caiyun Wu</td>
-<td>Engine fault detection algorithm EA-EFNC based on few-shot
-learning</td>
-<td>Third International Conference on Machine Learning and Compu</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1117/12.2675146</td>
-</tr>
-<tr class="even">
-<td>16</td>
-<td>2023</td>
-<td>V. L. Cao</td>
-<td>Few-Shot Learning with Discriminative Representation for Cyberattack
-Detection</td>
-<td>2023 15th International Conference on Knowledge and Systems</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/kse59128.2023.10299444</td>
-</tr>
-<tr class="odd">
-<td>17</td>
-<td>2023</td>
-<td>Z. Shi</td>
-<td>Few-Shot Network Intrusion Detection Based on Model-Agnostic
-Meta-Learning with L2F Method</td>
-<td>2023 IEEE Wireless Communications and Networking Conference</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/wcnc55385.2023.10118898</td>
-</tr>
-<tr class="even">
-<td>18</td>
-<td>2023</td>
-<td>X. Ye</td>
-<td>Rolling bearing fault diagnosis with variable load and few samples
-based on multifeature fusion meta-learning</td>
-<td>2023 CAA Symposium on Fault Detection, Supervision and Safet</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/safeprocess58597.2023.10295704</td>
-</tr>
-<tr class="odd">
-<td>19</td>
-<td>2023</td>
-<td>J. Chen</td>
-<td>A Meta-Learning Method for Electric Machine Bearing Fault Diagnosis
-Under Varying Working Conditions With Limited Data</td>
-<td>IEEE Transactions on Industrial Informatics</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tii.2022.3165027</td>
-</tr>
-<tr class="even">
-<td>20</td>
-<td>2023</td>
-<td>Y. Liu</td>
-<td>Semi-supervised Few-shot Network Intrusion Detection based on
-Meta-learning</td>
-<td>2023 IEEE International Conferences on Internet of Things (i</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/ithings-greencom-cpscom-smartdata-cybermatics60724.2023.00097</td>
-</tr>
-<tr class="odd">
-<td>21</td>
-<td>2023</td>
-<td>S. Fang</td>
-<td>Few-Shot Fault Diagnosis of Rolling Bearings Based on
-Multidimensional Global Attention Siamese Network</td>
-<td>IECON 2023- 49th Annual Conference of the IEEE Industrial El</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/iecon51785.2023.10312375</td>
-</tr>
-<tr class="even">
-<td>22</td>
-<td>2023</td>
-<td>X. Zhang</td>
-<td>Imbalanced Fault Diagnosis Based on Supervised Prototypical
-Contrastive Network</td>
-<td>2023 Global Reliability and Prognostics and Health Managemen</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/phm-hangzhou58797.2023.10482577</td>
-</tr>
-<tr class="odd">
-<td>23</td>
-<td>2024</td>
-<td>Yan et al.</td>
-<td>Meta learning-based few-shot intrusion detection for 5G-enabled
-industrial internet</td>
-<td>Complex &amp; Intelligent Systems</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1007/s40747-024-01388-1</td>
-</tr>
-<tr class="even">
-<td>24</td>
-<td>2024</td>
-<td>Lang Du</td>
-<td>Research on Turnout Fault Diagnosis Model Based on
-GADF-CNN-MAML</td>
-<td>2024 5th International Conference on Artificial Intelligence</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/icaice63571.2024.10863959</td>
-</tr>
-<tr class="odd">
-<td>25</td>
-<td>2024</td>
-<td>Wang Danfeng</td>
-<td>Model-Agnostic Meta-Learning-based Fault Classification for
-Industrial Processes with Small Sample</td>
-<td>2024 39th Youth Academic Annual Conference of Chinese Associ</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/yac63405.2024.10598657</td>
-</tr>
-<tr class="even">
-<td>26</td>
-<td>2024</td>
-<td>P. Jagdish Kumar</td>
-<td>Classifying Network Abnormalities Into Faults and Attacks in
-Iot-Based Cyber-Physical Systems using Machine Learning</td>
-<td>2024 International Conference on Integrated Circuits and Com</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/icicacs60521.2024.10498664</td>
-</tr>
-<tr class="odd">
-<td>27</td>
-<td>2024</td>
-<td>Yi-Cheng Yu</td>
-<td>Pruning Quantized Unsupervised Meta-Learning DegradingNet Solution
-for Industrial Equipment and Semiconductor Process Anomaly Detection and
-Prediction</td>
-<td>Applied Sciences</td>
-<td>NS</td>
-<td>REC</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.3390/app14051708</td>
-</tr>
-<tr class="even">
-<td>28</td>
-<td>2024</td>
-<td>Yunpu Wu</td>
-<td>A Novel Fault Diagnosis Method of High-Speed Train Based on Few-Shot
-Learning.</td>
-<td>Entropy (Basel, Switzerland)</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.3390/e26050428</td>
-</tr>
-<tr class="odd">
-<td>29</td>
-<td>2024</td>
-<td>J. Wu</td>
-<td>A Novel Few-Shot Deep Transfer Learning Method for Anomaly
-Detection: Deep Domain-Adversarial Contrastive Network With
-Time-Frequency Transferability Analytics</td>
-<td>IEEE Internet of Things Journal</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/jiot.2024.3403976</td>
-</tr>
-<tr class="even">
-<td>30</td>
-<td>2024</td>
-<td>L. A. Jilcha</td>
-<td>SaRLog: Semantic-Aware Robust Log Anomaly Detection via
-BERT-Augmented Contrastive Learning</td>
-<td>IEEE Internet of Things Journal</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>GEN</td>
-<td>10.1109/jiot.2024.3386183</td>
-</tr>
-<tr class="odd">
-<td>31</td>
-<td>2024</td>
-<td>Z. Pu</td>
-<td>Incrementally Generative Adversarial Diagnostics Using Few-Shot
-Enabled One-Class Learning</td>
-<td>IEEE Transactions on Industrial Informatics</td>
-<td>NML</td>
-<td>HYB</td>
-<td>INC</td>
-<td>IOV</td>
-<td>10.1109/tii.2024.3416945</td>
-</tr>
-<tr class="even">
-<td>32</td>
-<td>2024</td>
-<td>H. Sun</td>
-<td>Space Decoupled Prototype Learning for Few-Shot Attack Detection in
-Cyber–Physical Systems</td>
-<td>IEEE Transactions on Industrial Informatics</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tii.2024.3423327</td>
-</tr>
-<tr class="odd">
-<td>33</td>
-<td>2024</td>
-<td>U. Zukaib</td>
-<td>Meta-IDS: Meta-Learning-Based Smart Intrusion Detection System for
-Internet of Medical Things (IoMT) Network</td>
-<td>IEEE Internet of Things Journal</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/jiot.2024.3387294</td>
-</tr>
-<tr class="even">
-<td>34</td>
-<td>2024</td>
-<td>K. Li</td>
-<td>Reweighted Regularized Prototypical Network for Few-Shot Fault
-Diagnosis</td>
-<td>IEEE Transactions on Neural Networks and Learning Systems</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tnnls.2022.3232394</td>
-</tr>
-<tr class="odd">
-<td>35</td>
-<td>2024</td>
-<td>L. Du</td>
-<td>A Few-Shot Class-Incremental Learning Method for Network Intrusion
-Detection</td>
-<td>IEEE Transactions on Network and Service Management</td>
-<td>NS</td>
-<td>CLS</td>
-<td>INC</td>
-<td>IOV</td>
-<td>10.1109/tnsm.2023.3332284</td>
-</tr>
-<tr class="even">
-<td>36</td>
-<td>2025</td>
-<td>Jiaxi Li</td>
-<td>An Anomaly Detection Approach for Aerospace Telemetry Data Based on
-Model-Agnostic Meta-Learning</td>
-<td>IFAC-PapersOnLine</td>
-<td>OPT</td>
-<td>REC</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1016/j.ifacol.2025.11.424</td>
-</tr>
-<tr class="odd">
-<td>37</td>
-<td>2025</td>
-<td>Yutian Wang</td>
-<td>Few-Shot Learning for Anomaly Detection in Gas-Fired Power Plants
-Using Prototypical Networks</td>
-<td>Informatica</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.31449/inf.v49i36.12350</td>
-</tr>
-<tr class="even">
-<td>38</td>
-<td>2025</td>
-<td>N. Ijaz</td>
-<td>A Hybrid LATAM and Few-Shot Learning Framework for Fault Diagnosis
-in Wireless Sensor Networks</td>
-<td>IEEE Sensors Journal</td>
-<td>MET</td>
-<td>HYB</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/jsen.2025.3620491</td>
-</tr>
-<tr class="odd">
-<td>39</td>
-<td>2025</td>
-<td>Ming Wan</td>
-<td>One-Class Anomaly Detection for Industrial Data Traffic Based on
-Dual-Characteristic Prototype Points</td>
-<td>2025 IEEE International Symposium on Parallel and Distribute</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/ispa67752.2025.00089</td>
-</tr>
-<tr class="even">
-<td>40</td>
-<td>2025</td>
-<td>David He</td>
-<td>Full Ceramic Bearing Fault Diagnosis with Few-Shot Learning Using
-GPT-2</td>
-<td>Computer Modeling in Engineering &amp; Sciences</td>
-<td>MOD</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.32604/cmes.2025.063975</td>
-</tr>
-<tr class="odd">
-<td>41</td>
-<td>2025</td>
-<td>Ravindra Chopparapu</td>
-<td>Implementation of an Optimized Hybrid Machine Learning–Based IDS for
-Enhanced Threat Detection in IoT Environments</td>
-<td>2025 IEEE 5th International Conference on ICT in Business In</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/ictbig68706.2025.11323664</td>
-</tr>
-<tr class="even">
-<td>42</td>
-<td>2025</td>
-<td>Ali Pourghoraba</td>
-<td>Model-Agnostic Meta-Learning for Fault Diagnosis of Induction Motors
-in Data-Scarce Environments with Varying Operating Conditions and
-Electric Drive Noise</td>
-<td>IEEE Transactions on Energy Conversion</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tec.2025.3556100</td>
-</tr>
-<tr class="odd">
-<td>43</td>
-<td>2025</td>
-<td>Ying Yu</td>
-<td>A novel few-shot cross-domain fault diagnosis method enhanced by
-feature fusion and ReLU-KAN</td>
-<td>Engineering Research Express</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1088/2631-8695/adcc77</td>
-</tr>
-<tr class="even">
-<td>44</td>
-<td>2025</td>
-<td>Minke Zou</td>
-<td>HySAM: A Hybrid Similarity-Enhanced Attention-Driven Network for
-Multi-Scale Few-Shot Learning in Belt Conveyor Roller Fault
-Detection</td>
-<td>Proceedings of the 4th International Conference on Computer,</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1145/3727648.3727708</td>
-</tr>
-<tr class="odd">
-<td>45</td>
-<td>2025</td>
-<td>Wei Gao</td>
-<td>Metric-Based Meta-Learning Relation Network for Cross-Domain
-Few-Shot Bearing Fault Diagnosis</td>
-<td>IEEE Sensors Journal</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/jsen.2025.3547258</td>
-</tr>
-<tr class="even">
-<td>46</td>
-<td>2025</td>
-<td>Yuanfa Cen</td>
-<td>Integration of Normalizing Flows and Prototypical Networks for
-Few-Shot Early Fault Detection in Transformer</td>
-<td>2025 5th International Conference on Electrical Engineering</td>
-<td>HYB</td>
-<td>HYB</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/ic2ecs68700.2025.11362286</td>
-</tr>
-<tr class="odd">
-<td>47</td>
-<td>2025</td>
-<td>Yanfei Liu</td>
-<td>A novel temporal classification prototype network for few-shot
-bearing fault detection.</td>
-<td>Scientific reports</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1038/s41598-025-98963-4</td>
-</tr>
-<tr class="even">
-<td>48</td>
-<td>2025</td>
-<td>Ji-Min Woo</td>
-<td>Meta-Learning-Based LSTM-Autoencoder for Low-Data Anomaly Detection
-in Retrofitted CNC Machine Using Multi-Machine Datasets</td>
-<td>Systems</td>
-<td>OPT</td>
-<td>REC</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.3390/systems13070534</td>
-</tr>
-<tr class="odd">
-<td>49</td>
-<td>2025</td>
-<td>Muyan Yao</td>
-<td>Rethinking Discrepancy Analysis: Anomaly Detection via Meta-Learning
-Powered Dual-Source Representation Differentiation</td>
-<td>IEEE Transactions on Automation Science and Engineering</td>
-<td>NS</td>
-<td>REC</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tase.2024.3486688</td>
-</tr>
-<tr class="even">
-<td>50</td>
-<td>2025</td>
-<td>S. Zhu</td>
-<td>Partially-Supervised Graph Derivation Network With Meta-Learning for
-Time-Series Anomaly Detection</td>
-<td>IEEE Internet of Things Journal</td>
-<td>OPT</td>
-<td>HYB</td>
-<td>STA</td>
-<td>GEN</td>
-<td>10.1109/jiot.2025.3558273</td>
-</tr>
-<tr class="odd">
-<td>51</td>
-<td>2025</td>
-<td>O. S. Ogunleye</td>
-<td>Hybrid Meta-Deep Learning Approach for Malicious Data Classification
-in Iot Packet Data Networks</td>
-<td>2025 8th Conference on Cloud and Internet of Things (CIoT)</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/ciot67574.2025.11410126</td>
-</tr>
-<tr class="even">
-<td>52</td>
-<td>2025</td>
-<td>Y. Wang</td>
-<td>Fault Diagnosis for Pneumatic Control Valves Using a Novel Few-shot
-Learning Method</td>
-<td>2025 CAA Symposium on Fault Detection, Supervision, and Safe</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/safeprocess67117.2025.11267814</td>
-</tr>
-<tr class="odd">
-<td>53</td>
-<td>2025</td>
-<td>N. Ijaz</td>
-<td>Few-Shot Transfer Learning-Based Fault Classification in Wireless
-Sensor Networks</td>
-<td>IEEE Access</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/access.2025.3554748</td>
-</tr>
-<tr class="even">
-<td>54</td>
-<td>2025</td>
-<td>M. Zabin</td>
-<td>Few-Shot Learning-Based Machine Fault Diagnosis Using EMD-Gammatone
-Spectrogram with Limited Labeled Audio Dataset</td>
-<td>2025 IEEE International Conference on Big Data and Smart Com</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/bigcomp64353.2025.00046</td>
-</tr>
-<tr class="odd">
-<td>55</td>
-<td>2025</td>
-<td>B. Chandrasekaran</td>
-<td>Evaluation of Few-Shot Learning with Vision Language Models for
-Needle Bearing Defect Detection</td>
-<td>SoutheastCon 2025</td>
-<td>MOD</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/southeastcon56624.2025.10971495</td>
-</tr>
-<tr class="even">
-<td>56</td>
-<td>2025</td>
-<td>K. Yi</td>
-<td>Pipeline Anomaly Detection Based on KPCA and Cosine Distance
-Prototypical Network</td>
-<td>2025 IEEE International Conference on Industrial Technology</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/icit63637.2025.10965214</td>
-</tr>
-<tr class="odd">
-<td>57</td>
-<td>2025</td>
-<td>U. Suleymanov</td>
-<td>SSPNet: Semi-Supervised Prototypical Networks for Few-Shot Network
-Intrusion Detection</td>
-<td>MILCOM 2025 - 2025 IEEE Military Communications Conference (</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/milcom64451.2025.11310333</td>
-</tr>
-<tr class="even">
-<td>58</td>
-<td>2025</td>
-<td>M. Emadaleslami</td>
-<td>Differential Fault Diagnosis in Power Transformers Under Limited
-Data Condition via Few-Shot Learning</td>
-<td>IEEE Transactions on Industrial Informatics</td>
-<td>NS</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tii.2025.3586057</td>
-</tr>
-<tr class="odd">
-<td>59</td>
-<td>2025</td>
-<td>H. Li</td>
-<td>A Few-Shot Network Attack Detection Method Based on MAML-L2F Dynamic
-Parameter Optimization</td>
-<td>2025 China Automation Congress (CAC)</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/cac67268.2025.11486720</td>
-</tr>
-<tr class="even">
-<td>60</td>
-<td>2025</td>
-<td>J. Tian</td>
-<td>OMLog: Online Log Anomaly Detection for Evolving System With
-Meta-Learning</td>
-<td>IEEE Internet of Things Journal</td>
-<td>MOD</td>
-<td>PRE</td>
-<td>DAW</td>
-<td>GEN</td>
-<td>10.1109/jiot.2025.3569628</td>
-</tr>
-<tr class="odd">
-<td>61</td>
-<td>2025</td>
-<td>R. Xu</td>
-<td>Cyber Attack Detection for Industrial Control Systems with Few-Shot
-and Class Imbalance: An Improved DA-LSTM-UNet Scheme</td>
-<td>2025 10th International Conference on Control, Robotics and</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IIV</td>
-<td>10.1109/crc67523.2025.11288189</td>
-</tr>
-<tr class="even">
-<td>62</td>
-<td>2025</td>
-<td>W. Xi</td>
-<td>MHT: Dual-Layered Meta-Driven Hypernetworks for Unknown Attack
-Detection</td>
-<td>2025 10th International Conference on Computer and Communica</td>
-<td>MOD</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/icccs65393.2025.11069655</td>
-</tr>
-<tr class="odd">
-<td>63</td>
-<td>2025</td>
-<td>D. N. Chi Nam</td>
-<td>STRIDE: Spectral-Temporal Representation and Instance-Weighted
-Domain Expansion</td>
-<td>2025 IEEE International Conference on Data Mining (ICDM)</td>
-<td>NML</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/icdm65498.2025.00125</td>
-</tr>
-<tr class="even">
-<td>64</td>
-<td>2025</td>
-<td>J. Li</td>
-<td>MTSNN: A Few-Shot Fine-Grained Diagnosis Framework for Cross-Machine
-Fault Diagnosis With Heterogeneous Fault Categories</td>
-<td>IEEE Transactions on Instrumentation and Measurement</td>
-<td>MET</td>
-<td>DIS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/tim.2025.3551907</td>
-</tr>
-<tr class="odd">
-<td>65</td>
-<td>2025</td>
-<td>J. Xu</td>
-<td>A Novel Approach for Small-Sample Open-Set Fault Diagnosis in
-Rolling Bearings: Dense-ProtoNet-AE</td>
-<td>2025 CAA Symposium on Fault Detection, Supervision, and Safe</td>
-<td>HYB</td>
-<td>HYB</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/safeprocess67117.2025.11268163</td>
-</tr>
-<tr class="even">
-<td>66</td>
-<td>2025</td>
-<td>W. Guo</td>
-<td>ModelAdaptive Bearing Fault Diagnosis in Small Sample
-Situations</td>
-<td>2025 CAA Symposium on Fault Detection, Supervision, and Safe</td>
-<td>OPT</td>
-<td>CLS</td>
-<td>STA</td>
-<td>IOV</td>
-<td>10.1109/safeprocess67117.2025.11267982</td>
-</tr>
-</tbody>
-</table>
+<p>The authors have no competing interests to declare, and the work was
+done without dedicated funding. The SWaT and WADI recordings were
+supplied by iTrust at the Singapore University of Technology and Design,
+whose data-use terms we follow.</p>
 <div id="refs" class="references csl-bib-body" role="list">
 <div id="ref-chandola2009survey" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">V.

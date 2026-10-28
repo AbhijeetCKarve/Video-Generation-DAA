@@ -12,5 +12,11 @@ if [ -n "$CHROME" ]; then
   "$CHROME" --headless --disable-gpu --no-sandbox --no-pdf-header-footer \
     --print-to-pdf=manuscript.pdf "file://$(pwd)/manuscript.html" 2>/dev/null
 fi
-wc -w manuscript.md
+pandoc supplementary.md --standalone --css style.css --embed-resources -o supplementary.html
+pandoc supplementary.md -o supplementary.docx
+if [ -n "$CHROME" ]; then
+  "$CHROME" --headless --disable-gpu --no-sandbox --no-pdf-header-footer \
+    --print-to-pdf=supplementary.pdf "file://$(pwd)/supplementary.html" 2>/dev/null
+fi
+wc -w manuscript.md supplementary.md
 ls -la manuscript.docx manuscript.pdf 2>/dev/null || true
