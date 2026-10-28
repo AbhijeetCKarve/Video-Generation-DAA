@@ -1,0 +1,249 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="1500" viewBox="0 0 1760 1500" font-family="DejaVu Sans, Arial, Helvetica, sans-serif">
+<defs>
+<marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker>
+<marker id="arr-red" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#C0392B"/></marker>
+<marker id="arr-green" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#2E8B57"/></marker>
+<marker id="arr-purple" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#6E4BA3"/></marker>
+</defs>
+<rect x="0" y="0" width="1760" height="1500" fill="white"/>
+<text x="880.0" y="40" font-size="24" font-weight="bold" text-anchor="middle" fill="#222" font-style="normal">DAMAD: a detector that watches a plant every step and re-learns only when the plant changes</text>
+<text x="880.0" y="66" font-size="14" font-weight="normal" text-anchor="middle" fill="#555" font-style="normal">Read top to bottom. Green = data, blue = models, orange = scores and thresholds, yellow = decisions, pink = memory and safety, purple = meta-learning.</text>
+<rect x="30" y="100" width="1700" height="230" rx="14" fill="#FAFAFA" stroke="#6E4BA3" stroke-width="1.5" stroke-dasharray="2,4"/>
+<rect x="46" y="87" width="387.2" height="26" rx="6" fill="#6E4BA3"/>
+<text x="51" y="105" font-size="15" font-weight="bold" text-anchor="start" fill="white" font-style="normal">A  Before deployment (done once, offline)</text>
+<rect x="50" y="130" width="300" height="180" rx="10" fill="#E8F1E4" stroke="#5B8C5A" stroke-width="2"/>
+<text x="64" y="154" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Past normal recordings</text>
+<text x="64" y="178.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Weeks of sensor readings from the</text>
+<text x="64" y="195.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">plant while it was running normally.</text>
+<text x="64" y="213.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">No faults are needed for training.</text>
+<polyline points="70.0,290.0 81.0,271.0 92.0,280.5 103.0,251.9 114.0,267.1 125.0,255.7 136.0,272.9 147.0,263.3 158.0,250.0 169.0,271.0 180.0,265.2" fill="none" stroke="#5B8C5A" stroke-width="1.8"/>
+<polyline points="200.0,290.0 211.0,280.0 222.0,285.0 233.0,287.5 244.0,275.0 255.0,255.0 266.0,260.0 277.0,250.0 288.0,257.5 299.0,252.5 310.0,255.0" fill="none" stroke="#5B8C5A" stroke-width="1.8"/>
+<path d="M350,220.0 L382,220.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="382" y="130" width="300" height="180" rx="10" fill="#FFF1C9" stroke="#B8860B" stroke-width="2"/>
+<text x="396" y="154" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Cut into operating regimes</text>
+<text x="396" y="178.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">One change detector (ADWIN) per sensor.</text>
+<text x="396" y="195.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">When 20 % of sensors report a change</text>
+<text x="396" y="213.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">within 200 steps, a new regime starts</text>
+<text x="396" y="231.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">(regimes are at least 400 steps long).</text>
+<rect x="402" y="270" width="60" height="14" fill="#5B8C5A" opacity="0.8"/>
+<rect x="465" y="270" width="40" height="14" fill="#3C6EA5" opacity="0.8"/>
+<rect x="508" y="270" width="70" height="14" fill="#C96A2B" opacity="0.8"/>
+<rect x="581" y="270" width="50" height="14" fill="#6E4BA3" opacity="0.8"/>
+<rect x="634" y="270" width="40" height="14" fill="#B5405E" opacity="0.8"/>
+<text x="402" y="300" font-size="11" font-weight="normal" text-anchor="start" fill="#555" font-style="normal">regime 1   regime 2   regime 3   regime 4   ...</text>
+<path d="M682,220.0 L714,220.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="714" y="130" width="300" height="180" rx="10" fill="#E7DDF3" stroke="#6E4BA3" stroke-width="2"/>
+<text x="728" y="154" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Practice tasks (episodes)</text>
+<text x="728" y="178.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Each regime becomes one practice task:</text>
+<text x="728" y="195.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">K windows from its first half to learn</text>
+<text x="728" y="213.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">from (support), 32 windows from its</text>
+<text x="728" y="231.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">second half to be tested on (query).</text>
+<path d="M1014,220.0 L1046,220.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1046" y="130" width="300" height="180" rx="10" fill="#E7DDF3" stroke="#6E4BA3" stroke-width="2"/>
+<text x="1060" y="154" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Meta-training (MAML++)</text>
+<text x="1060" y="178.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">400 rounds, 4 tasks per round. In each</text>
+<text x="1060" y="195.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">task the model takes 3 small learning</text>
+<text x="1060" y="213.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">steps on the support windows and is</text>
+<text x="1060" y="231.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">judged on the query windows. The result</text>
+<text x="1060" y="249.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">is a starting point that adapts quickly.</text>
+<path d="M1346,220.0 L1378,220.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1378" y="130" width="332" height="180" rx="10" fill="#DCE9F7" stroke="#3C6EA5" stroke-width="2"/>
+<text x="1392" y="154" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">θ*: the adaptable start</text>
+<text x="1392" y="178.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">A VAE (an autoencoder that</text>
+<text x="1392" y="195.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">reconstructs an 8-step window</text>
+<text x="1392" y="213.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">of all sensors) whose weights</text>
+<text x="1392" y="231.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">are a good starting point for</text>
+<text x="1392" y="249.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">any regime of this plant.</text>
+<text x="1544.0" y="280" font-size="34" font-weight="normal" text-anchor="middle" fill="#3C6EA5" font-style="normal">★</text>
+<rect x="30" y="380" width="1700" height="300" rx="14" fill="#FAFAFA" stroke="#3C6EA5" stroke-width="1.5" stroke-dasharray="2,4"/>
+<rect x="46" y="367" width="543.5999999999999" height="26" rx="6" fill="#3C6EA5"/>
+<text x="51" y="385" font-size="15" font-weight="bold" text-anchor="start" fill="white" font-style="normal">B  Every step while the plant runs (the steady-state path)</text>
+<rect x="50" y="420" width="255" height="200" rx="10" fill="#E8F1E4" stroke="#5B8C5A" stroke-width="2"/>
+<text x="64" y="444" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">1  Readings arrive</text>
+<text x="64" y="468.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Every sensor of the plant</text>
+<text x="64" y="485.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">sends one value per step.</text>
+<text x="64" y="503.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">The last 8 steps form the</text>
+<text x="64" y="521.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">current window.</text>
+<rect x="80" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="102" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="124" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="146" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="168" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="190" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="212" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="234" y="545" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="80" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="102" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="124" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="146" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="168" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="190" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="212" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="234" y="558" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="80" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="102" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="124" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="146" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="168" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="190" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="212" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="234" y="571" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="80" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="102" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="124" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="146" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="168" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="190" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="212" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<rect x="234" y="584" width="22" height="13" fill="#C9DAF0" stroke="#3C6EA5" stroke-width="0.6"/>
+<text x="80" y="612" font-size="11" font-weight="normal" text-anchor="start" fill="#555" font-style="normal">8 steps × all sensors</text>
+<path d="M305,520.0 L333,520.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="333" y="420" width="285" height="200" rx="10" fill="#DCE9F7" stroke="#3C6EA5" stroke-width="2"/>
+<text x="347" y="444" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">2  Model guesses &#x27;normal&#x27;</text>
+<text x="347" y="468.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">The VAE θ (adapted from θ*)</text>
+<text x="347" y="485.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">compresses the window to 16</text>
+<text x="347" y="503.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">numbers and rebuilds it. It can</text>
+<text x="347" y="521.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">only rebuild what it has seen</text>
+<text x="347" y="539.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">as normal, so a faulty window</text>
+<text x="347" y="557.1" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">comes back wrong.</text>
+<polyline points="503.0,590.0 518.0,570.0 533.0,580.0 548.0,550.0 563.0,566.0 578.0,554.0 593.0,568.0" fill="none" stroke="#5B8C5A" stroke-width="1.8"/>
+<polyline points="503.0,590.0 518.0,572.2 533.0,578.9 548.0,550.0 563.0,567.8 578.0,550.0 593.0,570.0" fill="none" stroke="#3C6EA5" stroke-width="1.4"/>
+<text x="503" y="605" font-size="11" font-weight="normal" text-anchor="start" fill="#555" font-style="normal">input vs rebuilt</text>
+<path d="M618,520.0 L646,520.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="646" y="420" width="275" height="200" rx="10" fill="#FBE6D4" stroke="#C96A2B" stroke-width="2"/>
+<text x="660" y="444" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">3  Residual r_t</text>
+<text x="660" y="468.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">How far the rebuilt window</text>
+<text x="660" y="485.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">is from the real one (mean</text>
+<text x="660" y="503.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">squared difference). Large</text>
+<text x="660" y="521.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">residual = the plant is not</text>
+<text x="660" y="539.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">doing what &#x27;normal&#x27; looks</text>
+<text x="660" y="557.1" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">like.</text>
+<rect x="874" y="520" width="28" height="75" fill="#eee" stroke="#999" stroke-width="0.8"/>
+<rect x="874" y="561.25" width="28" height="33.75" fill="#C96A2B"/>
+<path d="M921,520.0 L949,520.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="949" y="420" width="275" height="200" rx="10" fill="#FBE6D4" stroke="#C96A2B" stroke-width="2"/>
+<text x="963" y="444" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">4  Compare with line τ</text>
+<text x="963" y="468.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">τ is the alarm line. It is set</text>
+<text x="963" y="485.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">from the data (no labels) and</text>
+<text x="963" y="503.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">does NOT move between</text>
+<text x="963" y="521.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">regime changes, so ordinary</text>
+<text x="963" y="539.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">ups and downs do not cause</text>
+<text x="963" y="557.1" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">alarms.</text>
+<rect x="1177" y="520" width="28" height="75" fill="#eee" stroke="#999" stroke-width="0.8"/>
+<rect x="1177" y="561.25" width="28" height="33.75" fill="#C96A2B"/>
+<line x1="1171" y1="542.5" x2="1211" y2="542.5" stroke="#B8860B" stroke-width="2.5" stroke-dasharray="4,3"/>
+<text x="1209" y="546" font-size="13" font-weight="bold" text-anchor="start" fill="#B8860B" font-style="normal">τ</text>
+<path d="M1224,490 L1252,490" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<path d="M1224,570 L1252,570" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1252" y="420" width="200" height="80" rx="10" fill="#F9DADA" stroke="#C0392B" stroke-width="2"/>
+<text x="1266" y="444" font-size="17" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">ALARM</text>
+<text x="1266" y="469.5" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">r_t above the line τ</text>
+<rect x="1252" y="532" width="200" height="80" rx="10" fill="#DFF2E1" stroke="#2E8B57" stroke-width="2"/>
+<text x="1266" y="556" font-size="17" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Normal</text>
+<text x="1266" y="581.5" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">r_t at or below τ</text>
+<path d="M783.5,620 L783.5,680" fill="none" stroke="#B8860B" stroke-width="2.2" marker-end="url(#arr)"/>
+<text x="793.5" y="650" font-size="13" font-weight="normal" text-anchor="start" fill="#B8860B" font-style="italic">every residual is also handed to the drift gate (band C)</text>
+<rect x="30" y="730" width="1700" height="225" rx="14" fill="#FAFAFA" stroke="#B8860B" stroke-width="1.5" stroke-dasharray="2,4"/>
+<rect x="46" y="717" width="736.8" height="26" rx="6" fill="#B8860B"/>
+<text x="51" y="735" font-size="15" font-weight="bold" text-anchor="start" fill="white" font-style="normal">C  Module 1, the drift gate: has the plant moved to a different way of running?</text>
+<rect x="50" y="770" width="300" height="160" rx="10" fill="#FFF1C9" stroke="#B8860B" stroke-width="2"/>
+<text x="64" y="794" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Average over blocks</text>
+<text x="64" y="818.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">The log of the residual is averaged</text>
+<text x="64" y="835.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">over blocks of 10 windows, so one</text>
+<text x="64" y="853.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">odd window cannot trigger anything.</text>
+<path d="M350,850.0 L380,850.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="380" y="770" width="300" height="160" rx="10" fill="#FFF1C9" stroke="#B8860B" stroke-width="2"/>
+<text x="394" y="794" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">ADWIN: old blocks vs recent</text>
+<text x="394" y="818.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">A sliding-window test asks whether the</text>
+<text x="394" y="835.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">recent blocks have a different average</text>
+<text x="394" y="853.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">from the older ones, with a guarantee</text>
+<text x="394" y="871.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">on how often it is wrong by chance.</text>
+<path d="M680,850.0 L710,850.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="710" y="770" width="340" height="160" rx="10" fill="#FFF1C9" stroke="#B8860B" stroke-width="2"/>
+<text x="724" y="794" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Two conditions before it counts</text>
+<text x="724" y="818.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">(a) the residual went UP, not down: a</text>
+<text x="724" y="835.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">model that now fits better needs no help;</text>
+<text x="724" y="853.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">(b) it rose by at least 65 % over the level</text>
+<text x="724" y="871.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">seen after the last adaptation, and at</text>
+<text x="724" y="889.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">least 400 windows have passed since then.</text>
+<path d="M1050,850.0 L1080,850.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1080" y="770" width="260" height="160" rx="10" fill="#F9DADA" stroke="#C0392B" stroke-width="2"/>
+<text x="1094" y="794" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Regime change confirmed</text>
+<text x="1094" y="818.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">The plant is now running in a</text>
+<text x="1094" y="835.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">way the model does not fit.</text>
+<text x="1094" y="853.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Go to band D.</text>
+<text x="1210" y="910" font-size="28" font-weight="normal" text-anchor="middle" fill="#222" font-style="normal">⚡</text>
+<path d="M1340,850.0 L1370,850.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1370" y="770" width="340" height="160" rx="10" fill="#F2F2F2" stroke="#777777" stroke-width="2"/>
+<text x="1384" y="794" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Otherwise</text>
+<text x="1384" y="818.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">nothing changes: the same</text>
+<text x="1384" y="835.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">model and the same τ keep</text>
+<text x="1384" y="853.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">scoring (band B).</text>
+<rect x="30" y="1005" width="1700" height="470" rx="14" fill="#FAFAFA" stroke="#B5405E" stroke-width="1.5" stroke-dasharray="2,4"/>
+<rect x="46" y="992" width="727.5999999999999" height="26" rx="6" fill="#B5405E"/>
+<text x="51" y="1010" font-size="15" font-weight="bold" text-anchor="start" fill="white" font-style="normal">D  After a confirmed change (rare): re-learn, re-set the line, remember, check</text>
+<rect x="50" y="1045" width="320" height="190" rx="10" fill="#E8F1E4" stroke="#5B8C5A" stroke-width="2"/>
+<circle cx="70" cy="1065" r="13" fill="#5B8C5A"/>
+<text x="70" y="1070" font-size="14" font-weight="bold" text-anchor="middle" fill="white" font-style="normal">1</text>
+<text x="92" y="1069" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Collect K example windows</text>
+<text x="64" y="1093.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">The next K windows (K = 1, 5 or 10)</text>
+<text x="64" y="1110.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">are taken as examples of the new</text>
+<text x="64" y="1128.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">normal. Nothing else is needed: no</text>
+<text x="64" y="1146.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">labels, no engineer, no retraining</text>
+<text x="64" y="1164.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">on weeks of data.</text>
+<path d="M370,1140.0 L396,1140.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="396" y="1045" width="320" height="190" rx="10" fill="#DCE9F7" stroke="#3C6EA5" stroke-width="2"/>
+<circle cx="416" cy="1065" r="13" fill="#3C6EA5"/>
+<text x="416" y="1070" font-size="14" font-weight="bold" text-anchor="middle" fill="white" font-style="normal">2</text>
+<text x="438" y="1069" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Module 2: adapt the model</text>
+<text x="410" y="1093.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Start again from θ* (the adaptable</text>
+<text x="410" y="1110.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">start, band A) and take 3 learning</text>
+<text x="410" y="1128.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">steps on the K windows. This takes</text>
+<text x="410" y="1146.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">well under a second and gives the</text>
+<text x="410" y="1164.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">new model θ used in band B, step 2.</text>
+<path d="M716,1140.0 L742,1140.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="742" y="1045" width="320" height="190" rx="10" fill="#FBE6D4" stroke="#C96A2B" stroke-width="2"/>
+<circle cx="762" cy="1065" r="13" fill="#C96A2B"/>
+<text x="762" y="1070" font-size="14" font-weight="bold" text-anchor="middle" fill="white" font-style="normal">3</text>
+<text x="784" y="1069" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Module 4: new alarm line</text>
+<text x="756" y="1093.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Score the next 300 windows with the</text>
+<text x="756" y="1110.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">new model, fit the tail of those</text>
+<text x="756" y="1128.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">residuals (peaks-over-threshold) and</text>
+<text x="756" y="1146.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">set τ where only 1 in 100 normal</text>
+<text x="756" y="1164.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">windows would cross it. τ then stays</text>
+<text x="756" y="1182.1" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">fixed until the next confirmed change.</text>
+<path d="M1062,1140.0 L1088,1140.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1088" y="1045" width="320" height="190" rx="10" fill="#F6DCE3" stroke="#B5405E" stroke-width="2"/>
+<circle cx="1108" cy="1065" r="13" fill="#B5405E"/>
+<text x="1108" y="1070" font-size="14" font-weight="bold" text-anchor="middle" fill="white" font-style="normal">4</text>
+<text x="1130" y="1069" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Module 3: remember it</text>
+<text x="1102" y="1093.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Its last 300 steps, its sensor</text>
+<text x="1102" y="1110.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">averages and its τ go into a memory</text>
+<text x="1102" y="1128.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">of at most 8 regimes (oldest out).</text>
+<text x="1102" y="1146.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">If the plant returns to a known</text>
+<text x="1102" y="1164.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">regime later, nothing is forgotten.</text>
+<path d="M1408,1140.0 L1434,1140.0" fill="none" stroke="#333" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="1434" y="1045" width="276" height="190" rx="10" fill="#E7DDF3" stroke="#6E4BA3" stroke-width="2"/>
+<circle cx="1454" cy="1065" r="13" fill="#6E4BA3"/>
+<text x="1454" y="1070" font-size="14" font-weight="bold" text-anchor="middle" fill="white" font-style="normal">5</text>
+<text x="1476" y="1069" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Refresh θ*</text>
+<text x="1448" y="1093.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">10 short meta-training rounds</text>
+<text x="1448" y="1110.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">on the new regime plus up to 3</text>
+<text x="1448" y="1128.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">remembered ones (chosen by</text>
+<text x="1448" y="1146.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">similarity and recency) update</text>
+<text x="1448" y="1164.28" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">θ*, so the next adaptation</text>
+<text x="1448" y="1182.1" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">starts from a better place.</text>
+<rect x="50" y="1265" width="1660" height="160" rx="10" fill="#F6DCE3" stroke="#B5405E" stroke-width="2"/>
+<circle cx="70" cy="1285" r="13" fill="#B5405E"/>
+<text x="70" y="1290" font-size="14" font-weight="bold" text-anchor="middle" fill="white" font-style="normal">6</text>
+<text x="92" y="1289" font-size="16" font-weight="bold" text-anchor="start" fill="#1a1a1a" font-style="normal">Safety check for the next 600 windows: was it really a change of regime, or a long fault?</text>
+<text x="64" y="1313.0" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">A long fault also raises the residual, so the gate can confirm a &#x27;change&#x27; that is really an anomaly. To catch this, the old model and its old τ keep scoring in the</text>
+<text x="64" y="1330.82" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">background (the champion) while the new ones are live (the challenger). Every 50 windows the two residuals are compared; if the old model fits the</text>
+<text x="64" y="1348.64" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">stream better by a clear margin (0.1 log units), the adaptation, the new τ and the memory entry are all undone and the detector is back where it was.</text>
+<text x="64" y="1366.46" font-size="13.5" font-weight="normal" text-anchor="start" fill="#333" font-style="normal">Dashed arrows: the new θ goes to band B step 2, the new τ to band B step 4, and the refreshed θ* to step 2 of this band.</text>
+<path d="M556.0,1045 L556.0,985 L365,985 L365,705 L475,705 L475,630" fill="none" stroke="#3C6EA5" stroke-width="2.2" stroke-dasharray="8,6" marker-end="url(#arr)"/>
+<text x="460.5" y="979.0" font-size="12" font-weight="normal" text-anchor="middle" fill="#3C6EA5" font-style="italic">new model θ → band B step 2</text>
+<path d="M902.0,1045 L902.0,975 L1065,975 L1065,630" fill="none" stroke="#C96A2B" stroke-width="2.2" stroke-dasharray="8,6" marker-end="url(#arr)"/>
+<text x="983.5" y="969.0" font-size="12" font-weight="normal" text-anchor="middle" fill="#C96A2B" font-style="italic">new alarm line τ → band B step 4</text>
+<text x="40" y="1488" font-size="12.5" font-weight="normal" text-anchor="start" fill="#555" font-style="normal">Steady state costs one forward pass per window; the dashed re-learning path runs only after a confirmed change and is reversible through the safety check.</text>
+</svg>

@@ -177,7 +177,7 @@ Table 4. The benchmarking protocol.
 
 DAMAD has four modules arranged around a streaming VAE (Figure 2). In steady state every window $x_t$ is encoded, reconstructed and scored by Eq. (1), and an alarm is raised if the score exceeds $\tau$. Module 1 watches the residual for a regime change. When a change is confirmed, the next K windows become the support set, Module 2 adapts a fresh copy of $\theta^*$ to them in K gradient steps, Module 4 recalibrates $\tau$ on the residuals that follow, Module 3 stores the regime that just ended, and a replay meta-update refreshes $\theta^*$ from the new regime and a few remembered ones. A champion/challenger check runs in parallel for a while: the previous model keeps scoring in the shadow, and if it fits the stream better than the adapted one, the adaptation and the new threshold are undone.
 
-![Figure 2. DAMAD. Solid arrows are the steady-state path taken at every step; dashed arrows fire only after a confirmed regime change.](../figures/fig_architecture.png){#fig:arch width=100%}
+![Figure 2. DAMAD, band by band. A: what is prepared once, offline (regimes, episodes, the meta-trained starting point θ*). B: the path every window takes while the plant runs. C: the residual-side drift gate that decides whether the plant has changed. D: the six things that happen after a confirmed change, including the safety check that undoes an adaptation if the old model turns out to fit better. Dashed arrows carry the adapted model and the new threshold back into the per-step path.](../figures/fig_damad_architecture.png){#fig:arch width=100%}
 
 ## 5.2 Module 2: the meta-learned VAE
 
