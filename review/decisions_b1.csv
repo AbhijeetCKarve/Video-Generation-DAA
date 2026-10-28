@@ -8,7 +8,7 @@ R0012,EC1,LLM benchmark; no meta-/few-shot learning,,,,,
 R0013,INC,MAML on GADF-encoded turnout signals,OPT,CLS,STA,IOV,railway turnout sensors
 R0014,EC1,meta-learning in the stacking-ensemble sense,,,,,
 R0015,EC1,no meta-/few-shot learning,,,,,
-R0016,INC,few-shot fine-tuning after unsupervised pre-training on vibration data,FT,CLS,STA,IOV,few-shot without a meta-learning paradigm
+R0016,INC,prototype-based few-shot learning on CNC vibration features,MET,DIS,STA,IOV,
 R0017,INC,meta-learning over autoencoders for multi-motor vibration AD,OPT,REC,STA,IOV,
 R0018,INC,MAML for spacecraft telemetry AD,OPT,REC,STA,IIV,telemetry
 R0021,INC,Siamese few-shot ITSC fault diagnosis (federated),MET,DIS,STA,IOV,
@@ -38,4 +38,4 @@ R0051,EC1,cloud microservices; no meta-learning,,,,,
 R0053,EC1,no meta-/few-shot learning,,,,,
 R0054,EC1,no meta-/few-shot learning,,,,,
 R0055,EC1,meta-learning in the algorithm-selection sense; healthcare,,,,,
-R0056,INC,few-shot meta-learning IDS at the IoT edge,OPT,CLS,INC,IOV,sparse detail in abstract
+R0056,INC,few-shot meta-learning IDS at the IoT edge,NS,CLS,STA,IOV,sparse detail in abstract
