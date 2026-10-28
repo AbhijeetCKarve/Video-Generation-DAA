@@ -1,0 +1,75 @@
+{
+ "identified": 788,
+ "raw": {
+  "lens_primary": 124,
+  "lens_secondary": 476,
+  "ieee": 188
+ },
+ "duplicates": 93,
+ "unique": 695,
+ "keyword_excluded": 466,
+ "type_excluded_EC4": 29,
+ "read_manually": 200,
+ "manual": {
+  "EC1": 82,
+  "INC": 65,
+  "EC2": 50,
+  "SURVEY": 2,
+  "EC3": 1
+ },
+ "reference_list_added": 2,
+ "corpus": 67,
+ "years": {
+  "2020": 1,
+  "2021": 3,
+  "2022": 5,
+  "2023": 13,
+  "2024": 13,
+  "2025": 32
+ },
+ "D1": {
+  "MET": 22,
+  "OPT": 19,
+  "NML": 11,
+  "NS": 9,
+  "MOD": 4,
+  "HYB": 2
+ },
+ "D2": {
+  "CLS": 33,
+  "DIS": 20,
+  "REC": 8,
+  "HYB": 5,
+  "PRE": 1
+ },
+ "D3": {
+  "STA": 62,
+  "INC": 4,
+  "DAW": 1
+ },
+ "D4": {
+  "IOV": 61,
+  "GEN": 5,
+  "IIV": 1
+ },
+ "D1xD3": {
+  "HYB|STA": 2,
+  "MET|STA": 22,
+  "MOD|DAW": 1,
+  "MOD|STA": 3,
+  "NML|INC": 1,
+  "NML|STA": 10,
+  "NS|INC": 1,
+  "NS|STA": 8,
+  "OPT|INC": 2,
+  "OPT|STA": 17
+ },
+ "sources_of_corpus": {
+  "IEEE Xplore/primary": 33,
+  "IEEE Xplore/primary; Lens.org/primary": 17,
+  "Lens.org/primary": 13,
+  "reference list": 2,
+  "Lens.org/primary; Lens.org/secondary": 1,
+  "IEEE Xplore/primary; Lens.org/primary; Lens.org/secondary": 1
+ }
+}

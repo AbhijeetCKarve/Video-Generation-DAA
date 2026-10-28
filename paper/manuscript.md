@@ -12,7 +12,7 @@ link-citations: true
 
 # Abstract {.unnumbered}
 
-Sensor streams from industrial plants have to be watched for faults with almost no labelled examples, under distributions that keep moving, and with new fault types showing up after deployment. Meta-learning is built for the few-shot part of that problem, but a systematic review we carried out of 87 peer-reviewed papers (2018--2025) found no method that combines meta-learning with online adaptation on a non-stationary stream and is evaluated on an industrial benchmark. This paper closes that gap in three steps. First, we condense the review into a four-dimensional taxonomy of meta-learning anomaly detectors and a benchmarking protocol with strictly point-wise metrics, controlled drift injection, and three streaming measures (detection latency, adaptation steps, false-alarm rate under drift). Second, we build DAMAD, the Drift-Aware Meta-Adaptive Detector, as a working system: a MAML++-initialised variational autoencoder that adapts in K gradient steps when a regime change is confirmed, a regime-indexed memory that replays past regimes during meta-updates, a gated extreme-value threshold, and a champion/challenger check that undoes an adaptation if the old model turns out to fit the following data better. Building it changed two design decisions from our earlier conceptual sketch: the drift gate has to watch the model residual rather than the raw input, and a change has to be confirmed by the gain it brings, otherwise long anomalies masquerade as drift. Third, we run DAMAD against eight baselines (Isolation Forest, static, fine-tuned, incrementally updated and drift-aware VAEs, MAML and Meta-SGD adapted once, and an MMD-triggered meta-adapter) on eight benchmarks, SWaT, WADI, HAI 21.03, SMAP, MSL, SMD, SKAB and PSM, over five seeds, four drift patterns and ten ablations, 19,650 streaming runs in all. Without injected drift, the static VAE is as good as any meta-learned detector on six of the eight, and the number of support windows makes no difference between one and ten: the initialisation is not the bottleneck. SWaT and WADI are the exception, because their attack recordings sit at a different operating point from their normal recordings: there the static and adapt-once detectors alarm on 49--74 % of normal steps and DAMAD on 4--6 %, with F1 55 against 26 on SWaT. Under injected drift the static and adapt-once detectors alarm on 73--87 % of normal steps pooled (95--100 % on SWaT, WADI and PSM) and do not recover; DAMAD keeps the rate at 17--30 %, recovers within 230--440 windows, and has the best pooled point-wise F1 under every pattern, driven by SWaT, WADI and SMD. On HAI it brings no gain, on SMAP and MSL every method is weak, and its recalibrated thresholds cost it detection latency everywhere. The ablations show that threshold recalibration and the residual-side gate carry the result, the acceptance test matters where anomalies are long, replay helps on some streams and hurts on SWaT, and the choice of meta-learner is secondary. Code, loaders and every result table are released.
+Sensor streams from industrial plants have to be watched for faults with almost no labelled examples, under distributions that keep moving, and with new fault types showing up after deployment. Meta-learning is built for the few-shot part of that problem, but a systematic review we carried out of 67 peer-reviewed papers (2020--2025) found no method that combines meta-learning with online adaptation on a non-stationary stream and is evaluated on an industrial benchmark. This paper closes that gap in three steps. First, we condense the review into a four-dimensional taxonomy of meta-learning anomaly detectors and a benchmarking protocol with strictly point-wise metrics, controlled drift injection, and three streaming measures (detection latency, adaptation steps, false-alarm rate under drift). Second, we build DAMAD, the Drift-Aware Meta-Adaptive Detector, as a working system: a MAML++-initialised variational autoencoder that adapts in K gradient steps when a regime change is confirmed, a regime-indexed memory that replays past regimes during meta-updates, a gated extreme-value threshold, and a champion/challenger check that undoes an adaptation if the old model turns out to fit the following data better. Building it changed two design decisions from our earlier conceptual sketch: the drift gate has to watch the model residual rather than the raw input, and a change has to be confirmed by the gain it brings, otherwise long anomalies masquerade as drift. Third, we run DAMAD against eight baselines (Isolation Forest, static, fine-tuned, incrementally updated and drift-aware VAEs, MAML and Meta-SGD adapted once, and an MMD-triggered meta-adapter) on eight benchmarks, SWaT, WADI, HAI 21.03, SMAP, MSL, SMD, SKAB and PSM, over five seeds, four drift patterns and ten ablations, 19,650 streaming runs in all. Without injected drift, the static VAE is as good as any meta-learned detector on six of the eight, and the number of support windows makes no difference between one and ten: the initialisation is not the bottleneck. SWaT and WADI are the exception, because their attack recordings sit at a different operating point from their normal recordings: there the static and adapt-once detectors alarm on 49--74 % of normal steps and DAMAD on 4--6 %, with F1 55 against 26 on SWaT. Under injected drift the static and adapt-once detectors alarm on 73--87 % of normal steps pooled (95--100 % on SWaT, WADI and PSM) and do not recover; DAMAD keeps the rate at 17--30 %, recovers within 230--440 windows, and has the best pooled point-wise F1 under every pattern, driven by SWaT, WADI and SMD. On HAI it brings no gain, on SMAP and MSL every method is weak, and its recalibrated thresholds cost it detection latency everywhere. The ablations show that threshold recalibration and the residual-side gate carry the result, the acceptance test matters where anomalies are long, replay helps on some streams and hurts on SWaT, and the choice of meta-learner is secondary. Code, loaders and every result table are released.
 
 **Keywords:** meta-learning; few-shot learning; anomaly detection; industrial Internet of Things; concept drift; streaming data; variational autoencoder; benchmarking protocol.
 
@@ -28,7 +28,7 @@ An earlier version of this work, accepted at PCEMS 2026, reported the review and
 
 The contributions are as follows.
 
-1. A four-dimensional taxonomy of meta-learning AD methods (paradigm, detection mechanism, streaming capability, industrial validation) grounded in a PRISMA review of 87 papers, and a gap map showing that the online meta-adaptive column of that taxonomy is empty (Section 3).
+1. A four-dimensional taxonomy of meta-learning AD methods (paradigm, detection mechanism, streaming capability, industrial validation) grounded in a PRISMA-style review of 67 papers, and a gap map showing that the online meta-adaptive column of that taxonomy is empty (Section 3).
 2. A benchmarking protocol for this class of methods: open datasets, synthetic drift injected at known change points, strictly point-wise metrics with no point-adjust, three streaming metrics, and a fixed set of baselines and ablations (Section 4).
 3. DAMAD, a working online meta-adaptive detector with four modules that each map to one of three sub-problems we identify. Two design choices differ from our earlier sketch, and we explain why with evidence (Section 5).
 4. An evaluation on SWaT, WADI, HAI 21.03, SMAP, MSL, SMD, SKAB and PSM, five seeds, four drift patterns, eight baselines and ten ablations, with detection latency, adaptation speed, false-alarm rate under drift and computational cost reported alongside F1 and AUROC (Sections 6 and 7). The results are not uniformly in the method's favour, and we report where they are not.
@@ -68,70 +68,79 @@ A stream exhibits concept drift when the joint distribution of readings and labe
 
 ## 3.1 Method
 
-The review followed the PRISMA 2020 guidelines [@page2021prisma]. We searched IEEE Xplore, Scopus, Web of Science, the ACM Digital Library and Google Scholar for January 2018 to December 2025, the period since MAML [@finn2017maml] started the current wave of gradient-based meta-learning. Two search strings were used. The primary string targeted the intersection of meta-learning and AD: ("meta-learning" OR "few-shot learning" OR "MAML" OR "prototypical network" OR "learning to learn") AND ("anomaly detection" OR "fault detection" OR "outlier detection") AND ("Internet of Things" OR "IoT" OR "IIoT" OR "streaming data" OR "time series" OR "industrial"). The secondary string captured concept drift and AD jointly: ("concept drift" OR "distribution shift" OR "non-stationary" OR "online learning") AND ("anomaly detection" OR "fault detection") AND ("IoT" OR "IIoT" OR "streaming" OR "industrial").
+The review follows the PRISMA 2020 reporting items [@page2021prisma] as far as a two-author study allows, and this section states exactly what was done rather than what a full-scale review would do. Two sources were searched for January 2018 to December 2025, the period since MAML [@finn2017maml] started the current wave of gradient-based meta-learning: IEEE Xplore, exported on 28 September 2026, and Lens.org, which aggregates Crossref, PubMed, Microsoft Academic and OpenAlex records and therefore covers Elsevier, Springer, MDPI and ACM venues alongside IEEE. Two search strings were used. The primary string targeted the intersection of meta-learning and AD: ("meta-learning" OR "few-shot learning" OR "MAML" OR "prototypical network" OR "learning to learn") AND ("anomaly detection" OR "fault detection" OR "outlier detection") AND ("Internet of Things" OR "IoT" OR "IIoT" OR "streaming data" OR "time series" OR "industrial"). The secondary string captured concept drift and AD jointly: ("concept drift" OR "distribution shift" OR "non-stationary" OR "online learning") AND ("anomaly detection" OR "fault detection") AND ("IoT" OR "IIoT" OR "streaming" OR "industrial"). The IEEE Xplore export was run with the primary string; Lens.org was run with both.
 
-Table 1 lists the inclusion and exclusion criteria and Table 2 the four-stage selection. Pooling both strings across the five databases gave 1,247 records, 834 after de-duplication. Title and abstract screening removed 636 (271 with no meta-learning/AD intersection, 214 image-domain only, 151 outside the date or language limits), leaving 198. Full-text review removed a further 124 (51 without a methodological contribution, 47 treating the two topics in isolation, 26 not peer-reviewed), leaving 74. Backward and forward citation chaining added 13. The final corpus is 87 papers. Nine were published in 2018--19, 17 in 2020--21, 31 in 2022--23 and 30 in 2024--25, so roughly 70 % of the corpus is from 2022 onwards.
+Table 1 lists the inclusion and exclusion criteria and Table 2 the selection. The three exports held 788 records (IEEE Xplore 188, Lens primary 124, Lens secondary 476); matching on DOI and then on normalised title removed 93 duplicates within and across sources, leaving 695 unique works. Screening ran in three steps. First, 466 records whose title, abstract and keywords contain no meta-learning or few-shot term (meta-learning, few-shot, one-shot, MAML, prototypical, Siamese, metric learning, learning to learn) were excluded under EC1 without further reading; almost all of them are the drift-and-AD papers that the secondary string was designed to retrieve, and they inform Section 2.3 but are not meta-learning papers. Second, 29 of the remaining 229 records were preprints, book chapters, editorials, datasets, reports or theses and were excluded under EC4. Third, the remaining 200 records were read at title-and-abstract level by the first author: 82 were excluded under EC1 (meta-learning in the stacking-ensemble, AutoML or hyper-parameter sense, few-shot learning mentioned only as motivation, or no anomaly or fault detection task), 50 under EC2 as image-only, two as surveys with no method to classify, one under EC3 as a plain application of an existing method, and 65 were retained. Two papers that we knew from earlier reading and that meet the criteria but were not retrieved by either string, MAVAE [@moon2023mavae] and the 5G industrial-internet detector of Yan et al. [@yan2024fewshot], were added from our reference list. The corpus is 67 papers. One in 2020, three in 2021, five in 2022, 13 in 2023, 13 in 2024 and 32 in 2025: 87 % of it is from 2023 onwards, and nothing before 2020 survived screening. Appendix A lists every paper with its DOI and its codes.
 
-Table 1. Inclusion (IC) and exclusion (EC) criteria.
+Two limits of the procedure should be stated. No full-text stage was carried out, so the taxonomy codes in Section 3.2 come from titles, abstracts and keywords; where an abstract names a method ("MAML", "prototypical network") the code is reliable, and where it says only "meta-learning" the paradigm is recorded as not stated. And the screening was done by one author, so the inter-rater agreement that a two-reader review reports is not available; the screening sheet with a one-line reason for every decision is released with the code so that any reader can audit it.
+
+Table 1. Inclusion (IC) and exclusion (EC) criteria as applied.
 
 | Code | Criterion |
 |---|---|
-| IC1 | Addresses meta-learning or few-shot learning in the context of anomaly or fault detection |
+| IC1 | Proposes or evaluates meta-learning or few-shot learning for anomaly or fault detection on sensor, telemetry, network or log data |
 | IC2 | Published January 2018 to December 2025 |
-| IC3 | Indexed in Scopus or Web of Science; peer-reviewed; English; full text available |
-| EC1 | Meta-learning or AD alone, with no meaningful intersection |
-| EC2 | Image-based AD only, with no applicability to time series or sensor streams |
-| EC3 | Applies existing methods with no methodological contribution to either topic |
-| EC4 | Not peer-reviewed: preprints, workshop papers without formal review, duplicated submissions |
+| IC3 | Journal or conference paper as typed by the source database; English |
+| EC1 | No meta-/few-shot component, or "meta-learning" in the ensemble, AutoML or hyper-parameter sense, or few-shot scarcity named only as motivation, or no detection task |
+| EC2 | Image or video anomaly detection only |
+| EC3 | Applies an existing method with no methodological contribution |
+| EC4 | Preprint, book chapter, editorial, dataset, report or thesis |
 
-Table 2. PRISMA selection summary.
+Table 2. Selection summary.
 
 | Stage | Outcome |
 |---|---|
-| 1. Identification (5 databases) | 1,247 records; 834 after removing 413 duplicates |
-| 2. Title and abstract screening | 198 retained; 636 excluded |
-| 3. Full-text eligibility | 74 retained; 124 excluded |
-| 4. Citation chaining | 13 added |
-| Final corpus | 87 papers |
+| 1. Identification (IEEE Xplore, Lens.org primary, Lens.org secondary) | 788 records; 695 after removing 93 duplicates |
+| 2. Keyword pre-screen (no meta-/few-shot term) | 466 excluded (EC1); 229 retained |
+| 3. Publication type | 29 excluded (EC4); 200 read |
+| 4. Title and abstract reading | 82 EC1, 50 EC2, 2 surveys, 1 EC3; 65 retained |
+| 5. Reference-list additions | 2 added |
+| Final corpus | 67 papers |
 
 ## 3.2 A four-dimensional taxonomy
 
 Earlier surveys classify AD methods along one axis, usually algorithm family [@chandola2009survey; @pang2021deep] or application domain [@belay2023iot]. One axis hides trade-offs that matter here: a method can be excellent at few-shot adaptation and completely static, or drift-aware and never tested on industrial hardware. We classify every paper in the corpus along four axes at once.
 
-*D1, meta-learning paradigm.* OPT: optimisation-based, learning a shared initialisation (MAML, MAML++, Meta-SGD). MET: metric-based, learning a task-agnostic embedding. MOD: model-based, using memory or recurrent architectures. HYB: two or more of the above.
+*D1, learning paradigm.* OPT: optimisation-based meta-learning, learning a shared initialisation (MAML, MAML++, Meta-SGD). MET: metric-based, learning a task-agnostic embedding (Siamese, prototypical and relation networks). MOD: model-based, using memory, hypernetworks or a pretrained sequence model. HYB: two or more of the above. NML: few-shot learning without a meta-learning paradigm, by transfer and fine-tuning or by generating synthetic samples. NS: the abstract says "meta-learning" or "few-shot" and no more.
 
-*D2, detection mechanism.* REC: reconstruction error (AE, VAE). DIS: distance to learned prototypes. DEN: density estimation. PRE: prediction error. HYB: a combination.
+*D2, detection mechanism.* REC: reconstruction error (AE, VAE, transformer). DIS: distance to learned prototypes or embeddings. DEN: density estimation. PRE: prediction error. CLS: supervised few-shot classification of known fault or attack classes. HYB: a combination.
 
-*D3, streaming and drift capability.* STA: trained offline, no online update. INC: incremental updates without explicit drift awareness. DAW: detects distribution shift and triggers adaptation. OMA: online meta-adaptive, meaning the meta-level itself (the initialisation or the task distribution) is updated as the stream evolves.
+*D3, streaming and drift capability.* STA: trained offline, no online update. INC: incremental or class-incremental updates without explicit drift awareness. DAW: detects distribution shift and triggers adaptation. OMA: online meta-adaptive, meaning the meta-level itself (the initialisation or the task distribution) is updated as the stream evolves.
 
-*D4, industrial validation.* IIV: evaluated on an established industrial or telemetry benchmark (SWaT [@goh2016swat], WADI [@ahmed2017wadi], HAI [@shin2021hai], SMAP/MSL [@hundman2018smap]). IOV: evaluated on broader IoT or network data. GEN: generic datasets. THE: theory or simulation only.
+*D4, industrial validation.* IIV: evaluated on an established industrial or telemetry benchmark (SWaT [@goh2016swat], WADI [@ahmed2017wadi], HAI [@shin2021hai], SMAP/MSL [@hundman2018smap]). IOV: evaluated on other IoT, industrial or network data (bearing and motor rigs, process data, intrusion datasets, satellite telemetry without a named benchmark). GEN: generic datasets. THE: theory or simulation only.
 
-Table 3 places representative papers on the grid, and Figure 1 plots the whole corpus on the D1 × D3 plane. Optimisation-based methods account for 48 of the 87 papers (55 %), metric-based for 27 (31 %), model-based for 10 (11 %) and hybrid for 2 (2 %).
+Table 3 places representative papers on the grid, and Figure 1 plots the whole corpus on the D1 × D3 plane. Metric-based methods are the largest group, 22 of the 67 papers (33 %); optimisation-based methods follow with 19 (28 %); 11 (16 %) are few-shot methods with no meta-learning paradigm at all, mostly transfer learning with a handful of target samples; four are model-based, two hybrid, and nine state no paradigm in the abstract. On D2 the corpus is dominated by supervised few-shot classification of known fault classes (33 papers, 49 %), which is the bearing and motor fault-diagnosis literature; 20 papers score by distance to prototypes, eight by reconstruction, one by prediction and five by a combination. On D3, 62 papers (93 %) are static, four update incrementally [@yue2023incremental; @pu2024fseocl; @du2024fscil] and one, OMLog [@tian2024omlog], detects drift before it adapts. On D4, one paper [@tuli2022tranad] uses the industrial benchmarks of this study, 61 use other IoT, industrial or network data and five use generic data.
 
-Table 3. Taxonomy placement of representative papers.
+Table 3. Taxonomy placement of representative papers. Rows marked "context" are cited in the text but are not meta-learning papers and are not in the corpus.
 
 | Paper | Year | D1 | D2 | D3 | D4 |
 |---|---|---|---|---|---|
-| Finn et al. [@finn2017maml] | 2017 | OPT/MAML | n/a | STA | GEN |
-| Moon et al. [@moon2023mavae] | 2023 | OPT/MAML | REC (VAE) | STA | GEN |
-| Feng et al. [@feng2024metauad] | 2024 | OPT/Meta-SGD | DIS | STA | IOV |
-| Tian et al. [@tian2024omlog] | 2024 | MOD | PRE | DAW | GEN |
-| Wahab [@wahab2022online] | 2022 | none | PRE | INC | IOV |
-| Zhang et al. [@zhang2023prn] | 2023 | MET | DIS | STA | GEN |
-| Kermenov et al. [@kermenov2023drift] | 2023 | none | REC | INC | IIV |
-| Belay et al. [@belay2023iot] | 2023 | none | REC+DIS | STA | IIV |
+| Finn et al. [@finn2017maml] (context) | 2017 | OPT/MAML | n/a | STA | GEN |
+| Zhang et al. [@zhang2020maml] | 2020 | OPT/MAML | CLS | STA | IOV |
+| Zhou et al. [@zhou2021siamese] | 2021 | MET/Siamese | DIS | STA | IOV |
+| Tuli et al., TranAD [@tuli2022tranad] | 2022 | OPT/MAML | REC | STA | IIV |
+| Wahab [@wahab2022online] (context) | 2022 | none | PRE | INC | IOV |
+| Chen et al. [@chen2023metabearing] | 2023 | OPT/MAML | CLS | STA | IOV |
+| Yue et al. [@yue2023incremental] | 2023 | OPT | CLS | INC | IOV |
+| Moon et al., MAVAE [@moon2023mavae] | 2023 | OPT/MAML | REC (VAE) | STA | GEN |
+| Kermenov et al. [@kermenov2023drift] (context) | 2023 | none | REC | INC | IIV |
+| Belay et al. [@belay2023iot] (context) | 2023 | none | REC+DIS | STA | IIV |
+| Li et al. [@li2024rrpn] | 2024 | MET/prototypical | DIS | STA | IOV |
+| Pu et al. [@pu2024fseocl] | 2024 | NML | HYB | INC | IOV |
+| Du et al. [@du2024fscil] | 2024 | NS | CLS | INC | IOV |
 | Yan et al. [@yan2024fewshot] | 2024 | MET | DIS | STA | IOV |
+| Tian et al., OMLog [@tian2024omlog] | 2025 | MOD | PRE | DAW | GEN |
 | DAMAD (this work) | 2026 | HYB | REC | OMA | IIV |
 
-![Figure 1. Coverage of the 87 reviewed papers on the D1 × D3 plane. The online meta-adaptive column is empty for every paradigm; the hybrid row is almost empty. The bottom-right cell is the target of this work.](../figures/fig_gapmap.png){#fig:gapmap width=85%}
+![Figure 1. Coverage of the 67 reviewed papers on the D1 × D3 plane. The online meta-adaptive column is empty for every paradigm; the drift-aware column holds one paper. The bottom-right cell of the original sketch, hybrid and online meta-adaptive, is the target of this work.](../figures/fig_gapmap.png){#fig:gapmap width=85%}
 
 ## 3.3 Three findings
 
-*Finding 1, static dominance.* Most papers in every paradigm sit in the STA column. Methods designed for offline training are being applied to a problem that is online by nature.
+*Finding 1, static dominance.* 62 of the 67 papers sit in the STA column, and the four that update do so by adding fault classes or samples, not by watching the stream. Methods designed for offline training are being applied to a problem that is online by nature. The finding has a second face that the D2 counts show: half of the corpus treats the problem as supervised classification of fault classes seen at training time, which is a different problem from detecting a fault that has never been seen.
 
-*Finding 2, the OMA gap.* No paper in the corpus updates its meta-learning strategy in response to stream evolution. The column is empty for all four paradigms and for all eight years.
+*Finding 2, the OMA gap.* No paper in the corpus updates its meta-learning strategy in response to stream evolution. The column is empty for every paradigm and every year. The closest are OMLog [@tian2024omlog], which detects a shift and adapts once, and the three incremental methods, which never ask whether the stream has moved.
 
-*Finding 3, the validation gap.* The papers that use SWaT, WADI, HAI or SMAP/MSL do not meta-learn; the papers that meta-learn do not use them. The only datasets on which meta-learning AD has been reported are network traffic (CIC-IDS [@feng2024metauad]) and software logs (HDFS/BGL [@tian2024omlog]).
+*Finding 3, the validation gap.* One paper in the corpus evaluates on the industrial benchmarks of this study: TranAD [@tuli2022tranad], a transformer reconstruction detector that uses MAML during training so that it can be trained on a fraction of the data, and that reports on SWaT, WADI, SMAP, MSL and SMD. Its meta-learning is a training aid; nothing is adapted at deployment, and its scores are point-adjusted. Every other paper that meta-learns is evaluated on bearing and motor rigs, process datasets, intrusion datasets or telemetry without a named benchmark, and no paper evaluates few-shot *adaptation* on SWaT, WADI, HAI, SMAP or MSL. The benchmarks exist and the methods exist; the two have not met.
 
 Two papers deserve mention because they come closest. MAVAE [@moon2023mavae] wraps a VAE in a MAML outer loop and shows that five labelled normal windows suffice to adapt to a new sensor type. It is trained offline and never updated. OMLog [@tian2024omlog] uses MMD on log-sequence embeddings to detect a shift and then runs few-shot meta-adaptation; it is the only DAW method in the corpus, but it is built for discrete log sequences and has no memory of past regimes and no threshold management. Our baselines MAML-1 and OML-A (Section 6) transfer these two ideas to sensor streams so that they can be compared with DAMAD directly.
 
@@ -244,7 +253,7 @@ Table 6. Methods. "adapt once" means K-shot adaptation at the start of the strea
 
 | Name | Initialisation | Reaction to drift | Gate | Replay | τ recalibration |
 |---|---|---|---|---|---|
-| IF | Isolation Forest | none | – | – | – |
+| IF | Isolation Forest [@liu2008iforest] | none | – | – | – |
 | VAE-S | static VAE | none | – | – | – |
 | VAE-FT | static VAE | fine-tune once (30 Adam steps on K windows) | – | – | – |
 | VAE-INC | static VAE | one Adam step every 5 windows on the last 32 non-alarmed windows [@wahab2022online] | – | – | – |
@@ -485,7 +494,7 @@ Internal validity rests on every method running through the same loop with the s
 
 # 9 Conclusion
 
-We set out to find a method that is few-shot capable, drift-aware and deployable online for industrial sensor streams, found none in 87 papers, and built one. The review and taxonomy locate the gap; the protocol says how a method in that gap should be measured; DAMAD shows that the gap can be filled with existing parts, provided three things are done that the parts do not do on their own: watch the residual rather than the input, keep the threshold still except after a confirmed change, and let the old model contest every adaptation. On eight benchmarks, including the two water testbeds the field treats as its reference, that is enough to keep the alarm stream meaningful after a change where every static or adapt-once detector stops being useful; it is not enough to match their detection latency, and on telemetry channels the base learner, not the adaptation policy, is the limit. The remaining distance to a production system is in robust threshold calibration under contamination and in the latency cost of recalibration, and the released code is arranged so that either can be worked on by changing one configuration.
+We set out to find a method that is few-shot capable, drift-aware and deployable online for industrial sensor streams, found none in 67 papers, and built one. The review and taxonomy locate the gap; the protocol says how a method in that gap should be measured; DAMAD shows that the gap can be filled with existing parts, provided three things are done that the parts do not do on their own: watch the residual rather than the input, keep the threshold still except after a confirmed change, and let the old model contest every adaptation. On eight benchmarks, including the two water testbeds the field treats as its reference, that is enough to keep the alarm stream meaningful after a change where every static or adapt-once detector stops being useful; it is not enough to match their detection latency, and on telemetry channels the base learner, not the adaptation policy, is the limit. The remaining distance to a production system is in robust threshold calibration under contamination and in the latency cost of recalibration, and the released code is arranged so that either can be worked on by changing one configuration.
 
 # Data and code availability {.unnumbered}
 
@@ -494,3 +503,77 @@ The implementation, the dataset loaders, the experiment runner and every result 
 # Declaration {.unnumbered}
 
 The authors declare no competing interests. This research received no specific grant. SWaT and WADI data were obtained from iTrust, Singapore University of Technology and Design, under its data-use agreement.
+
+# Appendix A. The review corpus {.unnumbered}
+
+The 67 papers of Section 3 with the codes of the four taxonomy axes (D1 paradigm, D2 mechanism, D3 streaming capability, D4 validation; abbreviations as in Section 3.2). The screening sheet with every excluded record and its reason is released with the code.
+
+| # | Year | First author | Title | Venue | D1 | D2 | D3 | D4 | DOI |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 2020 | Shen Zhang | Few-Shot Bearing Anomaly Detection Based on Model-Agnostic Meta-Learning | 2020 International Conference on Electrical Machines and Sys | OPT | CLS | STA | IOV | 10.23919/ICEMS50442.2020.9291099 |
+| 2 | 2021 | Jinglin Zhang | Diagnosis of Interturn Short-Circuit Faults in Permanent Magnet Synchronous Motors Based on Few-Shot Learning Under a Federated Learning Framework | IEEE Transactions on Industrial Informatics | MET | DIS | STA | IOV | 10.1109/tii.2021.3067915 |
+| 3 | 2021 | Xiaokang Zhou | Siamese Neural Network Based Few-Shot Learning for Anomaly Detection in Industrial Cyber-Physical Systems | IEEE Transactions on Industrial Informatics | MET | DIS | STA | IOV | 10.1109/tii.2020.3047675 |
+| 4 | 2021 | G. Yu | Subspace-based domain adaptation for few-shot fault diagnosis | 2021 CAA Symposium on Fault Detection, Supervision, and Safe | NML | CLS | STA | IOV | 10.1109/safeprocess52771.2021.9693695 |
+| 5 | 2022 | Mohamed-Ali Tnani | Efficient Feature Learning Approach for Raw Industrial Vibration Data Using Two-Stage Learning Framework. | Sensors (Basel, Switzerland) | NML | CLS | STA | IOV | 10.3390/s22134813 |
+| 6 | 2022 | Yi-Cheng Yu | Fast Adaption for Multi Motor Anomaly Detection via Meta Learning and deep unsupervised learning | 2022 IEEE 31st International Symposium on Industrial Electro | OPT | REC | STA | IOV | 10.1109/isie51582.2022.9831559 |
+| 7 | 2022 | Y. Liu | The Adaptive Personalized Federated Meta-Learning for Anomaly Detection of Industrial Equipment | IEEE Journal of Radio Frequency Identification | OPT | CLS | STA | IOV | 10.1109/jrfid.2022.3209657 |
+| 8 | 2022 | Shreshth Tuli | TranAD | Proceedings of the VLDB Endowment | OPT | REC | STA | IIV | 10.14778/3514061.3514067 |
+| 9 | 2022 | T. Ye | FLAG: Few-Shot Latent Dirichlet Generative Learning for Semantic-Aware Traffic Detection | IEEE Transactions on Network and Service Management | NML | CLS | STA | IOV | 10.1109/tnsm.2021.3131266 |
+| 10 | 2023 | Moon Noh Jung Lee Hwang | Anomaly detection using a model-agnostic meta-learning-based variational auto-encoder for facility management | Journal of Building Engineering | OPT | REC | STA | GEN | 10.1016/j.jobe.2023.106099 |
+| 11 | 2023 | Farhan Md. Siraj | A Few-Shot Learning Based Fault Diagnosis Model Using Sensors Data from Industrial Machineries | Vibration | MET | CLS | STA | IOV | 10.3390/vibration6040059 |
+| 12 | 2023 | Chandana Priya Nivarthi | Towards Few-Shot Time Series Anomaly Detection with Temporal Attention and Dynamic Thresholding | 2023 International Conference on Machine Learning and Applic | NML | REC | STA | GEN | 10.1109/icmla58977.2023.00218 |
+| 13 | 2023 | Ke Yue | An Emerging Fault Diagnosis Framework with Incremental Meta-Learning for Rotating Machinery | 2023 International Conference on Sensing, Measurement & Data | OPT | CLS | INC | IOV | 10.1109/icsmd60522.2023.10490806 |
+| 14 | 2023 | L. Cheng | MMFSL: A Novel Multimodal Few-Shot Learning Framework for Fault Diagnosis of Industrial Bearings | IEEE Transactions on Instrumentation and Measurement | NML | CLS | STA | IOV | 10.1109/tim.2023.3289549 |
+| 15 | 2023 | Caiyun Wu | Engine fault detection algorithm EA-EFNC based on few-shot learning | Third International Conference on Machine Learning and Compu | NS | CLS | STA | IOV | 10.1117/12.2675146 |
+| 16 | 2023 | V. L. Cao | Few-Shot Learning with Discriminative Representation for Cyberattack Detection | 2023 15th International Conference on Knowledge and Systems  | MET | DIS | STA | IOV | 10.1109/kse59128.2023.10299444 |
+| 17 | 2023 | Z. Shi | Few-Shot Network Intrusion Detection Based on Model-Agnostic Meta-Learning with L2F Method | 2023 IEEE Wireless Communications and Networking Conference  | OPT | CLS | STA | IOV | 10.1109/wcnc55385.2023.10118898 |
+| 18 | 2023 | X. Ye | Rolling bearing fault diagnosis with variable load and few samples based on multifeature fusion meta-learning | 2023 CAA Symposium on Fault Detection, Supervision and Safet | OPT | CLS | STA | IOV | 10.1109/safeprocess58597.2023.10295704 |
+| 19 | 2023 | J. Chen | A Meta-Learning Method for Electric Machine Bearing Fault Diagnosis Under Varying Working Conditions With Limited Data | IEEE Transactions on Industrial Informatics | OPT | CLS | STA | IOV | 10.1109/tii.2022.3165027 |
+| 20 | 2023 | Y. Liu | Semi-supervised Few-shot Network Intrusion Detection based on Meta-learning | 2023 IEEE International Conferences on Internet of Things (i | NS | CLS | STA | IOV | 10.1109/ithings-greencom-cpscom-smartdata-cybermatics60724.2023.00097 |
+| 21 | 2023 | S. Fang | Few-Shot Fault Diagnosis of Rolling Bearings Based on Multidimensional Global Attention Siamese Network | IECON 2023- 49th Annual Conference of the IEEE Industrial El | MET | DIS | STA | IOV | 10.1109/iecon51785.2023.10312375 |
+| 22 | 2023 | X. Zhang | Imbalanced Fault Diagnosis Based on Supervised Prototypical Contrastive Network | 2023 Global Reliability and Prognostics and Health Managemen | MET | DIS | STA | IOV | 10.1109/phm-hangzhou58797.2023.10482577 |
+| 23 | 2024 | Yan et al. | Meta learning-based few-shot intrusion detection for 5G-enabled industrial internet | Complex & Intelligent Systems | MET | DIS | STA | IOV | 10.1007/s40747-024-01388-1 |
+| 24 | 2024 | Lang Du | Research on Turnout Fault Diagnosis Model Based on GADF-CNN-MAML | 2024 5th International Conference on Artificial Intelligence | OPT | CLS | STA | IOV | 10.1109/icaice63571.2024.10863959 |
+| 25 | 2024 | Wang Danfeng | Model-Agnostic Meta-Learning-based Fault Classification for Industrial Processes with Small Sample | 2024 39th Youth Academic Annual Conference of Chinese Associ | OPT | CLS | STA | IOV | 10.1109/yac63405.2024.10598657 |
+| 26 | 2024 | P. Jagdish Kumar | Classifying Network Abnormalities Into Faults and Attacks in Iot-Based Cyber-Physical Systems using Machine Learning | 2024 International Conference on Integrated Circuits and Com | MET | DIS | STA | IOV | 10.1109/icicacs60521.2024.10498664 |
+| 27 | 2024 | Yi-Cheng Yu | Pruning Quantized Unsupervised Meta-Learning DegradingNet Solution for Industrial Equipment and Semiconductor Process Anomaly Detection and Prediction | Applied Sciences | NS | REC | STA | IOV | 10.3390/app14051708 |
+| 28 | 2024 | Yunpu Wu | A Novel Fault Diagnosis Method of High-Speed Train Based on Few-Shot Learning. | Entropy (Basel, Switzerland) | NS | CLS | STA | IOV | 10.3390/e26050428 |
+| 29 | 2024 | J. Wu | A Novel Few-Shot Deep Transfer Learning Method for Anomaly Detection: Deep Domain-Adversarial Contrastive Network With Time-Frequency Transferability Analytics | IEEE Internet of Things Journal | NML | CLS | STA | IOV | 10.1109/jiot.2024.3403976 |
+| 30 | 2024 | L. A. Jilcha | SaRLog: Semantic-Aware Robust Log Anomaly Detection via BERT-Augmented Contrastive Learning | IEEE Internet of Things Journal | MET | DIS | STA | GEN | 10.1109/jiot.2024.3386183 |
+| 31 | 2024 | Z. Pu | Incrementally Generative Adversarial Diagnostics Using Few-Shot Enabled One-Class Learning | IEEE Transactions on Industrial Informatics | NML | HYB | INC | IOV | 10.1109/tii.2024.3416945 |
+| 32 | 2024 | H. Sun | Space Decoupled Prototype Learning for Few-Shot Attack Detection in Cyber–Physical Systems | IEEE Transactions on Industrial Informatics | MET | DIS | STA | IOV | 10.1109/tii.2024.3423327 |
+| 33 | 2024 | U. Zukaib | Meta-IDS: Meta-Learning-Based Smart Intrusion Detection System for Internet of Medical Things (IoMT) Network | IEEE Internet of Things Journal | NS | CLS | STA | IOV | 10.1109/jiot.2024.3387294 |
+| 34 | 2024 | K. Li | Reweighted Regularized Prototypical Network for Few-Shot Fault Diagnosis | IEEE Transactions on Neural Networks and Learning Systems | MET | DIS | STA | IOV | 10.1109/tnnls.2022.3232394 |
+| 35 | 2024 | L. Du | A Few-Shot Class-Incremental Learning Method for Network Intrusion Detection | IEEE Transactions on Network and Service Management | NS | CLS | INC | IOV | 10.1109/tnsm.2023.3332284 |
+| 36 | 2025 | Jiaxi Li | An Anomaly Detection Approach for Aerospace Telemetry Data Based on Model-Agnostic Meta-Learning | IFAC-PapersOnLine | OPT | REC | STA | IOV | 10.1016/j.ifacol.2025.11.424 |
+| 37 | 2025 | Yutian Wang | Few-Shot Learning for Anomaly Detection in Gas-Fired Power Plants Using Prototypical Networks | Informatica | MET | DIS | STA | IOV | 10.31449/inf.v49i36.12350 |
+| 38 | 2025 | N. Ijaz | A Hybrid LATAM and Few-Shot Learning Framework for Fault Diagnosis in Wireless Sensor Networks | IEEE Sensors Journal | MET | HYB | STA | IOV | 10.1109/jsen.2025.3620491 |
+| 39 | 2025 | Ming Wan | One-Class Anomaly Detection for Industrial Data Traffic Based on Dual-Characteristic Prototype Points | 2025 IEEE International Symposium on Parallel and Distribute | MET | DIS | STA | IOV | 10.1109/ispa67752.2025.00089 |
+| 40 | 2025 | David He | Full Ceramic Bearing Fault Diagnosis with Few-Shot Learning Using GPT-2 | Computer Modeling in Engineering & Sciences | MOD | CLS | STA | IOV | 10.32604/cmes.2025.063975 |
+| 41 | 2025 | Ravindra Chopparapu | Implementation of an Optimized Hybrid Machine Learning–Based IDS for Enhanced Threat Detection in IoT Environments | 2025 IEEE 5th International Conference on ICT in Business In | OPT | CLS | INC | IOV | 10.1109/ictbig68706.2025.11323664 |
+| 42 | 2025 | Ali Pourghoraba | Model-Agnostic Meta-Learning for Fault Diagnosis of Induction Motors in Data-Scarce Environments with Varying Operating Conditions and Electric Drive Noise | IEEE Transactions on Energy Conversion | OPT | CLS | STA | IOV | 10.1109/tec.2025.3556100 |
+| 43 | 2025 | Ying Yu | A novel few-shot cross-domain fault diagnosis method enhanced by feature fusion and ReLU-KAN | Engineering Research Express | NS | CLS | STA | IOV | 10.1088/2631-8695/adcc77 |
+| 44 | 2025 | Minke Zou | HySAM: A Hybrid Similarity-Enhanced Attention-Driven Network for Multi-Scale Few-Shot Learning in Belt Conveyor Roller Fault Detection | Proceedings of the 4th International Conference on Computer, | MET | DIS | STA | IOV | 10.1145/3727648.3727708 |
+| 45 | 2025 | Wei Gao | Metric-Based Meta-Learning Relation Network for Cross-Domain Few-Shot Bearing Fault Diagnosis | IEEE Sensors Journal | MET | DIS | STA | IOV | 10.1109/jsen.2025.3547258 |
+| 46 | 2025 | Yuanfa Cen | Integration of Normalizing Flows and Prototypical Networks for Few-Shot Early Fault Detection in Transformer | 2025 5th International Conference on Electrical Engineering  | HYB | HYB | STA | IOV | 10.1109/ic2ecs68700.2025.11362286 |
+| 47 | 2025 | Yanfei Liu | A novel temporal classification prototype network for few-shot bearing fault detection. | Scientific reports | MET | DIS | STA | IOV | 10.1038/s41598-025-98963-4 |
+| 48 | 2025 | Ji-Min Woo | Meta-Learning-Based LSTM-Autoencoder for Low-Data Anomaly Detection in Retrofitted CNC Machine Using Multi-Machine Datasets | Systems | OPT | REC | STA | IOV | 10.3390/systems13070534 |
+| 49 | 2025 | Muyan Yao | Rethinking Discrepancy Analysis: Anomaly Detection via Meta-Learning Powered Dual-Source Representation Differentiation | IEEE Transactions on Automation Science and Engineering | NS | REC | STA | IOV | 10.1109/tase.2024.3486688 |
+| 50 | 2025 | S. Zhu | Partially-Supervised Graph Derivation Network With Meta-Learning for Time-Series Anomaly Detection | IEEE Internet of Things Journal | OPT | HYB | STA | GEN | 10.1109/jiot.2025.3558273 |
+| 51 | 2025 | O. S. Ogunleye | Hybrid Meta-Deep Learning Approach for Malicious Data Classification in Iot Packet Data Networks | 2025 8th Conference on Cloud and Internet of Things (CIoT) | MET | DIS | STA | IOV | 10.1109/ciot67574.2025.11410126 |
+| 52 | 2025 | Y. Wang | Fault Diagnosis for Pneumatic Control Valves Using a Novel Few-shot Learning Method | 2025 CAA Symposium on Fault Detection, Supervision, and Safe | OPT | CLS | STA | IOV | 10.1109/safeprocess67117.2025.11267814 |
+| 53 | 2025 | N. Ijaz | Few-Shot Transfer Learning-Based Fault Classification in Wireless Sensor Networks | IEEE Access | NML | CLS | STA | IOV | 10.1109/access.2025.3554748 |
+| 54 | 2025 | M. Zabin | Few-Shot Learning-Based Machine Fault Diagnosis Using EMD-Gammatone Spectrogram with Limited Labeled Audio Dataset | 2025 IEEE International Conference on Big Data and Smart Com | NML | CLS | STA | IOV | 10.1109/bigcomp64353.2025.00046 |
+| 55 | 2025 | B. Chandrasekaran | Evaluation of Few-Shot Learning with Vision Language Models for Needle Bearing Defect Detection | SoutheastCon 2025 | MOD | CLS | STA | IOV | 10.1109/southeastcon56624.2025.10971495 |
+| 56 | 2025 | K. Yi | Pipeline Anomaly Detection Based on KPCA and Cosine Distance Prototypical Network | 2025 IEEE International Conference on Industrial Technology  | MET | DIS | STA | IOV | 10.1109/icit63637.2025.10965214 |
+| 57 | 2025 | U. Suleymanov | SSPNet: Semi-Supervised Prototypical Networks for Few-Shot Network Intrusion Detection | MILCOM 2025 - 2025 IEEE Military Communications Conference ( | MET | DIS | STA | IOV | 10.1109/milcom64451.2025.11310333 |
+| 58 | 2025 | M. Emadaleslami | Differential Fault Diagnosis in Power Transformers Under Limited Data Condition via Few-Shot Learning | IEEE Transactions on Industrial Informatics | NS | CLS | STA | IOV | 10.1109/tii.2025.3586057 |
+| 59 | 2025 | H. Li | A Few-Shot Network Attack Detection Method Based on MAML-L2F Dynamic Parameter Optimization | 2025 China Automation Congress (CAC) | OPT | CLS | STA | IOV | 10.1109/cac67268.2025.11486720 |
+| 60 | 2025 | J. Tian | OMLog: Online Log Anomaly Detection for Evolving System With Meta-Learning | IEEE Internet of Things Journal | MOD | PRE | DAW | GEN | 10.1109/jiot.2025.3569628 |
+| 61 | 2025 | Z. Li | Semi-Supervised Anomaly Detection in Satellite Sensor Data under Missing Values and Class Imbalance | 2025 6th International Conference on Internet of Things, Art | MET | DIS | STA | IOV | 10.1109/iotaima66468.2025.11212774 |
+| 62 | 2025 | R. Xu | Cyber Attack Detection for Industrial Control Systems with Few-Shot and Class Imbalance: An Improved DA-LSTM-UNet Scheme | 2025 10th International Conference on Control, Robotics and  | NML | CLS | STA | IOV | 10.1109/crc67523.2025.11288189 |
+| 63 | 2025 | W. Xi | MHT: Dual-Layered Meta-Driven Hypernetworks for Unknown Attack Detection | 2025 10th International Conference on Computer and Communica | MOD | CLS | STA | IOV | 10.1109/icccs65393.2025.11069655 |
+| 64 | 2025 | D. N. Chi Nam | STRIDE: Spectral-Temporal Representation and Instance-Weighted Domain Expansion | 2025 IEEE International Conference on Data Mining (ICDM) | NML | CLS | STA | IOV | 10.1109/icdm65498.2025.00125 |
+| 65 | 2025 | J. Li | MTSNN: A Few-Shot Fine-Grained Diagnosis Framework for Cross-Machine Fault Diagnosis With Heterogeneous Fault Categories | IEEE Transactions on Instrumentation and Measurement | MET | DIS | STA | IOV | 10.1109/tim.2025.3551907 |
+| 66 | 2025 | J. Xu | A Novel Approach for Small-Sample Open-Set Fault Diagnosis in Rolling Bearings: Dense-ProtoNet-AE | 2025 CAA Symposium on Fault Detection, Supervision, and Safe | HYB | HYB | STA | IOV | 10.1109/safeprocess67117.2025.11268163 |
+| 67 | 2025 | W. Guo | ModelAdaptive Bearing Fault Diagnosis in Small Sample Situations | 2025 CAA Symposium on Fault Detection, Supervision, and Safe | OPT | CLS | STA | IOV | 10.1109/safeprocess67117.2025.11267982 |
