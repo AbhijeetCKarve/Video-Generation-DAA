@@ -41,7 +41,7 @@ for n, _ in m["marks"]:
 narr = rec / "narration.wav"
 sf.write(narr, mix, SR)
 cmd = ["ffmpeg", "-y", "-loglevel", "error", "-i", video, "-i", str(narr),
-       "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-r", "30", "-pix_fmt", "yuv420p",
+       "-map", "0:v", "-map", "1:a", "-c:v", "copy",
        "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(out)]
 subprocess.run(cmd, check=True)
 print("wrote", out)

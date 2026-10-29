@@ -24,12 +24,25 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const marks = [];                                                   // [line number, ms since the title card]
 let t0 = null;
 
+const { spawn } = require('child_process');
 (async () => {
-  const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox'] });
-  const ctx = await browser.newContext({ viewport: { width: 1920, height: 1080 }, recordVideo: { dir: OUT, size: { width: 1920, height: 1080 } } });
-  const page = await ctx.newPage();
+  // a real screen: Chromium (kiosk) on a virtual X display, captured by ffmpeg at a constant 30 fps
+  const DISPLAY = ':99';
+  const xvfb = spawn('Xvfb', [DISPLAY, '-screen', '0', '1920x1080x24', '-nolisten', 'tcp'], { stdio: 'ignore' });
+  await sleep(1200);
+  const profile = fs.mkdtempSync(path.join(require('os').tmpdir(), 'lab-chrome-'));
+  const ctx = await chromium.launchPersistentContext(profile, { headless: false, viewport: null,
+    executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', env: { ...process.env, DISPLAY },
+    ignoreDefaultArgs: ['--enable-automation'],
+    args: ['--no-sandbox', '--disable-gpu', '--kiosk', '--app=http://127.0.0.1:8765/black.html', '--window-size=1920,1080',
+           '--window-position=0,0', '--hide-scrollbars', '--no-first-run', '--force-device-scale-factor=1'] });
+  await sleep(800);
+  const page = ctx.pages()[0];
   page.on('pageerror', e => console.log('PAGEERROR', e.message));
-  await page.setContent('<body style="background:#000;margin:0"></body>');
+  const outMp4 = path.join(OUT, 'screen.mp4');
+  const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'x11grab', '-draw_mouse', '0', '-framerate', '30', '-video_size', '1920x1080',
+    '-i', DISPLAY, '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', '-g', '60', outMp4], { stdio: ['pipe', 'ignore', 'inherit'] });
+  const ffStart = Date.now();
   await sleep(1500);
   await page.goto('http://127.0.0.1:8765/index.html?overlay=1');
   await page.evaluate(() => api.ready());
@@ -42,6 +55,8 @@ let t0 = null;
   const chunkLine = [6, 7, 8, 9, 10];                              // narration line for each code chunk
   const pill = '<div class="pill">DAA LAB · ASSIGNMENT 1</div>';
   // 1 hook on the title card
+  if (process.env.SMOKE) { await api('overlay', `${pill}<h1>Problem 1<br><span>smoke test</span></h1>`); await say(1); await sleep(2500); await api('overlay', ''); await api('cursor', 253, 87, 900); await sleep(1500); }
+  else {
   await api('overlay', `${pill}<h1>Problem 1<br><span>Bubble Sort with swap count</span></h1><div class="sub">C++ and Java, step by step in VS Code</div><div class="by"><small>PREPARED BY</small><b>Abhijeet Karve</b></div>`);
   await say(1); await hold(1, 300);
   // 2 welcome
@@ -122,9 +137,10 @@ let t0 = null;
   await say(22); await hold(22, 300);
   await api('overlay', `<h1>Thanks for watching</h1><div class="by"><small>CREATED BY</small><b>Abhijeet Karve</b></div>`);
   await sleep(7000);
+  }
   const total = Date.now() - t0;
-  await ctx.close(); await browser.close();
-  const video = fs.readdirSync(OUT).filter(f => f.endsWith('.webm')).map(f => path.join(OUT, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
-  fs.writeFileSync(path.join(OUT, 'marks.json'), JSON.stringify({ marks, total, video }, null, 1));
-  console.log('done', video, 'total ms', total);
+  ff.stdin.write('q'); await new Promise(r => ff.on('exit', r));
+  await ctx.close(); xvfb.kill();
+  fs.writeFileSync(path.join(OUT, 'marks.json'), JSON.stringify({ marks, total, video: outMp4, t0_in_video: (t0 - ffStart) / 1000 }, null, 1));
+  console.log('done', outMp4, 'total ms', total);
 })();
