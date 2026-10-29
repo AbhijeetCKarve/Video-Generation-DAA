@@ -22,3 +22,4 @@ projects/lab-*/src/*.class
 projects/lab-*/rec*/
 projects/lab-*/reference.m4a
 projects/lab-*/durations*.json
+projects/lab-*/recordings/real-voice.m4a
