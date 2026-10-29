@@ -77,6 +77,7 @@
   #overlay .nextbox { border:3px solid #A855F7; border-radius:24px; padding:30px 60px; text-align:center; }
   #overlay .nextbox small { display:block; color:#94A3B8; font-size:26px; font-weight:800; letter-spacing:2px; margin-bottom:10px; }
   #overlay .nextbox b { font-size:50px; color:#fff; }
+  #mark { position:absolute; left:0; top:0; width:6px; height:6px; background:#fff; display:none; z-index:1000; }
   #toast { position:absolute; left:50%; top:46px; transform:translateX(-50%); background:#252526; border:1px solid #454545; color:#e5e5e5; padding:8px 18px; border-radius:6px; font-size:16px; display:none; z-index:60; box-shadow:0 4px 14px rgba(0,0,0,.5); }
   #toast kbd { background:#3a3a3a; border-radius:4px; padding:2px 8px; margin:0 2px; }
   #note { position:absolute; right:40px; top:120px; width:560px; background:#1E293B; border:2px solid #FACC15; border-radius:16px; padding:22px 26px; z-index:60; display:none; font-size:24px; line-height:1.4; color:#F8FAFC; box-shadow:0 10px 30px rgba(0,0,0,.6); }
@@ -113,6 +114,7 @@
 </div>
 <div id="status"><span>⎇ main</span><span>⊗ 0  ⚠ 0</span><div class="right"><span id="st-pos">Ln 1, Col 1</span><span>Spaces: 4</span><span>UTF-8</span><span>LF</span><span id="st-lang">Plain Text</span><span>☺</span><span>🔔</span></div></div>
 <svg id="cursor" viewBox="0 0 22 30"><path d="M2 2 L2 24 L8 18 L12 28 L16 26 L12 17 L20 17 Z" fill="#fff" stroke="#000" stroke-width="1.5"/></svg>
+<div id="mark"></div>
 <div id="toast"></div>
 <div id="note"></div>
 <div id="overlay"></div>
@@ -214,6 +216,7 @@ const api = {
   prompt: async () => { term.write('\x1b[1;32mstudent@daa-lab\x1b[0m:\x1b[1;34m~/DAA-Lab\x1b[0m$ '); },
   note: async (html, ms) => { const n = $('note'); n.innerHTML = html; n.style.display = 'block'; if (ms) { await sleep(ms); n.style.display = 'none'; } },
   hideNote: async () => { $('note').style.display = 'none'; },
+  mark: async () => { const m = $('mark'); m.style.display = 'block'; await sleep(160); m.style.display = 'none'; },
   reveal: async (sel, i) => { const rows = document.querySelectorAll(sel); if (rows[i]) rows[i].classList.add('in'); },
   overlay: async (html) => { const o = $('overlay'); o.innerHTML = html; o.style.display = html ? 'flex' : 'none'; },
 };

@@ -34,7 +34,7 @@ let t0 = null;
   await page.goto('http://127.0.0.1:8765/index.html?overlay=1');
   await page.evaluate(() => api.ready());
   const api = (fn, ...args) => page.evaluate(([fn, args]) => window.api[fn](...args), [fn, args]);
-  const say = async (n) => { if (t0 === null) t0 = Date.now(); marks.push([n, Date.now() - t0]); };
+  const say = async (n) => { if (t0 === null) t0 = Date.now(); marks.push([n, Date.now() - t0]); await api('mark'); };   // the 6-px flash lets the mixer find this moment in the video
   const hold = async (n, extra = 600) => { const start = marks[marks.length - 1][1]; const need = dur[String(n).padStart(2, '0')] * 1000 + extra;
     const left = need - (Date.now() - t0 - start); if (left > 0) await sleep(left); };
   const typeTerm = async (s, cps = 12) => { await api('termType', s, cps); await sleep(350); await api('termWrite', '\n'); };
