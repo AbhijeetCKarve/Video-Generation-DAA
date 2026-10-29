@@ -6,6 +6,6 @@ bar laid out to match VS Code Dark. `lab/driver.js` drives it through Playwright
 typing paced to the narration, Ctrl+S, Terminal menu, compile, run, input) and records the screen; `lab/mix_lab.py`
 lays the narration over the recording.
 
-    cd lab/vscode && npm install monaco-editor@0.52.2 @xterm/xterm@5.5.0 @xterm/addon-fit@0.10.0 && http-server -p 8765 -s . &
+    cd lab/vscode && npm install monaco-editor@0.52.2 @xterm/xterm@5.5.0 @xterm/addon-fit@0.10.0 && (nohup http-server -p 8765 -s . &)
     node lab/driver.js projects/lab-01 projects/lab-01/durations.json projects/lab-01/rec
     python3 lab/mix_lab.py projects/lab-01/rec projects/lab-01/voice projects/lab-01/output/lab-01.mp4
