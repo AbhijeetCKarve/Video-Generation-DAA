@@ -1,16 +1,22 @@
-01  {warm} DAA Lab, problem one: Bubble Sort with swap count. Let's write it in C plus plus, run it in VS Code, and check it against the sample output.
-02  {explain} Open your assignment folder in VS Code. Click the new file icon in the Explorer, and name the file BubbleSort dot cpp. The dot cpp extension tells VS Code it is a C plus plus program.
-03  {explain} Start with the include for input and output, the using namespace line, and the main function.
-04  {explain} Read n from the keyboard. The problem says the program must read its input from the keyboard, so we always print a prompt and use cin.
-05  {explain} Then declare the array, and read the n integers in a loop.
-06  {explain} Now the bubble sort. The outer loop runs n minus one passes. The inner loop compares each pair of neighbours, and swaps them when the left one is bigger. Every swap increments our counter. After each pass the largest element has bubbled to the end, so the inner loop stops one position earlier each time.
-07  {explain} Finally, print the sorted array and the swap count, with clear labels, exactly as the problem asks.
-08  {explain} Save the file with Control S.
-09  {explain} Now open the integrated terminal: Terminal menu, New Terminal, or press Control and backtick.
-10  {explain} Compile with g plus plus. The dash o flag names the output program.
-11  {explain} Run it. Enter n equals five, then the five numbers from the sample: five, one, four, two, eight.
-12  {excited} Sorted array: one two four five eight. Number of swaps: four. That matches the expected output exactly.
-13  {emphatic} For the viva: bubble sort makes n minus one passes and, in the worst case, about n squared by two comparisons, so the time complexity is order n squared. The swap count depends on the input: four here.
-14  {explain} Prefer Java? Here is the same logic in BubbleSort dot java: a Scanner instead of cin, the same two loops, the same counter.
-15  {explain} Compile with javac, run with java: same input, same output.
-16  {warm} That is problem one. Practise it once yourself before the exam. See you in the next one!
+01  {curious} Five numbers, and the exam wants them sorted with Bubble Sort, plus the number of swaps. | Let's write the program, run it in VS Code, and check it against the sample output.
+02  {warm} Welcome to the DAA series. | I'm Abhijeet Karve, and I'll guide you through every algorithm, step by step.
+03  {explain} This is the DAA Lab, problem one: Bubble Sort with swap count. | Today: the program in C plus plus, written and run in VS Code, the check against the sample output, and the same program in Java.
+04  {explain} In the viva you must explain the logic and state the time complexity, | so stay till the end for the viva tips.
+05  {explain} Open your assignment folder in VS Code. Click the new file icon in the Explorer, and name the file BubbleSort dot cpp. | The dot cpp extension tells VS Code it is a C plus plus program.
+06  {explain} Start with the include for input and output, the using namespace line, and the main function.
+07  {explain} Read n from the keyboard. | The problem says the program must read its input from the keyboard, so we always print a prompt and use cin.
+08  {explain} Then declare the array, and read the n integers in a loop.
+09  {explain} Now the bubble sort. The outer loop runs n minus one passes. The inner loop compares each pair of neighbours, and swaps them when the left one is bigger. | Every swap increments our counter. After each pass the largest element has bubbled to the end, so the inner loop stops one position earlier each time.
+10  {explain} Finally, print the sorted array and the swap count, with clear labels, exactly as the problem asks.
+11  {explain} Save the file with Control S.
+12  {explain} Now open the integrated terminal: | Terminal menu, New Terminal, or press Control and backtick.
+13  {explain} Compile with g plus plus. | The dash o flag names the output program.
+14  {explain} Run it. | Enter n equals five, then the five numbers from the sample: five, one, four, two, eight.
+15  {excited} Sorted array: one two four five eight. Number of swaps: four. | That matches the expected output exactly.
+16  {explain} Prefer Java? Here is the same logic in BubbleSort dot java: | a Scanner instead of cin, the same two loops, the same counter.
+17  {explain} Compile with javac, run with java: | same input, same output.
+18  {emphatic} Viva tip one. | Say what the two loops do: n minus one passes, and each pass compares neighbours and bubbles the largest element to the end.
+19  {emphatic} Viva tip two. | State the time complexity: about n squared by two comparisons in the worst case, so order n squared. And say that the swap count depends on the input: four for this sample.
+20  {emphatic} Viva tip three. | Read the input from the keyboard with a prompt, and label every output line exactly as the problem statement shows it.
+21  {warm} To recap: | two nested loops with a swap counter inside the if, | compile with g plus plus or javac, | and always compare with the sample output before the viva.
+22  {warm} In the next video, problem two: Selection Sort pass by pass. | See you there!

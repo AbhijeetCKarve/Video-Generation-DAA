@@ -63,6 +63,20 @@
   #overlay .by { margin-top:40px; border-left:8px solid #FACC15; padding-left:22px; text-align:left; }
   #overlay .by small { display:block; color:#94A3B8; font-size:22px; font-weight:700; letter-spacing:1px; }
   #overlay .by b { font-size:44px; color:#fff; }
+  #overlay .rows { display:flex; flex-direction:column; gap:22px; align-items:flex-start; }
+  #overlay .row { display:flex; align-items:center; gap:22px; font-size:38px; color:#F8FAFC; font-weight:700; opacity:0; transform:translateX(30px); transition:all .5s ease; }
+  #overlay .row.in { opacity:1; transform:none; }
+  #overlay .row .n { background:#3B82F6; color:#fff; border-radius:12px; padding:4px 16px; font-size:30px; }
+  #overlay .row .n.gold { background:#FACC15; color:#0F172A; }
+  #overlay .row .tick { color:#22C55E; font-size:40px; }
+  #overlay .row small { display:block; font-size:24px; color:#94A3B8; font-weight:400; }
+  #overlay .star { background:#FACC15; color:#0F172A; font-weight:800; font-size:28px; padding:8px 24px; border-radius:30px; }
+  #overlay .head { font-size:30px; letter-spacing:2px; color:#94A3B8; font-weight:800; }
+  #overlay .big { font-size:72px; font-weight:900; color:#fff; }
+  #overlay .guide { font-size:32px; color:#3B82F6; }
+  #overlay .nextbox { border:3px solid #A855F7; border-radius:24px; padding:30px 60px; text-align:center; }
+  #overlay .nextbox small { display:block; color:#94A3B8; font-size:26px; font-weight:800; letter-spacing:2px; margin-bottom:10px; }
+  #overlay .nextbox b { font-size:50px; color:#fff; }
   #toast { position:absolute; left:50%; top:46px; transform:translateX(-50%); background:#252526; border:1px solid #454545; color:#e5e5e5; padding:8px 18px; border-radius:6px; font-size:16px; display:none; z-index:60; box-shadow:0 4px 14px rgba(0,0,0,.5); }
   #toast kbd { background:#3a3a3a; border-radius:4px; padding:2px 8px; margin:0 2px; }
   #note { position:absolute; right:40px; top:120px; width:560px; background:#1E293B; border:2px solid #FACC15; border-radius:16px; padding:22px 26px; z-index:60; display:none; font-size:24px; line-height:1.4; color:#F8FAFC; box-shadow:0 10px 30px rgba(0,0,0,.6); }
@@ -200,6 +214,7 @@ const api = {
   prompt: async () => { term.write('\x1b[1;32mstudent@daa-lab\x1b[0m:\x1b[1;34m~/DAA-Lab\x1b[0m$ '); },
   note: async (html, ms) => { const n = $('note'); n.innerHTML = html; n.style.display = 'block'; if (ms) { await sleep(ms); n.style.display = 'none'; } },
   hideNote: async () => { $('note').style.display = 'none'; },
+  reveal: async (sel, i) => { const rows = document.querySelectorAll(sel); if (rows[i]) rows[i].classList.add('in'); },
   overlay: async (html) => { const o = $('overlay'); o.innerHTML = html; o.style.display = html ? 'flex' : 'none'; },
 };
 window.api = api;
