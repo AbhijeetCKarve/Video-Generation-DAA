@@ -273,6 +273,28 @@ def clique_card(w=490, h=470):
     return img
 
 
+def code_card(w=490, h=470):
+    """A dark editor card with the bubble-sort swap, and a terminal line underneath."""
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#1E1E1E")
+    d.rounded_rectangle([0, 0, w - 1, 58], radius=30, fill="#2D2D2D")
+    d.rectangle([0, 30, w - 1, 58], fill="#2D2D2D")
+    d.rounded_rectangle([18, 12, 230, 48], radius=8, fill="#1E1E1E")
+    d.text((30, 30), "BubbleSort.cpp", font=font("Inter:semibold", 22), fill="#FFFFFF", anchor="lm")
+    mono = font("DejaVu Sans Mono:bold", 23)
+    lines = [("for (int i = 0; i < n - 1; i++)", "#C586C0"), ("  for (int j = 0; j < n-1-i; j++)", "#C586C0"),
+             ("    if (a[j] > a[j + 1]) {", "#569CD6"), ("      swap(a[j], a[j + 1]);", "#DCDCAA"),
+             ("      swaps++;", "#4EC9B0"), ("    }", "#D4D4D4")]
+    for i, (t, col) in enumerate(lines):
+        d.text((28, 90 + i * 40), t, font=mono, fill=col)
+    d.rounded_rectangle([18, 345, w - 18, 452], radius=14, fill="#0B0B0B")
+    d.text((34, 372), "$ ./BubbleSort", font=font("DejaVu Sans Mono:bold", 22), fill="#9CDCFE")
+    d.text((34, 404), "Sorted array: 1 2 4 5 8", font=font("DejaVu Sans Mono:bold", 22), fill="#FFFFFF")
+    d.text((34, 428), "Number of swaps: 4", font=font("DejaVu Sans Mono:bold", 22), fill="#4EC9B0")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -282,7 +304,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card, "clique": clique_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card, "clique": clique_card, "code": code_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -337,7 +359,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce", "clique"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce", "clique", "code"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)
