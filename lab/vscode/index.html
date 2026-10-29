@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Visual Studio Code</title>
+<link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css">
+<style>
+  :root { --bg:#1e1e1e; --side:#252526; --act:#333333; --tab:#2d2d2d; --tabact:#1e1e1e; --status:#007acc; --title:#3c3c3c; --fg:#cccccc; --muted:#8b8b8b; --border:#2b2b2b; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { width:1920px; height:1080px; overflow:hidden; background:var(--bg); color:var(--fg);
+    font-family:"Inter","Segoe UI",system-ui,sans-serif; font-size:17px; }
+  #title { height:38px; background:var(--title); display:flex; align-items:center; padding:0 14px; gap:22px; font-size:16px; position:relative; }
+  #title .menu span { margin-right:18px; cursor:default; padding:4px 6px; border-radius:4px; }
+  #title .menu span.open { background:#505050; }
+  #title .center { position:absolute; left:0; right:0; text-align:center; pointer-events:none; color:#d4d4d4; }
+  #title .logo { width:20px; height:20px; border-radius:3px; background:#0098ff; display:inline-block; }
+  #main { display:flex; height:1020px; }
+  #activity { width:52px; background:var(--act); display:flex; flex-direction:column; align-items:center; padding-top:8px; gap:6px; }
+  #activity .icon { width:52px; height:52px; display:flex; align-items:center; justify-content:center; color:#858585; }
+  #activity .icon.on { color:#fff; border-left:2px solid #fff; }
+  #activity svg { width:28px; height:28px; }
+  #sidebar { width:300px; background:var(--side); font-size:15px; }
+  #sidebar .head { padding:10px 20px; font-size:12px; letter-spacing:1px; color:#bbbbbb; display:flex; justify-content:space-between; }
+  #sidebar .folder { padding:4px 10px; font-weight:700; font-size:13px; letter-spacing:.4px; display:flex; justify-content:space-between; align-items:center; background:#2a2d2e; }
+  #sidebar .folder .tools { display:flex; gap:10px; color:#c5c5c5; }
+  #sidebar .folder .tools span { padding:2px; border-radius:3px; }
+  #sidebar .folder .tools span.hover { background:#3c3c3c; }
+  #tree .file { padding:4px 10px 4px 30px; display:flex; align-items:center; gap:8px; font-size:15px; }
+  #tree .file.sel { background:#37373d; }
+  #tree .file .fi { width:16px; height:16px; border-radius:2px; display:inline-block; }
+  #tree input { margin:4px 10px 4px 26px; width:250px; background:#3c3c3c; border:1px solid #007fd4; color:#fff; font:15px Inter,sans-serif; padding:3px 6px; outline:none; }
+  #editorcol { flex:1; display:flex; flex-direction:column; min-width:0; }
+  #tabs { height:38px; background:var(--tab); display:flex; align-items:stretch; }
+  .tab { padding:0 16px; display:flex; align-items:center; gap:8px; font-size:15px; color:#969696; background:var(--tab); border-right:1px solid #252526; }
+  .tab.on { color:#fff; background:var(--tabact); border-top:1px solid #0098ff; }
+  .tab .dot { width:8px; height:8px; border-radius:50%; background:#fff; display:none; }
+  .tab.dirty .dot { display:inline-block; }
+  .tab .x { color:#777; margin-left:6px; }
+  #crumbs { height:24px; font-size:13px; color:#a9a9a9; padding:3px 18px; background:var(--bg); }
+  #editor { flex:1; min-height:0; }
+  #welcome { flex:1; display:flex; align-items:center; justify-content:center; color:#6a6a6a; font-size:26px; flex-direction:column; gap:14px; }
+  #welcome .kb { font-size:16px; color:#8f8f8f; }
+  #welcome kbd { background:#3a3a3a; border-radius:4px; padding:2px 7px; font-size:14px; color:#ccc; }
+  #panel { height:0; overflow:hidden; background:var(--bg); border-top:1px solid #3a3a3a; transition:height .35s ease; display:flex; flex-direction:column; }
+  #panel.open { height:360px; }
+  #panel .ptabs { height:34px; display:flex; align-items:center; padding:0 18px; gap:26px; font-size:12px; letter-spacing:1px; color:#9d9d9d; }
+  #panel .ptabs .on { color:#e7e7e7; border-bottom:1px solid #e7e7e7; padding-bottom:3px; }
+  #term { flex:1; padding:6px 10px; }
+  #status { height:22px; background:var(--status); color:#fff; font-size:13px; display:flex; align-items:center; padding:0 12px; gap:18px; }
+  #status .right { margin-left:auto; display:flex; gap:18px; }
+  #cursor { position:absolute; width:22px; height:30px; left:900px; top:540px; z-index:50; transition:left .55s cubic-bezier(.3,.7,.4,1), top .55s cubic-bezier(.3,.7,.4,1); pointer-events:none; filter:drop-shadow(0 1px 2px rgba(0,0,0,.6)); }
+  #cursor.hidden { opacity:0; }
+  #cursor.click { transform:scale(.85); }
+  #menu { position:absolute; left:214px; top:38px; width:290px; background:#252526; border:1px solid #454545; box-shadow:0 4px 14px rgba(0,0,0,.5); font-size:15px; display:none; z-index:40; padding:6px 0; }
+  #menu div { padding:6px 28px; display:flex; justify-content:space-between; }
+  #menu div.hl { background:#094771; color:#fff; }
+  #menu .k { color:#9a9a9a; font-size:13px; }
+  #overlay { position:absolute; inset:0; background:#0F172A; z-index:100; display:none; align-items:center; justify-content:center; flex-direction:column; gap:28px; font-family:Inter,sans-serif; }
+  #overlay .pill { background:#A855F7; color:#fff; font-weight:800; font-size:30px; padding:10px 30px; border-radius:40px; letter-spacing:1px; }
+  #overlay h1 { font-size:88px; font-weight:900; color:#fff; text-align:center; line-height:1.05; }
+  #overlay h1 span { color:#FACC15; }
+  #overlay .sub { font-size:34px; color:#CBD5E1; }
+  #overlay .by { margin-top:40px; border-left:8px solid #FACC15; padding-left:22px; text-align:left; }
+  #overlay .by small { display:block; color:#94A3B8; font-size:22px; font-weight:700; letter-spacing:1px; }
+  #overlay .by b { font-size:44px; color:#fff; }
+  #toast { position:absolute; left:50%; top:46px; transform:translateX(-50%); background:#252526; border:1px solid #454545; color:#e5e5e5; padding:8px 18px; border-radius:6px; font-size:16px; display:none; z-index:60; box-shadow:0 4px 14px rgba(0,0,0,.5); }
+  #toast kbd { background:#3a3a3a; border-radius:4px; padding:2px 8px; margin:0 2px; }
+  #note { position:absolute; right:40px; top:120px; width:560px; background:#1E293B; border:2px solid #FACC15; border-radius:16px; padding:22px 26px; z-index:60; display:none; font-size:24px; line-height:1.4; color:#F8FAFC; box-shadow:0 10px 30px rgba(0,0,0,.6); }
+  #note b { color:#FACC15; }
+</style>
+</head>
+<body>
+<div id="title">
+  <span class="logo"></span>
+  <div class="menu"><span data-m="File">File</span><span data-m="Edit">Edit</span><span data-m="Selection">Selection</span><span data-m="View">View</span><span data-m="Go">Go</span><span data-m="Run">Run</span><span data-m="Terminal">Terminal</span><span data-m="Help">Help</span></div>
+  <div class="center" id="wtitle">DAA-Lab - Visual Studio Code</div>
+</div>
+<div id="menu"></div>
+<div id="main">
+  <div id="activity">
+    <div class="icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="6" r="2.5"/><circle cx="7" cy="18" r="2.5"/><circle cx="17" cy="9" r="2.5"/><path d="M7 8.5v7M17 11.5c0 4-10 2-10 4"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4l12 8-12 8z"/><path d="M4 2v4M4 18v4" opacity=".0"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h7v7H4zM11 4h7v7h-7zM11 11h7v7h-7z"/></svg></div>
+  </div>
+  <div id="sidebar">
+    <div class="head"><span>EXPLORER</span><span>···</span></div>
+    <div class="folder"><span>DAA-LAB</span><div class="tools"><span id="newfile" title="New File">⊕</span><span>⊞</span><span>↻</span><span>⊟</span></div></div>
+    <div id="tree"></div>
+  </div>
+  <div id="editorcol">
+    <div id="tabs"></div>
+    <div id="crumbs"></div>
+    <div id="welcome"><div>Visual Studio Code</div><div class="kb">Show All Commands <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></div><div class="kb">Go to File <kbd>Ctrl</kbd> + <kbd>P</kbd></div><div class="kb">Toggle Terminal <kbd>Ctrl</kbd> + <kbd>`</kbd></div></div>
+    <div id="editor" style="display:none"></div>
+    <div id="panel"><div class="ptabs"><span>PROBLEMS</span><span>OUTPUT</span><span>DEBUG CONSOLE</span><span class="on">TERMINAL</span><span>PORTS</span></div><div id="term"></div></div>
+  </div>
+</div>
+<div id="status"><span>⎇ main</span><span>⊗ 0  ⚠ 0</span><div class="right"><span id="st-pos">Ln 1, Col 1</span><span>Spaces: 4</span><span>UTF-8</span><span>LF</span><span id="st-lang">Plain Text</span><span>☺</span><span>🔔</span></div></div>
+<svg id="cursor" viewBox="0 0 22 30"><path d="M2 2 L2 24 L8 18 L12 28 L16 26 L12 17 L20 17 Z" fill="#fff" stroke="#000" stroke-width="1.5"/></svg>
+<div id="toast"></div>
+<div id="note"></div>
+<div id="overlay"></div>
+<script src="node_modules/@xterm/xterm/lib/xterm.js"></script>
+<script src="node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+<script>
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const jitter = (base, spread) => base + Math.random() * spread;
+const $ = id => document.getElementById(id);
+const models = {}, tabs = {};
+let editor = null, term = null, fit = null, active = null;
+const LANG = { cpp: 'cpp', java: 'java', txt: 'plaintext' };
+const ICON = { cpp: '#519aba', java: '#cc3e44', txt: '#8b8b8b' };
+const LANGNAME = { cpp: 'C++', java: 'Java', txt: 'Plain Text' };
+
+require.config({ paths: { vs: 'node_modules/monaco-editor/min/vs' } });
+const ready = new Promise(res => require(['vs/editor/editor.main'], () => {
+  editor = monaco.editor.create($('editor'), {
+    value: '', language: 'cpp', theme: 'vs-dark', fontSize: 23, lineHeight: 34, fontFamily: '"DejaVu Sans Mono", monospace',
+    minimap: { enabled: true, renderCharacters: false }, automaticLayout: true, scrollBeyondLastLine: false,
+    autoClosingBrackets: 'never', autoClosingQuotes: 'never', autoSurround: 'never', autoIndent: 'none',
+    quickSuggestions: false, suggestOnTriggerCharacters: false, formatOnType: false, parameterHints: { enabled: false },
+    cursorBlinking: 'blink', cursorSmoothCaretAnimation: 'on', renderLineHighlight: 'all', smoothScrolling: true,
+    wordBasedSuggestions: 'off', acceptSuggestionOnEnter: 'off', matchBrackets: 'always', bracketPairColorization: { enabled: true },
+  });
+  editor.onDidChangeCursorPosition(e => { $('st-pos').textContent = `Ln ${e.position.lineNumber}, Col ${e.position.column}`; });
+  term = new Terminal({ fontSize: 21, lineHeight: 1.25, fontFamily: '"DejaVu Sans Mono", monospace', cursorBlink: true, convertEol: true,
+    theme: { background: '#1e1e1e', foreground: '#cccccc', cursor: '#ffffff', green: '#16c60c', blue: '#3b78ff', brightBlue: '#3b8eea', brightGreen: '#23d18b' } });
+  fit = new FitAddon.FitAddon();
+  term.loadAddon(fit);
+  term.open($('term'));
+  res();
+}));
+
+function ext(name) { return name.split('.').pop(); }
+function renderTree() {
+  const t = $('tree'); t.innerHTML = '';
+  Object.keys(models).sort().forEach(n => {
+    const d = document.createElement('div'); d.className = 'file' + (n === active ? ' sel' : '');
+    d.innerHTML = `<span class="fi" style="background:${ICON[ext(n)]}"></span>${n}`; t.appendChild(d);
+  });
+}
+function renderTabs() {
+  const t = $('tabs'); t.innerHTML = '';
+  Object.keys(tabs).forEach(n => {
+    const d = document.createElement('div'); d.className = 'tab' + (n === active ? ' on' : '') + (tabs[n].dirty ? ' dirty' : '');
+    d.innerHTML = `<span class="fi" style="width:12px;height:12px;border-radius:2px;background:${ICON[ext(n)]}"></span>${n}<span class="dot"></span><span class="x">✕</span>`; t.appendChild(d);
+  });
+  $('crumbs').textContent = active ? `DAA-Lab  ›  ${active}` : '';
+}
+function show(name) {
+  active = name;
+  $('welcome').style.display = 'none'; $('editor').style.display = 'block';
+  editor.setModel(models[name]); editor.focus();
+  $('st-lang').textContent = LANGNAME[ext(name)];
+  $('wtitle').textContent = `${name} - DAA-Lab - Visual Studio Code`;
+  renderTree(); renderTabs(); editor.layout();
+}
+const api = {
+  ready: () => ready,
+  cursor: async (x, y, ms = 600) => { const c = $('cursor'); c.classList.remove('hidden'); c.style.left = x + 'px'; c.style.top = y + 'px'; await sleep(ms); },
+  click: async () => { const c = $('cursor'); c.classList.add('click'); await sleep(120); c.classList.remove('click'); await sleep(120); },
+  hideCursor: async () => { $('cursor').classList.add('hidden'); },
+  hoverNew: (on) => { $('newfile').classList.toggle('hover', on); },
+  // explorer: the input box, typed name, then the file + tab appear
+  newFile: async (name, cps = 10) => {
+    const inp = document.createElement('input'); $('tree').appendChild(inp); inp.focus();
+    await sleep(500);
+    for (const ch of name) { inp.value += ch; await sleep(jitter(1000 / cps, 60)); }
+    await sleep(500);
+    inp.remove();
+    models[name] = monaco.editor.createModel('', LANG[ext(name)]);
+    tabs[name] = { dirty: false };
+    show(name);
+  },
+  open: async (name) => { if (!tabs[name]) tabs[name] = { dirty: false }; show(name); },
+  // type into the editor like a person: steady pace with jitter, a beat at line ends
+  type: async (text, cps = 18) => {
+    for (const ch of text) {
+      editor.trigger('keyboard', 'type', { text: ch });
+      tabs[active].dirty = true; renderTabs();
+      await sleep(ch === '\n' ? jitter(140, 120) : jitter(1000 / cps, 1000 / cps * 0.8));
+    }
+  },
+  save: async () => { tabs[active].dirty = false; renderTabs(); },
+  toast: async (html, ms = 1400) => { const t = $('toast'); t.innerHTML = html; t.style.display = 'block'; await sleep(ms); t.style.display = 'none'; },
+  menu: async (name, items, hl, ms = 900) => {
+    document.querySelectorAll('#title .menu span').forEach(s => s.classList.toggle('open', s.dataset.m === name));
+    const m = $('menu'); const spans = [...document.querySelectorAll('#title .menu span')];
+    const el = spans.find(s => s.dataset.m === name); m.style.left = (el.getBoundingClientRect().left) + 'px';
+    m.innerHTML = items.map((it, i) => `<div class="${i === hl ? 'hl' : ''}"><span>${it[0]}</span><span class="k">${it[1] || ''}</span></div>`).join('');
+    m.style.display = 'block'; await sleep(ms); m.style.display = 'none';
+    document.querySelectorAll('#title .menu span').forEach(s => s.classList.remove('open'));
+  },
+  openTerminal: async () => { $('panel').classList.add('open'); await sleep(450); fit.fit(); editor.layout(); term.focus(); },
+  termWrite: async (s) => { term.write(s); await sleep(30); },
+  termType: async (s, cps = 14) => { for (const ch of s) { term.write(ch); await sleep(jitter(1000 / cps, 1000 / cps * 0.8)); } },
+  prompt: async () => { term.write('\x1b[1;32mstudent@daa-lab\x1b[0m:\x1b[1;34m~/DAA-Lab\x1b[0m$ '); },
+  note: async (html, ms) => { const n = $('note'); n.innerHTML = html; n.style.display = 'block'; if (ms) { await sleep(ms); n.style.display = 'none'; } },
+  hideNote: async () => { $('note').style.display = 'none'; },
+  overlay: async (html) => { const o = $('overlay'); o.innerHTML = html; o.style.display = html ? 'flex' : 'none'; },
+};
+window.api = api;
+if (location.search.includes('overlay=1')) { $('overlay').style.display = 'flex'; }
+</script>
+</body>
+</html>
