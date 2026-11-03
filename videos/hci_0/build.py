@@ -14,36 +14,36 @@ import beats  # noqa: E402
 from production import main  # noqa: E402
 
 SECTIONS = {
-    "hook_apps": (None, "bright"),
+    "hook_angry": (None, "bright"),
     "syllabus": ("Today's plan", "calm"),
-    "g_card": ("The course at a glance", "calm"),
-    "o_obj": ("Objectives and outcomes", "calm"),
-    "u1_intro": ("Unit I · Foundations of HCI", "pulse"),
-    "u2_intro": ("Unit II · Interaction design", "pulse"),
-    "u3_intro": ("Unit III · Usability engineering", "pulse"),
-    "u4_intro": ("Unit IV · Testing, accessibility, AI", "pulse"),
-    "l_tools": ("Laboratory", "calm"),
-    "a_cat": ("Assessment", "calm"),
-    "b_text": ("Books", "calm"),
-    "tip1": ("How to score", "pulse"),
+    "w_meet": ("What HCI is", "calm"),
+    "i_door": ("Five ideas you can use tomorrow", "pulse"),
+    "p_intro": ("Your turn", "pulse"),
+    "b_lab": ("What you will build", "calm"),
+    "t_units12": ("The theory", "calm"),
+    "m_scheme": ("Marks", "calm"),
+    "r_career": ("Why pick this elective", "pulse"),
+    "tip1": ("Three tips", "pulse"),
     "recap": ("Recap", "bright"),
 }
-MIN_WINDOW = {"hook_apps": 7.0, "hook_mascot": 6.0, "hook_promise": 7.0, "g_card": 7.0, "g_scheme": 7.0, "g_marks": 7.0, "o_obj": 9.0,
-              "o_co": 9.0, "l_tools": 7.0, "l_a123": 9.0, "l_mini": 10.0, "l_flow": 7.0, "a_cat": 7.0, "b_ref": 8.0}
+MIN_WINDOW = {"hook_angry": 8.0, "hook_mascot": 6.0, "hook_promise": 7.0, "w_meet": 7.0, "w_three": 7.0, "i_door": 8.0, "i_chat": 8.0,
+              "i_fitts": 8.0, "i_hick": 8.0, "i_gulf": 8.0, "i_dark": 8.0, "p_pause": 10.0, "p_answer": 7.0, "b_lab": 7.0, "b_mini": 8.0,
+              "t_units12": 7.0, "m_scheme": 8.0, "m_fair": 7.0}
 
 if __name__ == "__main__":
     main(beats, HERE / "scene.py", HERE.parents[1] / "projects" / "hci-0", SECTIONS, MIN_WINDOW,
          {"title": beats.TITLE, "code": beats.CODE, "unit": beats.UNIT, "end_secs": 15.0,
           "badge": "HCI  ·  ETCS334  ·  COURSE OVERVIEW", "series": "HCI SERIES",
-          "yt_title": "Human Computer Interface (ETCS334) Syllabus Explained | Theory, Labs and Marks in 13 Minutes",
+          "yt_title": "Why Take HCI? Human Computer Interface (ETCS334) Introductory Session | What You Build, Marks, Why Enrol",
           "course_line": "Course: Human Computer Interface (ETCS334), B.Tech CSE Semester VIII, DES Pune University",
           "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {}, "shots": []},
-          "summary": "The complete ETCS334 Human Computer Interface syllabus for B.Tech CSE (Semester VIII) in one video: "
-                     "the course at a glance (1 lecture + 2 lab hours a week, 2 credits, 50 marks with no written end exam), "
-                     "the four theory units from human factors and Norman's principles to usability testing, WCAG 2.2 and "
-                     "human-AI interaction, the eight laboratory assignments with Figma, card sorting, heuristic evaluation, "
-                     "usability testing and accessibility audits, the mini project, the assessment scheme, the books, and "
-                     "three tips on how to score.",
+          "summary": "The introductory session for ETCS334 Human Computer Interface (B.Tech CSE, Semester VIII, Programme "
+                     "Elective VI). What HCI is, through things you use every day: Norman doors, the signifiers in a chat app, "
+                     "Fitts' law and the thumb zone, Hick's law and the 50-button remote, the gulf of execution on a microwave, "
+                     "and dark patterns. Then what you will build in the laboratory (user research, personas, card sorting, "
+                     "wireframes and a Figma prototype, a usability test with real metrics, an accessibility audit with WAVE, "
+                     "Lighthouse and NVDA, and a mini project), the four units in brief, how the 50 marks work with no written "
+                     "end exam, four reasons to enrol, and three tips to start tonight.",
           "hashtags": "#HCI #HumanComputerInteraction #UX #Usability #Syllabus #DESPU",
           "tags": "hci, human computer interface, human computer interaction, hci syllabus, etcs334, ux design course, usability engineering, "
                   "norman design principles, nielsen heuristics, wcag, figma prototyping, des pune university, btech cse"})

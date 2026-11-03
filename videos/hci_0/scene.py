@@ -1,4 +1,4 @@
-"""HCI course overview (ETCS334). Rendered by build.py (needs SCHEDULE / ENVELOPE env vars)."""
+"""HCI introductory session (ETCS334). Rendered by build.py (needs SCHEDULE / ENVELOPE env vars)."""
 import sys
 from pathlib import Path
 
@@ -10,7 +10,6 @@ from lesson import *  # noqa: E402,F401,F403
 PINK = UNIT_COLORS["HCI"]
 PURPLE = UNIT_COLORS["IV"]
 DARK = "#0F172A"
-UNIT_C = {"I": SAFE, "II": GOLD, "III": ACCENT, "IV": PURPLE}
 
 
 def chips(items, color, size=22, text_color=None, buff=0.22):
@@ -34,34 +33,28 @@ def titled_card(title, color, lines, w, h, title_size=26, line_size=21, line_col
     return VGroup(box, body.move_to(box))
 
 
-def phone(center, good=True, w=2.4, h=4.4):
-    """A phone mockup: clean and calm, or cluttered and loud."""
-    col = SAFE if good else KILL
-    body = RoundedRectangle(width=w, height=h, corner_radius=0.35, color=col, stroke_width=4, fill_color=PANEL, fill_opacity=1).move_to(center)
-    g = VGroup(body)
-    if good:
-        g.add(RoundedRectangle(width=w - 0.5, height=0.6, corner_radius=0.1, color=PANEL_EDGE, fill_color="#2a3140", fill_opacity=1).move_to(center + UP * 1.5))
-        for i in range(3):
-            g.add(RoundedRectangle(width=w - 0.6, height=0.55, corner_radius=0.12, color=col, fill_color=col, fill_opacity=0.25, stroke_width=2).move_to(center + UP * (0.5 - i * 0.8)))
-        g.add(RoundedRectangle(width=w - 0.8, height=0.6, corner_radius=0.3, color=col, fill_color=col, fill_opacity=1, stroke_width=0).move_to(center + DOWN * 1.7))
-        g.add(label("Pay", 20, DARK, "BOLD").move_to(center + DOWN * 1.7))
+def phone_frame(center, w=2.6, h=5.0, color=PANEL_EDGE):
+    return RoundedRectangle(width=w, height=h, corner_radius=0.35, color=color, stroke_width=4, fill_color=PANEL, fill_opacity=1).move_to(center)
+
+
+def door(center, handle, label_text, color):
+    """A door: a flat plate (push) or a pull handle; the sign on it."""
+    d = RoundedRectangle(width=1.6, height=3.4, corner_radius=0.08, color=color, stroke_width=4, fill_color="#3b2f2f", fill_opacity=1).move_to(center)
+    g = VGroup(d)
+    if handle:
+        g.add(RoundedRectangle(width=0.14, height=0.9, corner_radius=0.07, color=GOLD, fill_color=GOLD, fill_opacity=1, stroke_width=0).move_to(center + RIGHT * 0.5))
     else:
-        rng = np.random.RandomState(3)
-        for i in range(14):
-            x = rng.uniform(-w / 2 + 0.35, w / 2 - 0.35); y = rng.uniform(-h / 2 + 0.3, h / 2 - 0.3)
-            ww = rng.uniform(0.3, 1.1); hh = rng.uniform(0.18, 0.45)
-            c = [KILL, GOLD, ACCENT, "#f97316", "#a3e635"][i % 5]
-            g.add(Rectangle(width=ww, height=hh, color=c, fill_color=c, fill_opacity=0.7, stroke_width=1).move_to(center + np.array([x, y, 0])))
-        g.add(label("✕", 22, TEXT, "BOLD").move_to(center + UP * 1.8 + RIGHT * 0.85))
+        g.add(Rectangle(width=0.5, height=0.5, color=TEXT, fill_color="#94A3B8", fill_opacity=1, stroke_width=1).move_to(center + RIGHT * 0.4))
+    if label_text:
+        g.add(VGroup(Rectangle(width=0.9, height=0.34, color=TEXT, fill_color=TEXT, fill_opacity=1, stroke_width=0),
+                     label(label_text, 16, DARK, "BOLD")).move_to(center + UP * 1.15))
     return g
 
 
 class Video(Lesson):
-    NEXT = ("Unit I", "Foundations of HCI and human factors")
+    NEXT = ("Lecture 1", "Foundations of HCI: the human")
 
-    # ------------------------------------------------------------ small layout helpers
     def screen(self, head_text, color, sub=None):
-        """Clear the stage and put a unit / section header at the top; rows then stack under it."""
         self.clear(run_time=0.4)
         head = chip(head_text, color, 26, DARK if color in (GOLD, SAFE) else TEXT).move_to(STAGE + UP * 2.55)
         self.show(head, anim=GrowFromCenter, run_time=0.5)
@@ -69,423 +62,453 @@ class Video(Lesson):
         self.y = 1.75
         if sub:
             t = label(sub, 30, TEXT, "BOLD").move_to(STAGE + UP * self.y)
+            if t.width > 13.0:
+                t.scale_to_fit_width(13.0)
             self.show(t, run_time=0.4)
             self.y -= 0.85
         return head
 
-    def row(self, mob, gap=0.62, run_time=0.9, lag=True):
-        """Place a row at the current y and reveal it left to right."""
+    def row(self, mob, gap=0.62, run_time=0.9):
         mob.move_to(STAGE + UP * self.y)
         if mob.width > 13.4:
             mob.scale_to_fit_width(13.4)
         self.stage.add(mob)
         parts = (list(mob[0]) + [mob[1]]) if getattr(mob, "is_flow", False) else list(mob)
-        if lag and len(parts) > 1:
+        if len(parts) > 1:
             self.go(LaggedStart(*[FadeIn(p, shift=UP * 0.15) for p in parts], lag_ratio=0.25), run_time=run_time)
         else:
             self.go(FadeIn(mob, shift=UP * 0.15), run_time=0.5)
         self.y -= gap
 
-    def case(self, text, y=None):
-        c = VGroup(chip("CASE STUDY", GOLD, 20, DARK), label(text, 24, TEXT)).arrange(RIGHT, buff=0.3)
-        if c.width > 12.8:
-            c.scale_to_fit_width(12.8)
-        box = card(c.width + 0.6, c.height + 0.45, edge=GOLD)
-        g = VGroup(box, c.move_to(box)).move_to(STAGE + UP * (y if y is not None else self.y))
-        self.show(g, run_time=0.6, shift=UP * 0.2)
+    def punch(self, text, color=GOLD, size=30, y=-2.4):
+        c = chip(text, color, size, DARK if color in (GOLD, SAFE) else TEXT).move_to(STAGE + UP * y)
+        if c.width > 13.2:
+            c.scale_to_fit_width(13.2)
+        self.show(c, anim=GrowFromCenter, run_time=0.5)
         self.sfx("chime")
-        self.y -= 0.9
-        return g
+        return c
 
     # ------------------------------------------------------------ hook
-    def b_hook_apps(self, b):
-        p1 = phone(STAGE + LEFT * 3.2 + UP * 0.2, True)
-        p2 = phone(STAGE + RIGHT * 3.2 + UP * 0.2, False)
-        self.show(p1, run_time=0.6)
-        self.show(p2, run_time=0.6)
-        l1 = chip("effortless", SAFE, 26, DARK).next_to(p1, DOWN, buff=0.3)
-        l2 = chip("throw the phone", KILL, 26).next_to(p2, DOWN, buff=0.3)
-        self.show(l1, l2, run_time=0.5)
+    def b_hook_angry(self, b):
+        p1 = phone_frame(STAGE + LEFT * 4.2 + UP * 0.2, color=KILL)
+        wrong = VGroup(RoundedRectangle(width=1.9, height=0.5, corner_radius=0.1, color=SAFE, fill_color=SAFE, fill_opacity=0.3).move_to(p1.get_center() + UP * 0.9),
+                       RoundedRectangle(width=1.9, height=0.5, corner_radius=0.1, color=KILL, fill_color=KILL, fill_opacity=0.9).move_to(p1.get_center() + UP * 0.2),
+                       label("Delete all", 16, TEXT, "BOLD").move_to(p1.get_center() + UP * 0.2), label("Save", 16, TEXT).move_to(p1.get_center() + UP * 0.9))
+        p2 = phone_frame(STAGE + UP * 0.2, color=KILL)
+        form = VGroup(*[RoundedRectangle(width=1.9, height=0.4, corner_radius=0.08, color=PANEL_EDGE, fill_color="#2a3140", fill_opacity=1).move_to(p2.get_center() + UP * (1.3 - i * 0.6)) for i in range(4)],
+                      chip("Session expired. Start again.", KILL, 13).move_to(p2.get_center() + DOWN * 1.5))
+        kiosk = VGroup(RoundedRectangle(width=3.0, height=4.2, corner_radius=0.2, color=KILL, stroke_width=4, fill_color=PANEL, fill_opacity=1).move_to(STAGE + RIGHT * 4.2 + UP * 0.2),
+                       Rectangle(width=2.2, height=1.4, color=ACCENT, fill_color="#0b2a4a", fill_opacity=1).move_to(STAGE + RIGHT * 4.2 + UP * 1.2),
+                       label("INSERT COINS", 16, TEXT, "BOLD").move_to(STAGE + RIGHT * 4.2 + UP * 1.2),
+                       label("₹50 ... gone", 20, KILL, "BOLD").move_to(STAGE + RIGHT * 4.2 + DOWN * 0.6))
+        self.show(p1, wrong, run_time=0.6)
+        self.show(p2, form, run_time=0.6)
+        self.show(kiosk, run_time=0.6)
+        self.sfx("kill")
         self.at(b, 1)
-        mid = VGroup(label("same hardware", 26, MUTED), label("same user", 26, MUTED), label("different interface", 32, GOLD, "BOLD")
-                     ).arrange(DOWN, buff=0.2).move_to(STAGE + UP * 0.2)
-        self.show(mid, run_time=0.6)
-        self.sfx("chime")
+        self.punch("the hardware was fine. the design failed you", KILL, 30, -2.7)
 
-    def b_hook_hci(self, b):
+    def b_hook_subject(self, b):
         self.clear(run_time=0.4)
-        big = label("HCI", 130, PINK, "BOLD").move_to(STAGE + UP * 0.9)
+        q = VGroup(label("joy", 56, SAFE, "BOLD"), label("or", 36, MUTED), label("torture", 56, KILL, "BOLD")).arrange(RIGHT, buff=0.5).move_to(STAGE + UP * 1.6)
+        self.show(q, anim=GrowFromCenter, run_time=0.6)
+        self.sfx("pop")
+        self.at(b, 1)
+        big = label("HCI", 120, PINK, "BOLD").move_to(STAGE + DOWN * 0.3)
+        full = label("Human Computer Interface", 36, TEXT, "BOLD").next_to(big, DOWN, buff=0.1)
         self.show(big, anim=GrowFromCenter, run_time=0.7)
         self.sfx("whoosh")
-        full = label("Human Computer Interface", 40, TEXT, "BOLD").next_to(big, DOWN, buff=0.2)
-        self.show(full, run_time=0.5)
-        self.at(b, 1)
-        fl = flow(["design", "prototype", "test"], GOLD, 28, 0.6).move_to(STAGE + DOWN * 1.9)
-        self.show(fl, run_time=0.7)
-        self.sfx("pop")
+        self.show(full, run_time=0.4)
+        el = chip("Programme Elective VI  ·  ETCS334", GOLD, 24, DARK).move_to(STAGE + DOWN * 2.6)
+        self.show(el, run_time=0.4)
 
     def b_hook_promise(self, b):
         self.clear(run_time=0.4)
-        t = chip("the whole syllabus in 13 minutes", PINK, 32).move_to(STAGE + UP * 2.0)
+        t = chip("the next 13 minutes", PINK, 30).move_to(STAGE + UP * 2.1)
         self.show(t, anim=GrowFromCenter, run_time=0.5)
-        self.at(b, 1)
         items = VGroup(*[VGroup(chip(str(i + 1), ACCENT, 26), label(x, 32, TEXT, "BOLD")).arrange(RIGHT, buff=0.3) for i, x in enumerate(
-            ["Four theory units", "Eight lab assignments and a mini project", "How you are assessed", "How to score well"])])
-        items.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(STAGE + DOWN * 0.4)
+            ["What HCI is, through things you use every day", "What you will build in this course", "How you will be marked", "Why it is the most useful elective"])])
+        items.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(STAGE + DOWN * 0.3)
         self.stage.add(items)
-        self.go(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.3) for r in items], lag_ratio=0.4), run_time=1.8)
+        self.go(FadeIn(items[0], shift=RIGHT * 0.3), run_time=0.5)
+        self.at(b, 1)
+        self.go(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.3) for r in items[1:]], lag_ratio=0.4), run_time=1.5)
         self.sfx("pop")
 
     def b_syllabus(self, b):
-        self.syllabus(b, ["The course at a glance", "The four units", "Laboratory and mini project", "Assessment and books"],
+        self.syllabus(b, ["What HCI is", "Five ideas you can use tomorrow", "What you will build", "How marks work, and why to enrol"],
                       unit_text="ETCS334  ·  HCI")
 
     def b_exam(self, b):
-        self.exam_star(b, star="★  No written end exam")
+        self.exam_star(b, text="A one-minute test, at the end", star="★  One-minute test at the end")
 
-    # ------------------------------------------------------------ at a glance
-    def b_g_card(self, b):
+    # ------------------------------------------------------------ what HCI is
+    def b_w_meet(self, b):
         self.unsay()
-        self.screen("THE COURSE AT A GLANCE", PINK)
-        rows = [("Course code", "ETCS334"), ("Course title", "Human Computer Interface (HCI)"), ("Programme", "B Tech (CSE)  ·  Semester VIII"), ("Pattern", "2024")]
-        g = VGroup(*[VGroup(label(k, 24, MUTED, "BOLD"), label(v, 28, TEXT, "BOLD")).arrange(RIGHT, buff=0.4) for k, v in rows])
-        for r in g:
-            r[0].set_x(STAGE[0] - 4.8, LEFT); r[1].set_x(STAGE[0] - 1.6, LEFT)
-        g.arrange(DOWN, buff=0.35, aligned_edge=LEFT, center=False)
-        for i, r in enumerate(g):
-            r.set_y(STAGE[1] + 1.5 - i * 0.7)
-        box = card(11.0, 3.6).move_to(STAGE + UP * 0.45)
-        self.show(box, run_time=0.4)
-        self.stage.add(g)
-        self.go(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.3) for r in g], lag_ratio=0.3), run_time=1.6)
+        self.screen("WHAT HCI IS", PINK)
+        human = VGroup(Circle(0.35, color=TEXT, fill_color=TEXT, fill_opacity=1, stroke_width=0).shift(UP * 0.7),
+                       RoundedRectangle(width=1.1, height=1.3, corner_radius=0.3, color=TEXT, fill_color=TEXT, fill_opacity=1, stroke_width=0).shift(DOWN * 0.35),
+                       label("human", 22, MUTED).shift(DOWN * 1.5)).move_to(STAGE + LEFT * 4.5 + UP * 0.4)
+        iface = VGroup(RoundedRectangle(width=3.4, height=2.4, corner_radius=0.2, color=PINK, stroke_width=4, fill_color=PANEL, fill_opacity=1),
+                       VGroup(*[chip(t, PINK, 16) for t in ["screen", "buttons", "voice", "gestures"]]).arrange_in_grid(rows=2, buff=0.15),
+                       label("the interface", 22, PINK, "BOLD").shift(DOWN * 1.5)).move_to(STAGE + UP * 0.4)
+        machine = VGroup(RoundedRectangle(width=1.6, height=1.9, corner_radius=0.15, color=ACCENT, stroke_width=4, fill_color="#0b2a4a", fill_opacity=1),
+                         VGroup(*[Rectangle(width=1.1, height=0.12, color=ACCENT, fill_color=ACCENT, fill_opacity=0.8, stroke_width=0).shift(UP * (0.5 - 0.3 * i)) for i in range(4)]),
+                         label("machine", 22, MUTED).shift(DOWN * 1.5)).move_to(STAGE + RIGHT * 4.5 + UP * 0.4)
+        a1 = DoubleArrow(human.get_right() + RIGHT * 0.1, iface.get_left() + LEFT * 0.1, color=MUTED, stroke_width=4, buff=0.1, max_tip_length_to_length_ratio=0.15)
+        a2 = DoubleArrow(iface.get_right() + RIGHT * 0.1, machine.get_left() + LEFT * 0.1, color=MUTED, stroke_width=4, buff=0.1, max_tip_length_to_length_ratio=0.15)
+        self.show(human, machine, run_time=0.5)
+        self.show(iface, anim=GrowFromCenter, run_time=0.6)
+        self.show(a1, a2, run_time=0.4)
         self.at(b, 1)
-        pec = chip("Programme Elective Course (PEC)  ·  Programme Elective VI", GOLD, 26, DARK).move_to(STAGE + DOWN * 2.1)
-        self.show(pec, anim=GrowFromCenter, run_time=0.5)
-        self.sfx("pop")
+        self.punch("does this design fit the way humans actually think and behave?", GOLD, 28, -2.4)
 
-    def b_g_scheme(self, b):
-        self.screen("TEACHING SCHEME  ·  PER WEEK", PINK)
-        cols = [("Lecture", "1", ACCENT), ("Tutorial", "–", PANEL_EDGE), ("Laboratory", "2", SAFE), ("Project", "–", PANEL_EDGE), ("Internship", "–", PANEL_EDGE)]
-        cards = VGroup(*[VGroup(card(2.2, 2.0, edge=c), VGroup(label(n, 20, MUTED, "BOLD"), label(v, 56, TEXT if v != "–" else MUTED, "BOLD")).arrange(DOWN, buff=0.1))
-                         for n, v, c in cols])
-        for cd in cards:
-            cd[1].move_to(cd[0])
-        cards.arrange(RIGHT, buff=0.3).move_to(STAGE + UP * 0.7)
-        self.stage.add(cards)
-        self.go(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cards], lag_ratio=0.2), run_time=1.4)
-        cr = chip("Total credits: 2", GOLD, 32, DARK).move_to(STAGE + DOWN * 1.1)
-        self.show(cr, anim=GrowFromCenter, run_time=0.5)
-        self.sfx("pop")
+    def b_w_three(self, b):
+        self.screen("THREE FIELDS, ONE SUBJECT", PINK)
+        c = STAGE + DOWN * 0.3
+        circles = VGroup(Circle(1.9, color=ACCENT, fill_color=ACCENT, fill_opacity=0.18, stroke_width=4).move_to(c + LEFT * 1.3 + UP * 0.6),
+                         Circle(1.9, color=GOLD, fill_color=GOLD, fill_opacity=0.18, stroke_width=4).move_to(c + RIGHT * 1.3 + UP * 0.6),
+                         Circle(1.9, color=SAFE, fill_color=SAFE, fill_opacity=0.18, stroke_width=4).move_to(c + DOWN * 1.4))
+        labels = VGroup(VGroup(label("Computer science", 24, ACCENT, "BOLD"), label("builds the system", 18, MUTED)).arrange(DOWN, buff=0.05).move_to(c + LEFT * 2.6 + UP * 1.2),
+                        VGroup(label("Psychology", 24, GOLD, "BOLD"), label("explains the user", 18, MUTED)).arrange(DOWN, buff=0.05).move_to(c + RIGHT * 2.6 + UP * 1.2),
+                        VGroup(label("Design", 24, SAFE, "BOLD"), label("shapes what the user sees", 18, MUTED)).arrange(DOWN, buff=0.05).move_to(c + DOWN * 2.3))
+        self.show(circles[0], labels[0], run_time=0.5)
         self.at(b, 1)
-        bar = VGroup(Rectangle(width=3.6, height=0.55, color=ACCENT, fill_color=ACCENT, fill_opacity=1, stroke_width=0),
-                     Rectangle(width=7.2, height=0.55, color=SAFE, fill_color=SAFE, fill_opacity=1, stroke_width=0)).arrange(RIGHT, buff=0).move_to(STAGE + DOWN * 2.2)
-        lab = VGroup(label("1 h lecture", 20, TEXT).move_to(bar[0]), label("2 h laboratory  ·  two thirds of the course", 20, DARK, "BOLD").move_to(bar[1]))
-        self.show(bar, lab, run_time=0.6)
+        self.show(circles[1], labels[1], run_time=0.5)
+        self.show(circles[2], labels[2], run_time=0.5)
+        hci = label("HCI", 40, PINK, "BOLD").move_to(c + UP * 0.1)
+        self.show(hci, anim=GrowFromCenter, run_time=0.5)
+        self.sfx("chime")
 
-    def b_g_marks(self, b):
-        self.screen("ASSESSMENT  ·  50 MARKS", PINK)
-        bar = VGroup(Rectangle(width=6.2, height=1.1, color=ACCENT, fill_color=ACCENT, fill_opacity=1, stroke_width=0),
-                     Rectangle(width=6.2, height=1.1, color=GOLD, fill_color=GOLD, fill_opacity=1, stroke_width=0)).arrange(RIGHT, buff=0.05).move_to(STAGE + UP * 1.1)
-        t = VGroup(label("Continuous assessment (CAT)  ·  25", 22, TEXT, "BOLD").move_to(bar[0]), label("End oral exam  ·  25", 22, DARK, "BOLD").move_to(bar[1]))
-        self.show(bar, run_time=0.6)
-        self.show(t, run_time=0.4)
-        self.sfx("pop")
-        note = label("the oral is based on your laboratory assignments and the mini project", 24, GOLD).move_to(STAGE + UP * 0.1)
-        self.show(note, run_time=0.5)
+    def b_w_blame(self, b):
+        self.screen("THE SHIFT IN THINKING", PINK)
+        old = VGroup(label("user error", 60, MUTED, "BOLD")).move_to(STAGE + UP * 0.9)
+        self.show(old, run_time=0.5)
         self.at(b, 1)
-        na = VGroup(*[chip(x, KILL, 24) for x in ["Term-end theory exam: NA", "Term-end practical exam: NA", "CAL: NA"]]).arrange(RIGHT, buff=0.3).move_to(STAGE + DOWN * 1.4)
-        self.stage.add(na)
-        self.go(LaggedStart(*[GrowFromCenter(c) for c in na], lag_ratio=0.3), run_time=1.0)
+        strike = Line(old.get_left() + LEFT * 0.2, old.get_right() + RIGHT * 0.2, color=KILL, stroke_width=8)
+        self.show(strike, anim=Create, run_time=0.4)
         self.sfx("kill")
-        strike = VGroup(*[Line(c.get_left(), c.get_right(), color=TEXT, stroke_width=4) for c in na])
-        self.show(strike, anim=Create, run_time=0.5)
-
-    def b_g_prereq(self, b):
-        self.screen("PREREQUISITES", PINK)
-        pre = VGroup(*[titled_card(t, ACCENT, [s], 4.0, 1.6, 24, 20) for t, s in
-                       [("Programming", "fundamentals"), ("Web technologies", "HTML, CSS, JavaScript"), ("Software", "engineering")]]).arrange(RIGHT, buff=0.4).move_to(STAGE + UP * 0.6)
-        self.stage.add(pre)
-        self.go(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in pre], lag_ratio=0.3), run_time=1.3)
-        self.at(b, 1)
-        ticks = VGroup(*[label("✓", 44, SAFE, "BOLD").next_to(c, DOWN, buff=0.25) for c in pre])
-        self.stage.add(ticks)
-        self.go(LaggedStart(*[GrowFromCenter(t) for t in ticks], lag_ratio=0.3), run_time=0.9)
+        new = label("design error", 72, GOLD, "BOLD").move_to(STAGE + DOWN * 0.8)
+        self.show(new, anim=GrowFromCenter, run_time=0.6)
         self.sfx("chime")
-        done = label("you already have all three", 28, SAFE, "BOLD").move_to(STAGE + DOWN * 2.0)
-        self.show(done, run_time=0.4)
+        n = label("the heart of the subject", 24, MUTED).move_to(STAGE + DOWN * 2.2)
+        self.show(n, run_time=0.4)
 
-    # ------------------------------------------------------------ objectives and outcomes
-    def b_o_obj(self, b):
-        self.screen("COURSE OBJECTIVES", PINK)
-        items = ["Fundamentals, evolution and human factors of HCI", "Interaction design principles, UI patterns and prototyping",
-                 "Usability engineering, user research and heuristic evaluation", "Usability testing, metrics, accessibility, AI-based and multimodal interfaces"]
-        rows = VGroup(*[VGroup(chip(str(i + 1), PINK, 24), label(t, 27, TEXT)).arrange(RIGHT, buff=0.3) for i, t in enumerate(items)])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(STAGE + UP * 0.2)
-        if rows.width > 13.0:
-            rows.scale_to_fit_width(13.0)
-        self.stage.add(rows)
-        self.go(FadeIn(rows[0], shift=RIGHT * 0.3), run_time=0.5)
-        self.at(b, 1)
-        span = self.phrase_len(b, 1)
-        for i in range(1, 4):
-            self.until(b["phrases"][1]["start"] + span * (0.05 + 0.3 * (i - 1)))
-            self.go(FadeIn(rows[i], shift=RIGHT * 0.3), run_time=0.5)
-            self.sfx("pop", -0.3)
+    # ------------------------------------------------------------ five ideas
+    def idea(self, n, title):
+        self.screen(f"IDEA {n}  ·  {title.upper()}", GOLD)
 
-    def b_o_co(self, b):
-        self.screen("COURSE OUTCOMES", PINK)
-        items = [("CO1", "Explain HCI concepts, human factors, Norman's principles", "Level 2"),
-                 ("CO2", "Apply design principles, UI patterns, prototyping", "Level 3 + 6"),
-                 ("CO3", "Analyse user needs; evaluate with heuristics and ISO 9241", "Level 4 + 5"),
-                 ("CO4", "Evaluate usability and accessibility: testing, metrics, WCAG, AI interfaces", "Level 5")]
-        rows = VGroup(*[VGroup(chip(c, ACCENT, 22), label(t, 25, TEXT), chip(l, PANEL_EDGE, 18)).arrange(RIGHT, buff=0.3) for c, t, l in items])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(STAGE + UP * 0.2)
-        if rows.width > 13.4:
-            rows.scale_to_fit_width(13.4)
-        self.stage.add(rows)
-        self.go(LaggedStart(FadeIn(rows[0], shift=RIGHT * 0.3), FadeIn(rows[1], shift=RIGHT * 0.3), lag_ratio=0.6), run_time=1.2)
+    def b_i_door(self, b):
+        self.idea(1, "affordances and signifiers")
+        d1 = door(STAGE + LEFT * 4.0 + UP * 0.3, False, "", SAFE)
+        d2 = door(STAGE + LEFT * 1.3 + UP * 0.3, True, "", SAFE)
+        l1 = label("flat plate: push", 22, SAFE, "BOLD").next_to(d1, DOWN, buff=0.25)
+        l2 = label("handle: pull", 22, SAFE, "BOLD").next_to(d2, DOWN, buff=0.25)
+        self.show(d1, l1, run_time=0.5)
+        self.show(d2, l2, run_time=0.5)
         self.at(b, 1)
-        self.go(FadeIn(rows[2], shift=RIGHT * 0.3), run_time=0.5)
-        self.until(b["phrases"][1]["start"] + self.phrase_len(b, 1) * 0.5)
-        self.go(FadeIn(rows[3], shift=RIGHT * 0.3), run_time=0.5)
+        d3 = door(STAGE + RIGHT * 2.6 + UP * 0.3, True, "PUSH", KILL)
+        l3 = label("handle, but push: a Norman door", 22, KILL, "BOLD").next_to(d3, DOWN, buff=0.25)
+        self.show(d3, l3, run_time=0.6)
+        self.sfx("kill")
+        ouch = label("✗", 60, KILL, "BOLD").next_to(d3, RIGHT, buff=0.4)
+        self.show(ouch, anim=GrowFromCenter, run_time=0.3)
+        n = label("your apps are full of them", 24, MUTED).move_to(STAGE + DOWN * 2.6)
+        self.show(n, run_time=0.4)
+
+    def b_i_chat(self, b):
+        self.clear(run_time=0.4)
+        self.idea(1, "signifiers in a chat app")
+        ph = phone_frame(STAGE + LEFT * 3.6 + UP * 0.2, 3.0, 5.2)
+        c = ph.get_center()
+        bub = VGroup(RoundedRectangle(width=2.0, height=0.7, corner_radius=0.2, color=SAFE, fill_color="#14532d", fill_opacity=1, stroke_width=0).move_to(c + UP * 1.2 + RIGHT * 0.3),
+                     label("See you at 5", 15, TEXT).move_to(c + UP * 1.3 + RIGHT * 0.3), label("✓✓", 15, ACCENT, "BOLD").move_to(c + UP * 1.0 + RIGHT * 1.0))
+        bar = VGroup(RoundedRectangle(width=1.7, height=0.5, corner_radius=0.25, color=PANEL_EDGE, fill_color="#2a3140", fill_opacity=1).move_to(c + DOWN * 2.0 + LEFT * 0.35),
+                     label("Message", 13, MUTED).move_to(c + DOWN * 2.0 + LEFT * 0.35),
+                     Circle(0.26, color=SAFE, fill_color=SAFE, fill_opacity=1, stroke_width=0).move_to(c + DOWN * 2.0 + RIGHT * 0.95), label("➤", 16, DARK, "BOLD").move_to(c + DOWN * 2.0 + RIGHT * 0.95),
+                     label("🎤", 18).move_to(c + DOWN * 2.0 + RIGHT * 0.45) if False else Circle(0.16, color=MUTED, fill_color=MUTED, fill_opacity=1, stroke_width=0).move_to(c + DOWN * 2.0 + RIGHT * 0.5))
+        self.show(ph, bub, bar, run_time=0.7)
+        notes = VGroup(VGroup(label("➤  paper plane", 24, TEXT, "BOLD"), label("signifies send", 20, MUTED)).arrange(RIGHT, buff=0.3),
+                       VGroup(label("●  microphone", 24, TEXT, "BOLD"), label("signifies record", 20, MUTED)).arrange(RIGHT, buff=0.3),
+                       VGroup(label("✓✓  blue ticks", 24, ACCENT, "BOLD"), label("feedback: delivered, read", 20, MUTED)).arrange(RIGHT, buff=0.3)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(STAGE + RIGHT * 2.8 + UP * 0.8)
+        self.stage.add(notes)
+        self.go(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.3) for r in notes], lag_ratio=0.4), run_time=1.4)
+        self.at(b, 1)
+        pr = chips(["visibility", "feedback", "signifiers"], GOLD, 24).move_to(STAGE + RIGHT * 2.8 + DOWN * 1.2)
+        self.show(pr, run_time=0.6)
         self.sfx("pop")
+        n = label("3 of Norman's 6 principles, in one screen", 22, MUTED).move_to(STAGE + RIGHT * 2.8 + DOWN * 2.0)
+        self.show(n, run_time=0.4)
 
-    # ------------------------------------------------------------ units
-    def unit(self, roman, hours, title):
-        self.screen(f"UNIT {roman}  ·  {hours} HOURS", UNIT_C[roman], title)
-
-    def b_u1_intro(self, b):
-        self.unit("I", 4, "Foundations of HCI and human factors")
-        self.row(chips(["definition", "scope", "importance of HCI"], PANEL_EDGE))
+    def b_i_fitts(self, b):
+        self.idea(2, "Fitts' law")
+        f = VGroup(label("time to reach a target  ∝  distance  /  size", 30, TEXT, "BOLD")).move_to(STAGE + UP * 1.5)
+        self.show(f, run_time=0.5)
+        ph = phone_frame(STAGE + LEFT * 3.8 + DOWN * 0.7, 2.6, 4.6)
+        c = ph.get_center()
+        zones = VGroup(RoundedRectangle(width=2.3, height=1.4, corner_radius=0.2, color=SAFE, fill_color=SAFE, fill_opacity=0.5, stroke_width=0).move_to(c + DOWN * 1.4),
+                       RoundedRectangle(width=2.3, height=1.3, corner_radius=0.2, color=GOLD, fill_color=GOLD, fill_opacity=0.4, stroke_width=0).move_to(c + UP * 0.05),
+                       RoundedRectangle(width=2.3, height=1.2, corner_radius=0.2, color=KILL, fill_color=KILL, fill_opacity=0.4, stroke_width=0).move_to(c + UP * 1.4))
+        zl = VGroup(label("easy", 16, DARK, "BOLD").move_to(zones[0]), label("stretch", 16, DARK, "BOLD").move_to(zones[1]), label("hard", 16, TEXT, "BOLD").move_to(zones[2]))
         self.at(b, 1)
-        self.row(flow(["command line", "GUI", "touch", "voice", "AI-based"], SAFE, 22, 0.3))
+        self.show(ph, zones, zl, run_time=0.7)
+        self.sfx("pop")
+        notes = VGroup(VGroup(chip("most used buttons", SAFE, 22), label("at the bottom, under your thumb", 22, TEXT)).arrange(RIGHT, buff=0.3),
+                       VGroup(chip("the ad's close button", KILL, 22), label("tiny, on purpose", 22, TEXT)).arrange(RIGHT, buff=0.3)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(STAGE + RIGHT * 2.6 + DOWN * 0.3)
+        self.stage.add(notes)
+        self.go(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.3) for r in notes], lag_ratio=0.5), run_time=1.2)
+        ad = VGroup(RoundedRectangle(width=3.2, height=1.0, corner_radius=0.1, color=PANEL_EDGE, fill_color="#2a3140", fill_opacity=1), label("AD: Win a phone!", 18, GOLD, "BOLD"),
+                    label("×", 11, MUTED).shift(RIGHT * 1.45 + UP * 0.38)).move_to(STAGE + RIGHT * 2.6 + DOWN * 2.2)
+        self.show(ad, run_time=0.5)
 
-    def b_u1_human(self, b):
-        self.row(chips(["the human as information processor:", "perception", "memory", "mental models"], ACCENT))
+    def b_i_hick(self, b):
+        self.idea(3, "Hick's law")
+        f = label("more choices  →  longer to decide", 30, TEXT, "BOLD").move_to(STAGE + UP * 1.5)
+        self.show(f, run_time=0.5)
         self.at(b, 1)
-        self.row(chips(["human error:", "slips  (right plan, wrong action)", "mistakes  (wrong plan)"], KILL))
+        r1 = RoundedRectangle(width=2.2, height=4.4, corner_radius=0.3, color=KILL, stroke_width=4, fill_color="#1f2937", fill_opacity=1).move_to(STAGE + LEFT * 3.2 + DOWN * 0.7)
+        btns = VGroup(*[Circle(0.12, color=TEXT, fill_color="#9ca3af", fill_opacity=1, stroke_width=0).move_to(r1.get_center() + np.array([-0.75 + 0.375 * (i % 5), 1.8 - 0.4 * (i // 5), 0])) for i in range(50)])
+        r2 = RoundedRectangle(width=1.6, height=4.4, corner_radius=0.5, color=SAFE, stroke_width=4, fill_color="#1f2937", fill_opacity=1).move_to(STAGE + RIGHT * 2.4 + DOWN * 0.7)
+        b6 = VGroup(*[Circle(0.3, color=TEXT, fill_color="#e5e7eb", fill_opacity=1, stroke_width=0).move_to(r2.get_center() + np.array([-0.4 + 0.8 * (i % 2), 1.4 - 0.8 * (i // 2), 0])) for i in range(6)])
+        self.show(r1, btns, run_time=0.7)
+        l1 = label("50 buttons", 22, KILL, "BOLD").next_to(r1, DOWN, buff=0.2)
+        self.show(l1, run_time=0.3)
+        self.show(r2, b6, run_time=0.6)
+        l2 = label("6 buttons", 22, SAFE, "BOLD").next_to(r2, DOWN, buff=0.2)
+        self.show(l2, run_time=0.3)
+        self.sfx("pop")
+        n = VGroup(label("same job,", 24, MUTED), label("very different feeling", 24, TEXT, "BOLD"), label("fewer visible choices → faster users", 22, GOLD)).arrange(DOWN, buff=0.15)
+        n.move_to(STAGE + RIGHT * 5.2 + DOWN * 0.7)
+        self.show(n, run_time=0.5)
 
-    def b_u1_norman(self, b):
-        self.row(chips(["Norman:", "visibility", "feedback", "constraints", "mapping", "affordances", "signifiers"], GOLD, 20))
+    def b_i_gulf(self, b):
+        self.idea(4, "the gulf of execution")
+        goal = chip("goal: 2 minutes on high", SAFE, 26).move_to(STAGE + LEFT * 4.2 + UP * 1.2)
+        act = chip("action: which button?", KILL, 26).move_to(STAGE + RIGHT * 4.2 + UP * 1.2)
+        gap = DashedLine(goal.get_right() + RIGHT * 0.1, act.get_left() + LEFT * 0.1, color=MUTED, stroke_width=3, dash_length=0.15)
+        gl = label("the gulf", 22, MUTED).next_to(gap, UP, buff=0.1)
+        self.show(goal, run_time=0.4)
+        self.show(gap, gl, act, run_time=0.6)
         self.at(b, 1)
-        self.row(chips(["gulf of execution", "gulf of evaluation", "Fitts' law: pointing", "Hick's law: choosing"], ACCENT, 20))
-
-    def b_u1_case(self, b):
-        self.case("good and bad design in everyday products and public kiosks (ATM, ticket vending machine)")
-
-    def b_u2_intro(self, b):
-        self.unit("II", 4, "Interaction design and prototyping")
-        self.row(chips(["user-centred design", "design thinking"], PANEL_EDGE))
-        self.at(b, 1)
-        self.row(flow(["empathise", "define", "ideate", "prototype", "test"], GOLD, 22, 0.3))
-
-    def b_u2_rules(self, b):
-        self.row(chips(["Shneiderman's 8 golden rules", "UI design patterns", "layout · Gestalt · colour · typography"], ACCENT, 20))
-        self.at(b, 1)
-        self.row(chips(["information architecture:", "navigation design", "card sorting"], SAFE, 20))
-
-    def b_u2_proto(self, b):
-        self.row(chips(["design systems:", "Material Design", "Apple Human Interface Guidelines"], PANEL_EDGE, 20))
-        self.at(b, 1)
-        self.row(flow(["wireframes", "low-fidelity prototype", "high-fidelity prototype"], GOLD, 22, 0.4))
-
-    def b_u2_case(self, b):
-        self.case("wireframes and a low-fidelity prototype of a university student portal / mobile app")
-
-    def b_u3_intro(self, b):
-        self.unit("III", 4, "Usability engineering and user research")
-        self.row(chips(["usability engineering lifecycle"], PANEL_EDGE))
-        self.at(b, 1)
-        self.row(chips(["usability", "vs", "user experience (UX)"], ACCENT))
-
-    def b_u3_research(self, b):
-        self.row(chips(["user research:", "interviews", "surveys", "observation"], SAFE, 20))
-        self.at(b, 1)
-        self.row(chips(["affinity diagrams", "personas", "scenarios", "user journey maps"], GOLD, 20))
-
-    def b_u3_models(self, b):
-        self.row(chips(["hierarchical task analysis", "Keystroke-Level Model (KLM)"], ACCENT, 20))
-        self.at(b, 1)
-        self.row(chips(["Nielsen's 10 usability heuristics", "ISO 9241-11 definition of usability"], PANEL_EDGE, 20))
-
-    def b_u3_case(self, b):
-        self.row(chips(["heuristic evaluation with severity ratings", "cognitive walkthrough"], KILL, 20))
-        self.at(b, 1)
-        self.case("heuristic evaluation of a real app: e-commerce, banking or a government service")
-
-    def b_u4_intro(self, b):
-        self.unit("IV", 3, "Usability testing, accessibility and emerging interfaces")
-        self.at(b, 1)
-        self.row(chips(["usability testing:", "think-aloud protocol", "moderated / remote testing", "A/B testing"], ACCENT, 20))
-
-    def b_u4_metrics(self, b):
-        self.row(chips(["metrics:", "task success rate", "time on task", "error rate", "System Usability Scale (SUS)"], GOLD, 20))
-        self.at(b, 1)
-        self.row(chips(["accessibility:", "WCAG 2.2", "POUR principles", "assistive technologies", "inclusive design"], SAFE, 20))
-
-    def b_u4_ethics(self, b):
-        self.row(chips(["ethics:", "dark patterns", "privacy"], KILL, 20))
-        self.at(b, 1)
-        self.row(chips(["human-AI interaction:", "chatbot", "voice", "multimodal interfaces"], PURPLE, 20))
-
-    def b_u4_case(self, b):
-        self.case("accessibility evaluation of a website / usability evaluation of an AI chatbot")
-        self.at(b, 1)
-        tot = chip("theory: 15 hours across four units  (4 + 4 + 4 + 3)", PINK, 24).move_to(STAGE + DOWN * 3.0)
-        self.show(tot, anim=GrowFromCenter, run_time=0.5)
+        panel = VGroup(RoundedRectangle(width=5.2, height=2.6, corner_radius=0.2, color=KILL, stroke_width=3, fill_color="#1f2937", fill_opacity=1))
+        names = ["Popcorn", "Defrost", "Reheat", "Sensor", "Potato", "Clock", "Timer", "Power", "+30s", "Beverage", "Pizza", "Melt"]
+        for i, nm in enumerate(names):
+            panel.add(VGroup(RoundedRectangle(width=1.15, height=0.5, corner_radius=0.08, color=PANEL_EDGE, fill_color="#374151", fill_opacity=1, stroke_width=1),
+                             label(nm, 13, TEXT)).move_to(panel[0].get_center() + np.array([-1.8 + 1.2 * (i % 4), 0.85 - 0.75 * (i // 4), 0])))
+        panel.move_to(STAGE + LEFT * 3.0 + DOWN * 1.0)
+        good = VGroup(RoundedRectangle(width=3.6, height=2.6, corner_radius=0.2, color=SAFE, stroke_width=3, fill_color="#1f2937", fill_opacity=1),
+                      label("2:00", 54, TEXT, "BOLD").shift(UP * 0.4), VGroup(chip("+30 s", PANEL_EDGE, 16), chip("START", SAFE, 18)).arrange(RIGHT, buff=0.3).shift(DOWN * 0.7)
+                      ).move_to(STAGE + RIGHT * 3.6 + DOWN * 1.0)
+        self.show(panel, run_time=0.6)
+        self.sfx("kill")
+        self.show(good, run_time=0.6)
         self.sfx("chime")
+        self.show(label("12 buttons", 20, KILL, "BOLD").next_to(panel, DOWN, buff=0.15), label("good design closes the gulf", 20, SAFE, "BOLD").next_to(good, DOWN, buff=0.15), run_time=0.4)
 
-    # ------------------------------------------------------------ laboratory
-    def assignment_card(self, n, hours, title, lines, w=4.2, h=2.4):
-        body = VGroup(VGroup(chip(f"A{n}", PINK, 20), chip(f"{hours} h", PANEL_EDGE, 16)).arrange(RIGHT, buff=0.2),
-                      label(title, 22, TEXT, "BOLD"), *[label(t, 18, MUTED) for t in lines]).arrange(DOWN, buff=0.1)
-        if body.width > w - 0.3:
-            body.scale_to_fit_width(w - 0.3)
-        box = card(w, h)
-        return VGroup(box, body.move_to(box))
-
-    def b_l_tools(self, b):
-        self.screen("LABORATORY  ·  30 HOURS  ·  8 ASSIGNMENTS", SAFE)
-        big = label("where most of your marks are made", 30, GOLD, "BOLD").move_to(STAGE + UP * 1.4)
-        self.show(big, run_time=0.5)
-        self.at(b, 1)
-        tools = VGroup(*[chip(t, ACCENT, 22) for t in ["Figma / Balsamiq", "Google Forms", "card-sorting tool", "WAVE / Lighthouse", "NVDA screen reader"]]).arrange(RIGHT, buff=0.3)
-        tools.move_to(STAGE + DOWN * 0.2)
-        if tools.width > 13.4:
-            tools.scale_to_fit_width(13.4)
-        self.stage.add(tools)
-        self.go(LaggedStart(*[GrowFromCenter(t) for t in tools], lag_ratio=0.25), run_time=1.5)
-        self.sfx("pop")
-        note = label("real tools, the same ones used in industry", 22, MUTED).move_to(STAGE + DOWN * 1.2)
-        self.show(note, run_time=0.4)
-
-    def lab_screen(self, cards_spec, phrase_split):
-        self.screen("LABORATORY ASSIGNMENTS", SAFE)
-        cards = VGroup(*[self.assignment_card(*c) for c in cards_spec]).arrange(RIGHT, buff=0.35).move_to(STAGE + UP * 0.3)
+    def b_i_dark(self, b):
+        self.idea(5, "dark patterns")
+        t1 = VGroup(RoundedRectangle(width=4.0, height=1.5, corner_radius=0.15, color=KILL, stroke_width=3, fill_color="#1f2937", fill_opacity=1),
+                    VGroup(label("Offer ends in", 18, MUTED), label("00:59", 40, KILL, "BOLD"), label("resets when you reload", 15, GOLD)).arrange(DOWN, buff=0.05))
+        t2 = VGroup(RoundedRectangle(width=4.0, height=1.5, corner_radius=0.15, color=KILL, stroke_width=3, fill_color="#1f2937", fill_opacity=1),
+                    VGroup(VGroup(Square(0.32, color=TEXT, fill_color=ACCENT, fill_opacity=1, stroke_width=2), label("✓", 18, TEXT, "BOLD")).shift(LEFT * 1.4),
+                           label("Travel insurance  ₹299", 20, TEXT).shift(RIGHT * 0.3), label("pre-ticked for you", 15, GOLD).shift(DOWN * 0.5)))
+        t3 = VGroup(RoundedRectangle(width=4.0, height=1.5, corner_radius=0.15, color=KILL, stroke_width=3, fill_color="#1f2937", fill_opacity=1),
+                    VGroup(chip("YES, UPGRADE ME", SAFE, 18), label("no thanks", 13, "#4b5563")).arrange(DOWN, buff=0.15))
+        for t in (t1, t2, t3):
+            t[1].move_to(t[0])
+        cards = VGroup(t1, t2, t3).arrange(RIGHT, buff=0.4).move_to(STAGE + UP * 0.5)
         self.stage.add(cards)
-        return cards
-
-    def b_l_a123(self, b):
-        cards = self.lab_screen([(1, 2, "Exploring human factors", ["2 good + 2 bad designs", "Norman's principles", "reflection on human error"]),
-                                 (2, 4, "User research & task analysis", ["survey / interview, 5+ users", "affinity diagram, personas", "journey map, HTA, KLM"]),
-                                 (3, 2, "Information architecture", ["card sorting with 2–3 users", "sitemap", "navigation review"])], 2)
-        self.go(FadeIn(cards[0], shift=UP * 0.2), run_time=0.5)
-        self.until(b["phrases"][0]["start"] + self.phrase_len(b, 0) * 0.45)
-        self.go(FadeIn(cards[1], shift=UP * 0.2), run_time=0.5)
+        self.go(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cards], lag_ratio=0.4), run_time=1.6)
+        self.sfx("kill")
         self.at(b, 1)
-        self.go(FadeIn(cards[2], shift=UP * 0.2), run_time=0.5)
+        self.punch("built to trick you: learn to spot them, refuse to build them", KILL, 28, -1.6)
+
+    # ------------------------------------------------------------ practice
+    def b_p_intro(self, b):
+        self.question_card(b, ["One app that annoys you:", "name the exact moment it goes wrong.", "signifier?  size?  too many choices?  a gulf?"])
+
+    def b_p_pause(self, b):
+        self.pause_screen(b, "Pause and think of one")
+
+    def b_p_answer(self, b):
+        self.pause_over()
+        self.screen("YOU JUST DID A HEURISTIC EVALUATION", GOLD)
+        fl = flow(["missing signifier", "button too small", "too many choices", "a gulf"], KILL, 22, 0.3).move_to(STAGE + UP * 0.9)
+        self.show(fl[0], run_time=0.8)
+        self.at(b, 1)
+        m = chips(["Nielsen's 10 heuristics", "severity ratings", "cognitive walkthrough"], GOLD, 24).move_to(STAGE + DOWN * 0.6)
+        self.show(m, run_time=0.8)
         self.sfx("pop")
+        n = label("instinct → method", 30, TEXT, "BOLD").move_to(STAGE + DOWN * 1.9)
+        self.show(n, run_time=0.4)
 
-    def b_l_a45(self, b):
-        cards = self.lab_screen([(4, 6, "Wireframing & prototyping", ["lo-fi wireframes, 3+ screens", "hi-fi interactive Figma prototype", "golden rules, Gestalt, design system"]),
-                                 (5, 4, "Heuristic evaluation", ["Nielsen's 10 heuristics", "severity ratings", "cognitive walkthrough, redesign"])], 1)
-        self.go(FadeIn(cards[0], shift=UP * 0.2), run_time=0.5)
-        big = chip("the biggest assignment: 6 hours", GOLD, 22, DARK).next_to(cards[0], DOWN, buff=0.3)
-        self.show(big, run_time=0.4)
+    # ------------------------------------------------------------ what you will build
+    def b_b_lab(self, b):
+        self.screen("WHAT YOU WILL BUILD", SAFE)
+        bar = VGroup(Rectangle(width=3.6, height=1.0, color=ACCENT, fill_color=ACCENT, fill_opacity=1, stroke_width=0),
+                     Rectangle(width=7.2, height=1.0, color=SAFE, fill_color=SAFE, fill_opacity=1, stroke_width=0)).arrange(RIGHT, buff=0).move_to(STAGE + UP * 0.8)
+        t = VGroup(label("1 h lecture", 22, TEXT, "BOLD").move_to(bar[0]), label("2 h laboratory, every week", 22, DARK, "BOLD").move_to(bar[1]))
+        self.show(bar, t, run_time=0.7)
         self.at(b, 1)
-        self.go(FadeIn(cards[1], shift=UP * 0.2), run_time=0.5)
-        self.sfx("pop")
+        no = VGroup(label("sit and memorise", 40, MUTED, "BOLD")).move_to(STAGE + DOWN * 0.9)
+        self.show(no, run_time=0.4)
+        self.show(Line(no.get_left(), no.get_right(), color=KILL, stroke_width=6), anim=Create, run_time=0.3)
+        self.punch("you will design", SAFE, 40, -2.2)
 
-    def b_l_a67(self, b):
-        cards = self.lab_screen([(6, 4, "Usability testing", ["think-aloud test, 3–5 users", "task success, time on task", "error rate, SUS score"]),
-                                 (7, 4, "Accessibility evaluation", ["WAVE / Lighthouse + NVDA", "contrast, alt text, keyboard, ARIA", "compared against WCAG 2.2"])], 1)
-        self.go(FadeIn(cards[0], shift=UP * 0.2), run_time=0.5)
-        self.at(b, 1)
-        self.go(FadeIn(cards[1], shift=UP * 0.2), run_time=0.5)
-        self.sfx("pop")
+    def build_step(self, n, title, items, extra=None):
+        self.screen(f"YOU WILL BUILD  ·  STEP {n}", SAFE, title)
+        self.row(chips(items, ACCENT, 22), gap=0.8)
+        if extra:
+            self.at(self._b, 1)
+            self.row(chips(extra, GOLD, 22), gap=0.8)
 
-    def b_l_mini(self, b):
-        self.screen("ASSIGNMENT 8  ·  MINI PROJECT  ·  4 HOURS", GOLD)
-        d = label("design, prototype and evaluate an interface through the complete user-centred design process", 24, TEXT).move_to(STAGE + UP * 1.6)
-        if d.width > 13.0:
-            d.scale_to_fit_width(13.0)
-        self.show(d, run_time=0.5)
+    def b_b_research(self, b):
+        self._b = b
+        self.screen("YOU WILL BUILD  ·  STEP 1", SAFE, "Study real users")
+        self.row(flow(["interview 5 people", "personas", "journey map"], ACCENT, 22, 0.4), gap=0.9)
         self.at(b, 1)
-        topics = ["accessible e-governance app", "campus navigation app", "chatbot for student queries", "appointment app for elderly users",
-                  "voice interface for visually impaired users", "checkout redesign, A/B tested", "AR campus / museum guide", "banking app without dark patterns"]
-        cs = [chip(t, PURPLE, 20) for t in topics]
-        grid = VGroup(VGroup(*cs[:3]).arrange(RIGHT, buff=0.25), VGroup(*cs[3:6]).arrange(RIGHT, buff=0.25), VGroup(*cs[6:]).arrange(RIGHT, buff=0.25)
-                      ).arrange(DOWN, buff=0.3).move_to(STAGE + DOWN * 0.6)
+        self.row(chips(["keystroke-level model: predict an expert's task time"], GOLD, 22), gap=0.8)
+
+    def b_b_proto(self, b):
+        self.screen("YOU WILL BUILD  ·  STEP 2", SAFE, "Structure and prototype")
+        self.row(flow(["card sorting", "wireframes, 3+ screens", "clickable Figma prototype"], ACCENT, 22, 0.4), gap=0.9)
+        self.at(b, 1)
+        self.row(chips(["Shneiderman's golden rules", "a real design system"], GOLD, 22), gap=0.8)
+
+    def b_b_test(self, b):
+        self.screen("YOU WILL BUILD  ·  STEP 3", SAFE, "Test it with real users")
+        self.row(chips(["think-aloud usability test"], ACCENT, 24), gap=0.9)
+        grid = VGroup(*[VGroup(label(k, 18, MUTED), label(v, 30, TEXT, "BOLD")).arrange(DOWN, buff=0.05) for k, v in
+                        [("task success rate", "80 %"), ("time on task", "42 s"), ("error rate", "0.4"), ("SUS", "72")]]).arrange(RIGHT, buff=0.9).move_to(STAGE + DOWN * 0.6)
+        self.show(grid, run_time=0.8)
+        ex = label("(example numbers)", 16, MUTED).next_to(grid, DOWN, buff=0.15)
+        self.show(ex, run_time=0.2)
+        self.at(b, 1)
+        self.punch("numbers, not opinions", GOLD, 32, -2.3)
+
+    def b_b_access(self, b):
+        self.screen("YOU WILL BUILD  ·  STEP 4", SAFE, "Audit a public website for accessibility")
+        self.row(chips(["WAVE", "Lighthouse", "NVDA screen reader", "WCAG 2.2"], ACCENT, 22), gap=0.9)
+        self.at(b, 1)
+        issues = chips(["no alt text ✗", "low contrast ✗", "no keyboard access ✗", "missing ARIA labels ✗"], KILL, 20)
+        self.row(issues, gap=0.9)
+        self.punch("how many sites a blind user simply cannot use", GOLD, 26, -1.9)
+
+    def b_b_mini(self, b):
+        self.screen("YOU WILL BUILD  ·  THE MINI PROJECT", GOLD, "A complete user-centred design of something you choose")
+        self.at(b, 1)
+        topics = ["accessible e-governance app", "campus navigation app", "chatbot for student queries", "voice interface for visually impaired users", "banking app without dark patterns"]
+        cs = [chip(t, PURPLE, 22) for t in topics]
+        grid = VGroup(VGroup(*cs[:3]).arrange(RIGHT, buff=0.3), VGroup(*cs[3:]).arrange(RIGHT, buff=0.3)).arrange(DOWN, buff=0.35).move_to(STAGE + DOWN * 0.2)
         if grid.width > 13.2:
             grid.scale_to_fit_width(13.2)
         self.stage.add(grid)
-        self.go(LaggedStart(*[GrowFromCenter(c) for c in cs], lag_ratio=0.15), run_time=2.4)
+        self.go(LaggedStart(*[GrowFromCenter(c) for c in cs], lag_ratio=0.2), run_time=1.8)
         self.sfx("pop")
 
-    def b_l_flow(self, b):
-        self.screen("ONE DESIGN PROCESS", SAFE)
-        self.at(b, 1)
-        fl = flow(["research", "structure", "prototype", "evaluate", "test", "audit"], SAFE, 22, 0.3).move_to(STAGE + UP * 0.6)
-        self.show(fl, run_time=1.2)
-        nums = VGroup(*[label(t, 18, MUTED).next_to(c, DOWN, buff=0.15) for t, c in zip(["A1, A2", "A3", "A4", "A5", "A6", "A7"], fl[0])])
-        self.show(nums, run_time=0.4)
-        mp = chip("A8 mini project: all of it, on one interface", GOLD, 26, DARK).move_to(STAGE + DOWN * 1.2)
-        self.show(mp, anim=GrowFromCenter, run_time=0.5)
-        self.sfx("chime")
+    # ------------------------------------------------------------ units in brief
+    def units(self, b, first):
+        if first:
+            self.screen("THE THEORY BEHIND EVERY STEP", PINK)
+            self.unit_cards = VGroup(*[titled_card(f"UNIT {r}", c, lines, 3.1, 2.6, 26, 19) for r, c, lines in
+                                       [("I", SAFE, ["the human:", "perception, memory, error", "Norman's principles"]),
+                                        ("II", GOLD, ["interaction design", "design thinking", "visual design, prototyping"]),
+                                        ("III", ACCENT, ["usability engineering", "user research, task analysis", "heuristic evaluation"]),
+                                        ("IV", PURPLE, ["usability testing", "accessibility, ethics", "designing for AI"])]]).arrange(RIGHT, buff=0.3).move_to(STAGE + UP * 0.2)
+            self.stage.add(self.unit_cards)
+            self.go(FadeIn(self.unit_cards[0], shift=UP * 0.2), run_time=0.5)
+            self.at(b, 1)
+            self.go(FadeIn(self.unit_cards[1], shift=UP * 0.2), run_time=0.5)
+        else:
+            self.go(FadeIn(self.unit_cards[2], shift=UP * 0.2), run_time=0.5)
+            self.at(b, 1)
+            self.go(FadeIn(self.unit_cards[3], shift=UP * 0.2), run_time=0.5)
+            self.sfx("pop")
+            n = label("15 hours of theory, 30 hours of laboratory", 22, MUTED).move_to(STAGE + DOWN * 2.0)
+            self.show(n, run_time=0.4)
 
-    # ------------------------------------------------------------ assessment
-    def b_a_cat(self, b):
-        self.screen("CONTINUOUS ASSESSMENT FOR THEORY  ·  25 MARKS", ACCENT)
+    def b_t_units12(self, b):
+        self.units(b, True)
+
+    def b_t_units34(self, b):
+        self.units(b, False)
+
+    # ------------------------------------------------------------ marks
+    def b_m_scheme(self, b):
+        self.screen("MARKS  ·  50 IN TOTAL", PINK)
+        no = chip("no written end exam", KILL, 30).move_to(STAGE + UP * 1.5)
+        self.show(no, anim=GrowFromCenter, run_time=0.5)
+        self.sfx("pop")
         self.at(b, 1)
-        cs = VGroup(*[titled_card(n, ACCENT, [t, f"{m} marks"], 3.8, 2.0, 24, 22) for n, t, m in
-                      [("CAT 1", "Active learning", 10), ("CAT 2", "Task based learning", 10), ("CAT 3", "Presentation", 5)]]).arrange(RIGHT, buff=0.4).move_to(STAGE + UP * 0.5)
+        cs = VGroup(titled_card("Continuous assessment  ·  25", ACCENT, ["active learning  10", "task based learning  10", "presentation  5"], 6.0, 2.3, 24, 20),
+                    titled_card("End oral exam  ·  25", GOLD, ["based on your laboratory work", "and the mini project"], 6.0, 2.3, 24, 20)).arrange(RIGHT, buff=0.5).move_to(STAGE + DOWN * 0.6)
         self.stage.add(cs)
-        self.go(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cs], lag_ratio=0.35), run_time=1.5)
-        self.sfx("pop")
-        s = label("10 + 10 + 5 = 25", 30, GOLD, "BOLD").move_to(STAGE + DOWN * 1.4)
-        self.show(s, run_time=0.4)
+        self.go(FadeIn(cs[0], shift=UP * 0.2), run_time=0.5)
+        self.until(b["phrases"][1]["start"] + self.phrase_len(b, 1) * 0.55)
+        self.go(FadeIn(cs[1], shift=UP * 0.2), run_time=0.5)
 
-    def b_a_oral(self, b):
-        self.screen("END ORAL EXAM  ·  25 MARKS", GOLD)
-        c = titled_card("Oral / practical", GOLD, ["based on your laboratory assignments", "and the mini project"], 7.5, 2.0, 28, 24).move_to(STAGE + UP * 0.8)
-        self.show(c, run_time=0.6)
+    def b_m_fair(self, b):
+        self.screen("A FAIR WAY TO BE MARKED", PINK)
+        fl = flow(["do the assignments", "a portfolio", "the oral: a conversation about your designs"], GOLD, 24, 0.5).move_to(STAGE + UP * 0.6)
+        self.show(fl[0][0], run_time=0.4)
         self.at(b, 1)
-        bar = VGroup(Rectangle(width=5.0, height=0.8, color=ACCENT, fill_color=ACCENT, fill_opacity=1, stroke_width=0),
-                     Rectangle(width=5.0, height=0.8, color=GOLD, fill_color=GOLD, fill_opacity=1, stroke_width=0)).arrange(RIGHT, buff=0.05).move_to(STAGE + DOWN * 1.2)
-        t = VGroup(label("theory CAT  25", 22, TEXT, "BOLD").move_to(bar[0]), label("lab work  25", 22, DARK, "BOLD").move_to(bar[1]))
-        self.show(bar, t, run_time=0.6)
-        half = label("your lab work is half the course", 28, GOLD, "BOLD").move_to(STAGE + DOWN * 2.3)
-        self.show(half, run_time=0.4)
+        self.show(fl[1][0], fl[0][1], run_time=0.5)
+        self.show(fl[1][1], fl[0][2], run_time=0.5)
         self.sfx("chime")
+        self.punch("you are marked on what you build", SAFE, 30, -1.4)
 
-    # ------------------------------------------------------------ books
-    def b_b_text(self, b):
-        self.screen("TEXTBOOKS", PINK)
-        books = [("Human-Computer Interaction", "Dix, Finlay, Abowd, Beale", "3rd ed., Pearson"), ("Usability Engineering", "Jakob Nielsen", "Morgan Kaufmann"),
-                 ("Designing the User Interface", "Shneiderman et al.", "6th ed., Pearson")]
-        cs = VGroup(*[titled_card(t, PINK, [a, e], 4.2, 2.2, 23, 20) for t, a, e in books]).arrange(RIGHT, buff=0.35).move_to(STAGE + UP * 0.4)
-        self.stage.add(cs)
-        self.go(LaggedStart(FadeIn(cs[0], shift=UP * 0.2), FadeIn(cs[1], shift=UP * 0.2), lag_ratio=0.5), run_time=1.2)
-        self.at(b, 1)
-        self.go(FadeIn(cs[2], shift=UP * 0.2), run_time=0.5)
+    # ------------------------------------------------------------ why enrol
+    def reason(self, n, title, lines, color):
+        if n == 1:
+            self.screen("WHY PICK THIS ELECTIVE", PINK)
+            self.reasons = VGroup()
+        c = titled_card(f"{n}  ·  {title}", color, lines, 6.3, 2.0, 26, 20)
+        pos = [STAGE + LEFT * 3.3 + UP * 1.0, STAGE + RIGHT * 3.3 + UP * 1.0, STAGE + LEFT * 3.3 + DOWN * 1.4, STAGE + RIGHT * 3.3 + DOWN * 1.4][n - 1]
+        c.move_to(pos)
+        self.show(c, run_time=0.6, shift=UP * 0.2)
         self.sfx("pop")
+        return c
 
-    def b_b_ref(self, b):
-        self.screen("READING AND ONLINE", PINK)
-        refs = VGroup(chip("Don Norman · The Design of Everyday Things", GOLD, 22, DARK), chip("Steve Krug · Don't Make Me Think", GOLD, 22, DARK)).arrange(RIGHT, buff=0.4)
-        refs.move_to(STAGE + UP * 1.3)
-        self.stage.add(refs)
-        self.go(LaggedStart(*[GrowFromCenter(c) for c in refs], lag_ratio=0.4), run_time=1.0)
+    def b_r_career(self, b):
+        self.reason(1, "Career", ["every product company has UX roles;", "developers who understand users ship better software"], ACCENT)
         self.at(b, 1)
-        online = [chip(t, ACCENT, 20) for t in ["W3C WCAG 2.2", "NN/g: 10 usability heuristics", "Microsoft: human-AI interaction guidelines",
-                                                 "NPTEL · IIT Guwahati", "NPTEL · IIIT Hyderabad", "NPTEL · IIT Roorkee", "Coursera · human factors and usability"]]
-        grid = VGroup(VGroup(*online[:3]).arrange(RIGHT, buff=0.25), VGroup(*online[3:]).arrange(RIGHT, buff=0.25)).arrange(DOWN, buff=0.3).move_to(STAGE + DOWN * 0.7)
-        if grid.width > 13.4:
-            grid.scale_to_fit_width(13.4)
-        self.stage.add(grid)
-        self.go(LaggedStart(*[FadeIn(c, shift=UP * 0.15) for c in online], lag_ratio=0.15), run_time=1.6)
-        self.sfx("pop")
+        self.punch("HCI makes you both", GOLD, 24, -2.9)
 
-    # ------------------------------------------------------------ tips, recap
+    def b_r_ai(self, b):
+        self.reason(2, "AI changed the interface", ["chatbots, voice assistants, copilots", "need design more than ever"], PURPLE)
+
+    def b_r_portfolio(self, b):
+        self.reason(3, "A portfolio", ["a Figma prototype, a usability report,", "an accessibility audit: show them in an interview"], SAFE)
+
+    def b_r_fun(self, b):
+        self.reason(4, "It is fun", ["argue about buttons, test your friends,", "break websites, see the world differently"], GOLD)
+        self.at(b, 1)
+        self.punch("once you see bad design, you cannot unsee it", GOLD, 24, -2.9)
+
+    # ------------------------------------------------------------ tips, recap, close
     def b_tip1(self, b):
-        self.tip(b, 1, "Keep a design portfolio from week one", "surveys, affinity diagrams, personas, wireframes, Figma links: the oral is about this")
+        self.tip(b, 1, "The one-minute test, tonight", "any app, one task you have never done: count the taps, note every hesitation")
 
     def b_tip2(self, b):
-        self.tip(b, 2, "Start the mini project early, reuse your assignments", "research (A2) · prototype (A4) · evaluation (A5) · test (A6)")
+        self.tip(b, 2, "Install Figma this week", "free education plan for students; we start wireframing early")
 
     def b_tip3(self, b):
-        self.tip(b, 3, "Learn the vocabulary by heart", "Norman's 6 · Shneiderman's 8 · Nielsen's 10 · POUR · SUS · WCAG")
+        self.tip(b, 3, "Keep a design diary from day one", "every bad interface you meet, one line each: gold for your mini project")
 
     def b_recap(self, b):
-        self.recap(b, ["2 credits: 1 lecture + 2 lab hours a week", "4 units: human factors to AI interfaces", "8 lab assignments + a mini project",
-                       "50 marks: 25 continuous + 25 oral"])
+        self.recap(b, ["HCI designs the meeting point of humans and machines", "It blames the design, not the user",
+                       "You research, prototype, test and audit real interfaces", "You are marked on what you build, not a written paper"])
+
+    def b_next(self, b):
+        self.clear(run_time=0.4)
+        en = VGroup(label("ENROL", 90, PINK, "BOLD"), chip("ETCS334  ·  Human Computer Interface  ·  Programme Elective VI", GOLD, 26, DARK),
+                    label("bring a problem you want to fix", 30, TEXT)).arrange(DOWN, buff=0.35).move_to(STAGE + UP * 0.4)
+        self.show(en, anim=GrowFromCenter, run_time=0.7)
+        self.sfx("chime")
+        self.at(b, 1)
+        nxt = VGroup(label("FIRST LECTURE", 22, MUTED, "BOLD"), label("Foundations of HCI: the human", 30, TEXT, "BOLD")).arrange(DOWN, buff=0.1)
+        box = card(nxt.width + 0.8, nxt.height + 0.5, edge=PINK)
+        g = VGroup(box, nxt.move_to(box)).move_to(STAGE + DOWN * 2.3)
+        self.show(g, run_time=0.5, shift=UP * 0.2)
