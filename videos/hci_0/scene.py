@@ -21,7 +21,9 @@ def flow(items, color, size=22, buff=0.35):
     row = chips(items, color, size, buff=buff)
     arrows = VGroup(*[Arrow(row[i].get_right(), row[i + 1].get_left(), buff=0.06, color=MUTED, stroke_width=3,
                             max_tip_length_to_length_ratio=0.4) for i in range(len(items) - 1)])
-    return VGroup(row, arrows)
+    g = VGroup(row, arrows)
+    g.is_flow = True
+    return g
 
 
 def titled_card(title, color, lines, w, h, title_size=26, line_size=21, line_color=TEXT):
@@ -77,9 +79,9 @@ class Video(Lesson):
         if mob.width > 13.4:
             mob.scale_to_fit_width(13.4)
         self.stage.add(mob)
-        parts = list(mob[0]) if isinstance(mob[0], VGroup) and len(mob) == 2 else list(mob)
+        parts = (list(mob[0]) + [mob[1]]) if getattr(mob, "is_flow", False) else list(mob)
         if lag and len(parts) > 1:
-            self.go(LaggedStart(*[FadeIn(p, shift=UP * 0.15) for p in parts], lag_ratio=0.25), *([FadeIn(mob[1])] if len(mob) == 2 and not isinstance(mob[1], Text) and len(parts) != len(mob) else []), run_time=run_time)
+            self.go(LaggedStart(*[FadeIn(p, shift=UP * 0.15) for p in parts], lag_ratio=0.25), run_time=run_time)
         else:
             self.go(FadeIn(mob, shift=UP * 0.15), run_time=0.5)
         self.y -= gap
