@@ -1,0 +1,280 @@
+                                    DES Pune University, Pune         DI No.: ACAD/DI/09
+                                                                     Issue No.:01 Date: 15-12-2025
+                              School of Engineering and Technology
+                                                                     Rev. 00 Dtd. 15-12-2025
+                                                                     Date    of      Preparation:
+Academic Year: 2026-27                    Syllabus Book
+                                                                     27/10/2026
+
+Name of the
+                    B Tech (CSE)                                     Semester:        VIII
+Program:
+Course Title:       Human Computer Interface (HCI)                   Pattern:       2024
+                                                                     Program Elective Course
+Course Code:        ETCS334                  Course Category         (PEC)
+                                                                     Programme Elective – VI
+                                                                                       Total
+                    Lecture       Tutorial   Laboratory    Project     Internship
+Teaching Scheme:                                                                      Credits
+                         01           -          02             -           -           02
+                    Continuous Assessment for Theory (CAT): (25 Marks)
+                               CAT1                    CAT2                      CAT3
+                          Active Learning        Task Based Learning          Presentation
+                             10 Marks                 10 Marks                  5 Marks
+
+Examination          Continuous Assessment for Laboratory (CAL): NA
+Scheme:                     CAL1                  CAL2                            CAL3
+(50 Marks)                   NA                    NA                              NA
+                             NA                    NA                              NA
+                    Term End Theory Exam: NA
+                    Term End Practical Exam: NA
+                    End Oral Exam: (25 Marks) – Oral/Practical based on laboratory assignments
+                    and mini-project
+                      1. Fundamentals of programming
+Course pre-           2. Web technologies (HTML, CSS, JavaScript)
+requisites            3. Software engineering
+                    1. To introduce the fundamental concepts, evolution and human factors of
+                       Human Computer Interaction.
+                    2. To explain interaction design principles, UI design patterns and prototyping
+                       techniques for user-centred design.
+Course Objectives   3. To apply usability engineering methods, user research and heuristic
+                       evaluation to real-world interfaces.
+                    4. To evaluate interfaces through usability testing, metrics and accessibility
+                       standards, and to examine emerging AI-based and multimodal interfaces.
+
+                    Upon successful completion of this course, learner should be able to:
+                       CO1. Explain the fundamental concepts of HCI, human cognitive and
+                              perceptual factors and Norman's design principles. (Level 2)
+Course Outcomes        CO2. Apply interaction design principles, UI design patterns and
+                              prototyping techniques to design user-centred interfaces. (Level 3
+                              and Level 6)
+
+
+
+
+                                                                                         Page 1 of 5
+                                  DES Pune University, Pune            DI No.: ACAD/DI/09
+                                                                       Issue No.:01 Date: 15-12-2025
+                           School of Engineering and Technology
+                                                                       Rev. 00 Dtd. 15-12-2025
+                                                                       Date    of        Preparation:
+Academic Year: 2026-27                  Syllabus Book
+                                                                       27/10/2026
+
+                         CO3. Analyze user needs and evaluate interfaces using user research
+                              methods, usability heuristics and ISO 9241 guidelines. (Level 4 and
+                              Level 5)
+                         CO4. Evaluate the usability and accessibility of interactive systems using
+                              usability testing, metrics and WCAG, including AI-based and
+                              multimodal interfaces. (Level 5)
+Syllabus
+      Unit No.                                   Contents                                   Hours.
+                    Foundations of HCI and Human Factors
+                    Definition, scope and importance of HCI, Evolution of
+                    interaction: command line, GUI, touch, voice and AI-based
+                    interfaces, The human as information processor: perception,
+                    memory and mental models, Human error: slips and mistakes,
+         I                                                                                 4 Hours
+                    Norman's design principles: visibility, feedback, constraints,
+                    mapping, affordances and signifiers, Gulfs of execution and
+                    evaluation, Fitts' law and Hick's law.
+                    Case study: Good and bad interaction design in everyday
+                    products and public kiosks (ATM / ticket vending machine).
+                    Interaction Design and Prototyping
+                    User-centred design and design thinking (empathise, define,
+                    ideate, prototype, test), Shneiderman's eight golden rules and UI
+                    design patterns, Visual design: layout, Gestalt principles, colour
+                    and typography, Information architecture: navigation design and
+         II                                                                                4 Hours
+                    card sorting, Design systems and platform guidelines (Material
+                    Design, Apple Human Interface Guidelines), Wireframing, low-
+                    fidelity and high-fidelity prototyping.
+                    Case study: Wireframing and low-fidelity prototype of a
+                    university student portal / mobile app.
+                    Usability Engineering and User Research
+                    Usability engineering lifecycle, Usability and User Experience
+                    (UX), User research methods: interviews, surveys and
+                    observation, Affinity diagrams, personas, scenarios and user
+                    journey maps, Hierarchical task analysis and the Keystroke-Level
+        III                                                                                4 Hours
+                    Model (KLM), Nielsen's 10 usability heuristics and the ISO 9241-
+                    11 definition of usability, Heuristic evaluation with severity
+                    ratings and cognitive walkthrough.
+                    Case study: Heuristic evaluation of a real-world application
+                    (e-commerce / banking / government service app).
+
+
+
+
+                                                                                            Page 2 of 5
+                                     DES Pune University, Pune              DI No.: ACAD/DI/09
+                                                                           Issue No.:01 Date: 15-12-2025
+                              School of Engineering and Technology
+                                                                           Rev. 00 Dtd. 15-12-2025
+                                                                           Date    of         Preparation:
+Academic Year: 2026-27                     Syllabus Book
+                                                                           27/10/2026
+
+                        Usability Testing, Accessibility and Emerging Interfaces
+                        Usability testing: think-aloud protocol, moderated and remote
+                        testing, A/B testing, Usability metrics: task success rate, time on
+                        task, error rate and System Usability Scale (SUS), Accessibility:
+                        WCAG 2.2, POUR principles, assistive technologies and
+         IV                                                                                     3 Hours
+                        inclusive design, Ethics in HCI: dark patterns and privacy,
+                        Human-AI interaction: guidelines for chatbot, voice and
+                        multimodal interfaces.
+                        Case study: Accessibility evaluation of a website / usability
+                        evaluation of an AI chatbot.
+Syllabus – Laboratory
+Suggested List of Assignments:
+Suggested tools: Figma / Balsamiq, Google Forms, card-sorting tool or paper cards, WAVE /
+Lighthouse accessibility checkers, NVDA screen reader.
+   Assignment No.                                     Contents                               Hours.
+                        Exploring Human Factors in HCI
+                        Identify and analyse at least two examples of good and bad
+                        interaction design (apps / websites). Map Norman's design
+          1                                                                                 2 Hours
+                        principles (visibility, feedback, constraints, mapping,
+                        affordances) to the examples. Write a short reflection on how
+                        human error affects usability.
+                        User Research, Personas and Task Analysis
+                        Design a short survey / interview (5–7 questions) for a chosen
+                        application and conduct it with at least five users. Synthesise the
+          2             findings using an affinity diagram, and create personas, scenarios  4 Hours
+                        and a user journey map. Perform hierarchical task analysis of a
+                        key task and estimate the expert task time using the Keystroke-
+                        Level Model (KLM).
+                        Information Architecture and Navigation Design
+                        For a content-heavy site (e-commerce, news or university portal),
+                        conduct a card sorting exercise with 2–3 users to group and label
+          3                                                                                 2 Hours
+                        content categories. Create a sitemap from the results. Evaluate
+                        whether the navigation supports findability and efficiency, and
+                        suggest redesign improvements.
+                        Wireframing and Prototyping
+                        For a simple application (food ordering, bus booking or college
+                        portal), create low-fidelity wireframes for at least three screens.
+          4                                                                                 6 Hours
+                        Convert them into an interactive high-fidelity prototype in Figma
+                        that applies Shneiderman's golden rules, Gestalt principles and a
+                        design system.
+                        Usability Heuristic Evaluation
+                        Evaluate a website or mobile app against Nielsen's 10 usability
+          5             heuristics. Rate each heuristic, assign severity ratings to the     4 Hours
+                        violations, and carry out a cognitive walkthrough of key tasks.
+                        Suggest redesign recommendations.
+
+
+
+                                                                                                 Page 3 of 5
+                                   DES Pune University, Pune             DI No.: ACAD/DI/09
+                                                                         Issue No.:01 Date: 15-12-2025
+                           School of Engineering and Technology
+                                                                         Rev. 00 Dtd. 15-12-2025
+                                                                         Date    of         Preparation:
+Academic Year: 2026-27                   Syllabus Book
+                                                                         27/10/2026
+
+                     Usability Testing
+                     Plan and conduct a think-aloud usability test of the prototype
+         6           from Assignment 4 with 3–5 users. Record task success rate, time          4 Hours
+                     on task, error rate and SUS score. Summarise the findings and
+                     suggest improvements.
+                     Accessibility Evaluation
+                     Audit a public website for accessibility (colour contrast, alt text,
+                     keyboard navigation, ARIA labels) using automated checkers
+         7                                                                                     4 Hours
+                     (WAVE / Lighthouse) and a screen reader (NVDA). Compare the
+                     findings against WCAG 2.2 and suggest improvements for
+                     diverse users.
+                     Mini-Project
+                     Design, prototype and evaluate a user interface by applying the
+                     complete user-centred design process. Suggested topics (not
+                     limited to):
+
+                     •   Accessible redesign of an e-governance service app.
+                     •   Campus navigation / student services mobile app.
+                     •   Conversational chatbot interface for student queries, with
+         8                                                                                     4 Hours
+                         usability evaluation.
+                     •   Appointment booking app for elderly users.
+                     •   Voice-based interface for visually impaired users.
+                     •   E-commerce checkout redesign validated through A/B
+                         testing.
+                     •   AR-based campus or museum guide prototype.
+                     •   Banking app redesign that removes dark patterns.
+
+Learning Resources
+                     1. Alan Dix, Janet Finlay, Gregory D. Abowd, Russell Beale, “Human-
+                        Computer Interaction”, 3rd edition, Pearson Education, 2004, ISBN: 978-
+                        0-13-046109-4.
+                     2. Jakob Nielsen, “Usability Engineering”, Academic Press / Morgan
+                        Kaufmann, 1993, ISBN: 978-0-12-518406-9.
+Text Books
+                     3. Ben Shneiderman, Catherine Plaisant, Maxine Cohen, Steven Jacobs,
+                        Niklas Elmqvist, Nicholas Diakopoulos, “Designing the User Interface:
+                        Strategies for Effective Human-Computer Interaction”, 6th edition,
+                        Pearson, 2016, ISBN: 978-0-13-438038-4.
+
+                     1. Don Norman, “The Design of Everyday Things”, Revised and Expanded
+                        edition, Basic Books, 2013, ISBN: 978-0-465-05065-9.
+                     2. Jeffrey Rubin, Dana Chisnell, “Handbook of Usability Testing”, 2nd
+Reference Books         edition, Wiley, 2008, ISBN: 978-0-470-18548-3.
+                     3. Yvonne Rogers, Helen Sharp, Jennifer Preece, “Interaction Design:
+                        Beyond Human-Computer Interaction”, 6th edition, Wiley, 2023, ISBN:
+                        978-1-119-90109-9.
+
+
+                                                                                               Page 4 of 5
+                                        DES Pune University, Pune            DI No.: ACAD/DI/09
+                                                                             Issue No.:01 Date: 15-12-2025
+                                  School of Engineering and Technology
+                                                                             Rev. 00 Dtd. 15-12-2025
+                                                                             Date    of     Preparation:
+Academic Year: 2026-27                       Syllabus Book
+                                                                             27/10/2026
+
+                        4. Steve Krug, “Don't Make Me Think, Revisited”, 3rd edition, New Riders,
+                           2014, ISBN: 978-0-321-96551-6.
+                        5. Jeff Sauro, James R. Lewis, “Quantifying the User Experience: Practical
+                           Statistics for User Research”, 2nd edition, Morgan Kaufmann, 2016, ISBN:
+                           978-0-12-802308-2.
+
+                        1. W3C, Web Content Accessibility Guidelines (WCAG) 2.2 –
+                        https://www.w3.org/TR/WCAG22/
+                        2. Nielsen Norman Group, 10 Usability Heuristics for User Interface Design –
+                        https://www.nngroup.com/articles/ten-usability-heuristics/
+                        3. Microsoft, Guidelines for Human-AI Interaction (HAX Toolkit) –
+                        https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/
+                        4. NPTEL: Human-Computer Interaction, IIT Guwahati –
+Supplementary
+                        https://nptel.ac.in/courses/106103115
+Reading
+                        5. NPTEL: Human Computer Interaction, IIIT Hyderabad –
+                        https://nptel.ac.in/courses/106106177
+                        6. Coursera: Human Factors and Usability Engineering specialization –
+                        https://www.coursera.org/specializations/human-factors-and-usability-
+                        engineering-designing-for-humans
+                        7. NPTEL: User Interface Design, IIT Roorkee –
+                        https://nptel.ac.in/courses/124107008
+CO-PO Mapping:
+
+
+ CO       PO1     PO2        PO3      PO4     PO5     PO6     PO7    PO8          PO9     PO10    PO11
+ /PO
+  CO1       3       2         1         -       -       1       -        -         -        -        1
+  CO2       2       2         3         -       3       1       -        2         2        -        1
+  CO3       2       3         2         3       1       2       2        2         2        -        1
+  CO4       2       3         2         3       3       3       3        2         3        1        2
+
+
+
+          Prepared By                          Verified By                       Approved By
+        Mr. Abhijeet Karve
+
+
+
+
+                                                                                                Page 5 of 5
+

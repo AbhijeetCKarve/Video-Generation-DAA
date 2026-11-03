@@ -153,7 +153,7 @@ class Lesson(Scene):
         self.add(thumb)
         self.until(S["intro"] - 0.5)
         self.play(FadeOut(thumb), run_time=0.5)
-        self.header = Header(S["unit"], S["code"])
+        self.header = Header(S["unit"], S["code"], S.get("badge"))
         self.header_on = False
         if FACE:
             self.mascot = FaceSpot(accent=UNIT_COLORS[S["unit"]], radius=0.926).move_to(FACE_POS)
@@ -222,8 +222,8 @@ class Lesson(Scene):
         self.go(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.3) for r in rows], lag_ratio=0.5), run_time=2.2)
         self.sfx("pop")
 
-    def exam_star(self, b, text="Tips at the end!"):
-        star = chip("★  Exam favourite", GOLD, 26, "#0F172A").next_to(self.unit_chip, RIGHT, buff=0.3)
+    def exam_star(self, b, text="Tips at the end!", star="★  Exam favourite"):
+        star = chip(star, GOLD, 26, "#0F172A").next_to(self.unit_chip, RIGHT, buff=0.3)
         self.show(star, anim=GrowFromCenter, run_time=0.5)
         self.sfx("pop")
         self.at(b, 1)

@@ -26,7 +26,7 @@ BACK = "#F59E0B"
 GOLD = "#FACC15"
 LIGHT_SQ = "#E2E8F0"
 DARK_SQ = "#94A3B8"
-UNIT_COLORS = {"I": "#22C55E", "II": "#EAB308", "III": "#EF4444", "IV": "#A855F7", "V": "#3B82F6"}
+UNIT_COLORS = {"I": "#22C55E", "II": "#EAB308", "III": "#EF4444", "IV": "#A855F7", "V": "#3B82F6", "HCI": "#EC4899"}
 FONT = "Inter"
 MONO = "DejaVu Sans Mono"
 QUEEN = "♛"
@@ -52,9 +52,9 @@ def card(width, height, color=PANEL, edge=PANEL_EDGE):
 class Header(VGroup):
     """Top bar: section name on the left, series badge on the right."""
 
-    def __init__(self, unit, code, **kw):
+    def __init__(self, unit, code, badge=None, **kw):
         super().__init__(**kw)
-        self.badge = chip(f"DAA  ·  UNIT {unit}  ·  {code}", UNIT_COLORS[unit], 20).to_corner(UR, buff=0.35)
+        self.badge = chip(badge or f"DAA  ·  UNIT {unit}  ·  {code}", UNIT_COLORS[unit], 20).to_corner(UR, buff=0.35)
         self.section = label("", 24, MUTED, "BOLD").to_corner(UL, buff=0.4)
         self.add(self.badge, self.section)
 

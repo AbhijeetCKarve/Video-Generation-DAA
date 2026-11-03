@@ -283,7 +283,7 @@ def youtube_description(sched, meta, out):
                 chapters[-1] = (t0, f"{prev} & {title}" if t0 > 0 else prev)
     lines = [f"{int(t // 60)}:{int(t % 60):02d} {name}" for t, name in chapters]
     text = f"""TITLE
-{meta['title']} | DAA Unit {meta['unit']} ({meta['code']}) | {meta.get('title_suffix', 'Backtracking Explained')}
+{meta.get('yt_title') or f"{meta['title']} | DAA Unit {meta['unit']} ({meta['code']}) | {meta.get('title_suffix', 'Backtracking Explained')}"}
 
 DESCRIPTION
 {meta.get('summary', '')}
@@ -291,7 +291,7 @@ DESCRIPTION
 Chapters
 {chr(10).join(lines)}
 
-Course: Design and Analysis of Algorithms (ETCS329), Unit {meta['unit']}
+{meta.get('course_line') or f"Course: Design and Analysis of Algorithms (ETCS329), Unit {meta['unit']}"}
 Created by Abhijeet Karve
 
 Music: original background music (generated, royalty-free).

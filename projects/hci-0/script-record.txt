@@ -1,0 +1,53 @@
+HCI COURSE OVERVIEW (ETCS334) - full recording script (43 lines, about 13 minutes)
+
+How to record: quiet room, mic close, one line at a time with a short pause between lines.
+Read naturally, as if introducing the course to your class on day one. The number is for reference only - do not read it.
+If you stumble, pause and read the whole line again; I keep the last clean take.
+Line 04 is the welcome line for this course (HCI, not DAA), so please record it this time.
+Say: HCI as 'H C I', 'C O one' for CO1, 'ETCS three three four', 'ISO nine two four one dash eleven', WCAG as 'W-CAG',
+'two point two', SUS as 'S U S', KLM as 'K L M', 'A B testing', 'POUR' as the word 'pour', NVDA as 'N V D A', 'UI' as 'U I', 'UX' as 'U X'.
+Names: 'Norman', 'Shneiderman' (SHNY-der-man), 'Nielsen' (NEEL-sen), 'Fitts', 'Hick', 'Dix', 'Krug' (kroog). Numbers as written.
+
+01  Why does one app feel effortless, and another makes you want to throw your phone across the room? Same hardware, same user. The difference is the interface.
+02  Human Computer Interface, HCI, is the subject of designing that difference. This semester you will design, prototype and test real interfaces, and find out why users do what they do.
+03  This video walks through the whole syllabus in thirteen minutes: the four theory units, the eight lab assignments and the mini project, how you are assessed, and how to score well.
+04  Welcome to the HCI series. I'm Abhijeet Karve, and I'll guide you through this course, step by step.
+05  This is the course overview for ETCS334, Human Computer Interface. Today: the course at a glance, the four units, the laboratory and mini project, the assessment, and the books.
+06  This course has no written end exam, and that changes how you should study it. So stay till the end for the tips on scoring.
+07  The course at a glance. ETCS334, Human Computer Interface, in semester eight of B Tech Computer Science, pattern twenty twenty four. It is a programme elective, elective number six.
+08  The teaching scheme: one lecture hour and two laboratory hours every week, for two credits. So two thirds of your time in this course is in the lab, doing.
+09  Assessment is out of fifty marks. Twenty five come from continuous assessment for theory, and twenty five from an end oral exam based on your laboratory assignments and mini project. No term end written paper, no term end practical.
+10  Prerequisites: fundamentals of programming, web technologies, HTML, CSS and JavaScript, and software engineering. You already have all three.
+11  Four course objectives: understand the fundamentals and human factors of HCI, learn interaction design, UI patterns and prototyping, apply usability engineering and user research, and evaluate interfaces with usability testing, metrics and accessibility standards, including AI based interfaces.
+12  They map to four course outcomes. CO one: explain HCI concepts, human factors and Norman's principles. CO two: apply design principles and prototyping. CO three: analyse user needs and evaluate with heuristics and ISO nine two four one. CO four: evaluate usability and accessibility with testing, metrics and WCAG, including AI and multimodal interfaces.
+13  Unit one, four hours: foundations of HCI and human factors. What HCI is, and how interaction evolved: command line, graphical interfaces, touch, voice, and now AI based interfaces.
+14  Then the human as an information processor: perception, memory and mental models, and human error: slips, where you know what to do but your hand does something else, and mistakes, where the plan itself is wrong.
+15  Norman's six design principles: visibility, feedback, constraints, mapping, affordances and signifiers. The gulfs of execution and evaluation, Fitts' law for pointing, and Hick's law for choosing.
+16  The case study: good and bad interaction design in everyday products and public kiosks, like an ATM or a ticket vending machine. You will never look at one the same way again.
+17  Unit two, four hours: interaction design and prototyping. User centred design and design thinking in five steps: empathise, define, ideate, prototype, test.
+18  Shneiderman's eight golden rules and UI design patterns. Visual design: layout, Gestalt principles, colour and typography. Information architecture: navigation design and card sorting.
+19  Design systems and platform guidelines, Material Design and Apple's Human Interface Guidelines, then wireframing, and low fidelity and high fidelity prototyping.
+20  The case study: wireframing and a low fidelity prototype of a university student portal or mobile app. This is where Figma enters your life.
+21  Unit three, four hours: usability engineering and user research. The usability engineering lifecycle, and the difference between usability and user experience.
+22  User research methods: interviews, surveys and observation. Then making sense of the data: affinity diagrams, personas, scenarios and user journey maps.
+23  Hierarchical task analysis, and the Keystroke Level Model, which predicts how long an expert takes for a task. Nielsen's ten usability heuristics, and the ISO nine two four one dash eleven definition of usability.
+24  Heuristic evaluation with severity ratings, and the cognitive walkthrough. The case study: a heuristic evaluation of a real app, e-commerce, banking or a government service.
+25  Unit four, three hours: usability testing, accessibility and emerging interfaces. Usability testing: the think aloud protocol, moderated and remote testing, and A B testing.
+26  Usability metrics: task success rate, time on task, error rate, and the System Usability Scale, SUS. Accessibility: WCAG two point two, the POUR principles, assistive technologies and inclusive design.
+27  Ethics in HCI: dark patterns and privacy. And human AI interaction: guidelines for chatbot, voice and multimodal interfaces, the newest part of the subject.
+28  The case study: an accessibility evaluation of a website, or a usability evaluation of an AI chatbot. That is the theory: fifteen hours across four units.
+29  Now the laboratory, where most of your marks are made. Thirty hours, eight assignments, and real tools: Figma or Balsamiq, Google Forms, a card sorting tool, the WAVE and Lighthouse accessibility checkers, and the NVDA screen reader.
+30  Assignment one: analyse two good and two bad designs with Norman's principles. Assignment two: a survey or interview with at least five users, then personas, a journey map, task analysis and a KLM estimate. Assignment three: card sorting with two or three users, a sitemap, and a navigation review.
+31  Assignment four, the biggest at six hours: low fidelity wireframes for at least three screens, turned into an interactive high fidelity Figma prototype. Assignment five: a heuristic evaluation against Nielsen's ten heuristics, with severity ratings and a cognitive walkthrough.
+32  Assignment six: a think aloud usability test of your own prototype with three to five users, recording task success, time on task, error rate and the SUS score. Assignment seven: an accessibility audit of a public website with WAVE, Lighthouse and NVDA, compared against WCAG two point two.
+33  Assignment eight is the mini project: design, prototype and evaluate an interface through the complete user centred design process. Suggested topics include an accessible e-governance app, a campus navigation app, a chatbot for student queries, an appointment app for elderly users, a voice interface for visually impaired users, a checkout redesign validated by A B testing, an AR campus guide, and a banking app without dark patterns.
+34  Notice the flow: the assignments are the stages of one design process, research, structure, prototype, evaluate, test, audit, and the mini project puts them together.
+35  Assessment in detail. Continuous assessment for theory is twenty five marks: CAT one, active learning, ten marks; CAT two, task based learning, ten marks; CAT three, a presentation, five marks.
+36  The end oral exam is twenty five marks, and it is based on your laboratory assignments and the mini project. So your lab work is not a side activity. It is half the course.
+37  The textbooks: Dix, Finlay, Abowd and Beale, Human Computer Interaction; Jakob Nielsen, Usability Engineering; and Shneiderman and colleagues, Designing the User Interface, sixth edition.
+38  For reading you will enjoy: Don Norman's The Design of Everyday Things, and Steve Krug's Don't Make Me Think. Online: the WCAG two point two guidelines, Nielsen Norman Group's ten heuristics, Microsoft's guidelines for human AI interaction, and NPTEL courses from IIT Guwahati, IIIT Hyderabad and IIT Roorkee.
+39  Tip one. Keep a design portfolio from week one: every survey, affinity diagram, persona, wireframe and Figma link. The oral exam is a conversation about that portfolio.
+40  Tip two. Start the mini project early, and reuse your assignments as its stages: the research from assignment two, the prototype from four, the evaluation from five, the test from six.
+41  Tip three. Learn the vocabulary by heart: Norman's six principles, Shneiderman's eight rules, Nielsen's ten heuristics, the four POUR principles, SUS and WCAG. They come up in every presentation and every oral.
+42  To recap: two credits, one lecture and two lab hours a week; four units from human factors to AI interfaces; eight lab assignments and a mini project; and fifty marks: twenty five continuous, twenty five oral.
+43  That is the whole course on one page. See you in the first lecture: Unit One, foundations of HCI.
