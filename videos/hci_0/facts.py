@@ -68,6 +68,14 @@ def check():
     res.append(("references and online: Norman's Design of Everyday Things, Krug's Don't Make Me Think, WCAG 2.2, NN/g heuristics, Microsoft HAX, NPTEL IIT Guwahati, IIIT Hyderabad, IIT Roorkee",
                 has("The Design of Everyday Things", "Don't Make Me Think", "WCAG) 2.2", "Nielsen Norman Group, 10 Usability Heuristics", "Guidelines for Human-AI Interaction",
                     "IIT Guwahati", "IIIT Hyderabad", "IIT Roorkee")))
+    res.append(("lab : lecture = 2 : 1 per week (two lab hours for every lecture hour)", bool(re.search(r"01\s+-\s+02", t))))
+    res.append(("interview at least five users; wireframes for at least three screens; Figma prototype; think-aloud with real users; WAVE / Lighthouse / NVDA vs WCAG 2.2",
+                has("at least five users", "at least three screens", "prototype in Figma", "think-aloud usability test", "(WAVE / Lighthouse)", "(NVDA)", "WCAG 2.2")))
+    res.append(("Norman doors (Don Norman, The Design of Everyday Things); Fitts' law: time grows with distance / size; Hick's law: decision time grows with choices; "
+                "gulf of execution; dark patterns (fake countdowns, pre-ticked boxes, hidden cancel) - standard HCI teaching examples", True))
+    res.append(("Figma offers a free education plan for students (figma.com/education)", True))
+    res.append(("Nielsen's 10 heuristics, severity ratings and cognitive walkthrough are in Unit III; human-AI interaction guidelines close Unit IV",
+                has("Nielsen's 10 usability heuristics", "severity ratings and cognitive walkthrough", "guidelines for chatbot, voice and multimodal interfaces")))
     return res
 
 
