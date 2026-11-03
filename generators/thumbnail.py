@@ -295,6 +295,22 @@ def code_card(w=490, h=470):
     return img
 
 
+def units_card(w=490, h=470):
+    """Four unit rows and a lab chip: the syllabus at a glance."""
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=30, fill="#FFFFFF")
+    rows = [("I", "Human factors", "#22C55E"), ("II", "Design & prototyping", "#EAB308"), ("III", "Usability & research", "#3B82F6"), ("IV", "Testing, WCAG, AI", "#A855F7")]
+    for i, (r, t, c) in enumerate(rows):
+        y = 40 + i * 82
+        d.rounded_rectangle([30, y, 110, y + 60], radius=14, fill=c)
+        d.text((70, y + 30), r, font=font("Inter:extrabold", 30), fill="#FFFFFF", anchor="mm")
+        d.text((130, y + 30), t, font=font("Inter:extrabold", 28), fill="#1E293B", anchor="lm")
+    d.rounded_rectangle([30, 372, 460, 430], radius=18, fill="#EC4899")
+    d.text((245, 401), "8 LABS  +  MINI PROJECT", font=font("Inter:extrabold", 28), fill="#FFFFFF", anchor="mm")
+    return img
+
+
 def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PROBLEM"),
          subtitle="Solved step by step", credit="PREPARED BY", tag_color=BLUE, visual="board"):
     img = Image.new("RGB", (W, H))
@@ -304,7 +320,7 @@ def make(n, author, out, tag="DAA  \u00b7  BACKTRACKING", title=("N-QUEENS", "PR
         px.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(BG_TOP, BG_BOTTOM)))
 
     # board (or state space tree) on the right, tilted slightly, with a soft glow behind it
-    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card, "clique": clique_card, "code": code_card}.get(visual, lambda: board(n, 470))()
+    b = {"tree": tree_card, "cycle": cycle_card, "bb": bb_card, "matrix": matrix_card, "growth": growth_card, "venn": venn_card, "reduce": reduce_card, "clique": clique_card, "code": code_card, "units": units_card}.get(visual, lambda: board(n, 470))()
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(glow).rounded_rectangle([730, 105, 730 + b.width + 50, 105 + b.height + 50],
                                            radius=30, fill=(59, 130, 246, 150))
@@ -359,7 +375,7 @@ def main():
     ap.add_argument("--title", default="N-QUEENS|PROBLEM", help="one or two title lines, split with |")
     ap.add_argument("--subtitle", default="Solved step by step")
     ap.add_argument("--credit", default="PREPARED BY", help="label above the author name")
-    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce", "clique", "code"])
+    ap.add_argument("--visual", default="board", choices=["board", "board+graph", "tree", "cycle", "bb", "matrix", "growth", "venn", "reduce", "clique", "code", "units"])
     args = ap.parse_args()
     out = make(args.n, args.author, args.out, args.tag, args.title.split("|"), args.subtitle, args.credit,
                args.tag_color, args.visual)

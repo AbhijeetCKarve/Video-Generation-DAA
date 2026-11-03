@@ -192,7 +192,7 @@ class Lesson(Scene):
                 self.go(self.mascot.animate.move_to(MASCOT_POS), run_time=0.8)
             self.sfx("whoosh")
             self.go(self.mascot.wave(), run_time=1.0)
-        series = label("DAA SERIES", 34, MUTED, "BOLD")
+        series = label(S.get("series", "DAA SERIES"), 34, MUTED, "BOLD")
         by = label("by Abhijeet Karve", 54, TEXT, "BOLD")
         g = VGroup(series, by).arrange(DOWN, buff=0.25).move_to(STAGE + UP * 0.4)
         self.show(g, anim=FadeIn, run_time=0.6, shift=UP * 0.2)
