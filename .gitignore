@@ -23,3 +23,5 @@ projects/lab-*/rec*/
 projects/lab-*/reference.m4a
 projects/lab-*/durations*.json
 projects/lab-*/recordings/real-voice.m4a
+projects/hci-*/recordings/real-voice.m4a
+projects/hci-*/voice-real/
