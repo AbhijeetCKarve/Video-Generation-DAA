@@ -140,7 +140,7 @@ class Video(Lesson):
                       unit_text="ETCS334  ·  HCI")
 
     def b_exam(self, b):
-        self.exam_star(b, text="A one-minute test, at the end", star="★  One-minute test at the end")
+        self.exam_star(b, text="A one-minute test, at the end", star="★  Test at the end")
 
     # ------------------------------------------------------------ what HCI is
     def b_w_meet(self, b):
@@ -219,7 +219,7 @@ class Video(Lesson):
     def b_i_chat(self, b):
         self.clear(run_time=0.4)
         self.idea(1, "signifiers in a chat app")
-        ph = phone_frame(STAGE + LEFT * 3.6 + UP * 0.2, 3.0, 5.2)
+        ph = phone_frame(STAGE + LEFT * 3.6 + DOWN * 0.5, 3.0, 4.8)
         c = ph.get_center()
         bub = VGroup(RoundedRectangle(width=2.0, height=0.7, corner_radius=0.2, color=SAFE, fill_color="#14532d", fill_opacity=1, stroke_width=0).move_to(c + UP * 1.2 + RIGHT * 0.3),
                      label("See you at 5", 15, TEXT).move_to(c + UP * 1.3 + RIGHT * 0.3), label("✓✓", 15, ACCENT, "BOLD").move_to(c + UP * 1.0 + RIGHT * 1.0))
@@ -243,9 +243,9 @@ class Video(Lesson):
 
     def b_i_fitts(self, b):
         self.idea(2, "Fitts' law")
-        f = VGroup(label("time to reach a target  ∝  distance  /  size", 30, TEXT, "BOLD")).move_to(STAGE + UP * 1.5)
+        f = VGroup(label("time to reach a target  ∝  distance  /  size", 28, TEXT, "BOLD")).move_to(STAGE + RIGHT * 2.2 + UP * 1.6)
         self.show(f, run_time=0.5)
-        ph = phone_frame(STAGE + LEFT * 3.8 + DOWN * 0.7, 2.6, 4.6)
+        ph = phone_frame(STAGE + LEFT * 4.2 + DOWN * 0.8, 2.4, 4.4)
         c = ph.get_center()
         zones = VGroup(RoundedRectangle(width=2.3, height=1.4, corner_radius=0.2, color=SAFE, fill_color=SAFE, fill_opacity=0.5, stroke_width=0).move_to(c + DOWN * 1.4),
                        RoundedRectangle(width=2.3, height=1.3, corner_radius=0.2, color=GOLD, fill_color=GOLD, fill_opacity=0.4, stroke_width=0).move_to(c + UP * 0.05),
@@ -265,13 +265,13 @@ class Video(Lesson):
 
     def b_i_hick(self, b):
         self.idea(3, "Hick's law")
-        f = label("more choices  →  longer to decide", 30, TEXT, "BOLD").move_to(STAGE + UP * 1.5)
+        f = label("more choices  →  longer to decide", 28, TEXT, "BOLD").move_to(STAGE + UP * 1.7)
         self.show(f, run_time=0.5)
         self.at(b, 1)
-        r1 = RoundedRectangle(width=2.2, height=4.4, corner_radius=0.3, color=KILL, stroke_width=4, fill_color="#1f2937", fill_opacity=1).move_to(STAGE + LEFT * 3.2 + DOWN * 0.7)
-        btns = VGroup(*[Circle(0.12, color=TEXT, fill_color="#9ca3af", fill_opacity=1, stroke_width=0).move_to(r1.get_center() + np.array([-0.75 + 0.375 * (i % 5), 1.8 - 0.4 * (i // 5), 0])) for i in range(50)])
-        r2 = RoundedRectangle(width=1.6, height=4.4, corner_radius=0.5, color=SAFE, stroke_width=4, fill_color="#1f2937", fill_opacity=1).move_to(STAGE + RIGHT * 2.4 + DOWN * 0.7)
-        b6 = VGroup(*[Circle(0.3, color=TEXT, fill_color="#e5e7eb", fill_opacity=1, stroke_width=0).move_to(r2.get_center() + np.array([-0.4 + 0.8 * (i % 2), 1.4 - 0.8 * (i // 2), 0])) for i in range(6)])
+        r1 = RoundedRectangle(width=2.2, height=4.0, corner_radius=0.3, color=KILL, stroke_width=4, fill_color="#1f2937", fill_opacity=1).move_to(STAGE + LEFT * 3.6 + DOWN * 1.0)
+        btns = VGroup(*[Circle(0.12, color=TEXT, fill_color="#9ca3af", fill_opacity=1, stroke_width=0).move_to(r1.get_center() + np.array([-0.75 + 0.375 * (i % 5), 1.6 - 0.36 * (i // 5), 0])) for i in range(50)])
+        r2 = RoundedRectangle(width=1.6, height=4.0, corner_radius=0.5, color=SAFE, stroke_width=4, fill_color="#1f2937", fill_opacity=1).move_to(STAGE + RIGHT * 0.8 + DOWN * 1.0)
+        b6 = VGroup(*[Circle(0.3, color=TEXT, fill_color="#e5e7eb", fill_opacity=1, stroke_width=0).move_to(r2.get_center() + np.array([-0.4 + 0.8 * (i % 2), 1.2 - 0.8 * (i // 2), 0])) for i in range(6)])
         self.show(r1, btns, run_time=0.7)
         l1 = label("50 buttons", 22, KILL, "BOLD").next_to(r1, DOWN, buff=0.2)
         self.show(l1, run_time=0.3)
@@ -280,7 +280,7 @@ class Video(Lesson):
         self.show(l2, run_time=0.3)
         self.sfx("pop")
         n = VGroup(label("same job,", 24, MUTED), label("very different feeling", 24, TEXT, "BOLD"), label("fewer visible choices → faster users", 22, GOLD)).arrange(DOWN, buff=0.15)
-        n.move_to(STAGE + RIGHT * 5.2 + DOWN * 0.7)
+        n.move_to(STAGE + RIGHT * 4.3 + DOWN * 1.0)
         self.show(n, run_time=0.5)
 
     def b_i_gulf(self, b):
@@ -451,7 +451,9 @@ class Video(Lesson):
 
     def b_m_fair(self, b):
         self.screen("A FAIR WAY TO BE MARKED", PINK)
-        fl = flow(["do the assignments", "a portfolio", "the oral: a conversation about your designs"], GOLD, 24, 0.5).move_to(STAGE + UP * 0.6)
+        fl = flow(["do the assignments", "a portfolio", "the oral: a conversation about your designs"], GOLD, 22, 0.4).move_to(STAGE + UP * 0.6)
+        if fl.width > 13.0:
+            fl.scale_to_fit_width(13.0)
         self.show(fl[0][0], run_time=0.4)
         self.at(b, 1)
         self.show(fl[1][0], fl[0][1], run_time=0.5)
