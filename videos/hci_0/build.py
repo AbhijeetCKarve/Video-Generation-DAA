@@ -34,7 +34,7 @@ if __name__ == "__main__":
     main(beats, HERE / "scene.py", HERE.parents[1] / "projects" / "hci-0", SECTIONS, MIN_WINDOW,
          {"title": beats.TITLE, "code": beats.CODE, "unit": beats.UNIT, "end_secs": 15.0,
           "badge": "HCI  ·  ETCS334  ·  INTRO SESSION", "series": "HCI SERIES",
-          "yt_title": "Why Take HCI? Human Computer Interface (ETCS334) Introductory Session | What You Build, Marks, Why Enrol",
+          "yt_title": "Why Take HCI? Human Computer Interface (ETCS334) Introductory Session | Build, Marks, Enrol",
           "course_line": "Course: Human Computer Interface (ETCS334), B.Tech CSE Semester VIII, DES Pune University",
           "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {}, "shots": []},
           "summary": "The introductory session for ETCS334 Human Computer Interface (B.Tech CSE, Semester VIII, Programme "
