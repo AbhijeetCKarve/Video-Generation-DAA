@@ -47,8 +47,8 @@ def paint(nodes, idx, color):
 class Video(Lesson):
     NEXT = ("5.1  Network flow", "& the max-flow min-cut theorem")
 
-    def screen(self, head_text, color, sub=None):
-        self.clear(run_time=0.4)
+    def screen(self, head_text, color, sub=None, keep=()):
+        self.clear(*keep, run_time=0.4)
         head = chip(head_text, color, 26, DARK if color in (GOLD, SAFE) else TEXT).move_to(STAGE + UP * 2.55)
         self.show(head, anim=GrowFromCenter, run_time=0.5)
         self.sfx("pop")
@@ -190,8 +190,7 @@ class Video(Lesson):
         self.vc = g
 
     def b_v_algo(self, b):
-        self.clear(self.vc, run_time=0.4)
-        self.screen("APPROX-VERTEX-COVER", ACCENT)
+        self.screen("APPROX-VERTEX-COVER", ACCENT, keep=(self.vc,))
         self.go(self.vc.animate.move_to(STAGE + LEFT * 3.0 + DOWN * 0.5), run_time=0.4)
         code = CodePanel(["C := {}",
                           "while edges remain:",
@@ -285,8 +284,7 @@ class Video(Lesson):
         self.cmap = m
 
     def b_t_trace(self, b):
-        self.clear(self.cmap, run_time=0.4)
-        self.screen("FIVE CITIES", PURPLE)
+        self.screen("FIVE CITIES", PURPLE, keep=(self.cmap,))
         m = self.cmap
         self.go(m.animate.move_to(STAGE + LEFT * 3.2 + DOWN * 0.5), run_time=0.4)
         tree = VGroup(*[edge(m.pts[a], m.pts[b], SAFE, 6, 0.3) for a, b in MST_EDGES])
@@ -437,5 +435,5 @@ class Video(Lesson):
         self.tip(b, 3, "TSP: triangle inequality, MST ≤ OPT, walk = 2·MST, shortcuts", "mention Christofides for 1.5")
 
     def b_recap(self, b):
-        self.recap(b, ["Approximation: a guarantee in polynomial time", "Vertex cover and metric TSP: simple 2-approximations with short proofs",
+        self.recap(b, ["Approximation: a guarantee in polynomial time", "Vertex cover and metric TSP: simple 2-approximations",
                        "AI approximates, big data embraces, cryptography relies on hardness"])
