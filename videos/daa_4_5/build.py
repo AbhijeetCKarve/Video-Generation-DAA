@@ -31,6 +31,7 @@ if __name__ == "__main__":
     main(beats, HERE / "scene.py", HERE.parents[1] / "projects" / "daa-4.5", SECTIONS, MIN_WINDOW,
          {"title": beats.TITLE, "code": beats.CODE, "unit": beats.UNIT, "end_secs": 15.0,
           "title_suffix": "Vertex Cover, TSP & Real Uses",
+          "yt_title": "Approximation Algorithms: Vertex Cover, TSP & Uses in AI, Big Data, Crypto | DAA Unit IV (4.5)",
           "cameo": {"size": 312, "voice": "voice-real", "real": "projects/daa-3.2/voice-real", "lines": {}, "shots": []},
           "summary": "The last video of Unit IV. What an approximation algorithm and its ratio are, and why a guaranteed "
                      "2x answer in polynomial time beats an exact answer that never arrives. Two classic algorithms with "
