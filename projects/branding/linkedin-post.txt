@@ -1,0 +1,79 @@
+LINKEDIN POST — DAA SERIES (playlist launch)
+============================================
+
+Replace [PLAYLIST LINK] with the YouTube playlist URL before posting.
+
+
+VERSION A — full post (about 1,400 characters; recommended)
+-----------------------------------------------------------
+
+Ten lectures. Two units. Every algorithm traced step by step, on screen.
+
+Every year I watch bright students lose marks in Design & Analysis of Algorithms, not because the ideas are hard, but because the textbook shows the finished table and skips the steps that produced it.
+
+So I built a free YouTube series that shows the steps.
+
+Units III and IV of DAA (ETCS329) are complete, 10 videos of 7 to 11 minutes each:
+
+Unit III · Backtracking and Branch & Bound
+ 3.1 Backtracking fundamentals
+ 3.2 8-Queens and graph colouring
+ 3.3 Sum of subsets and Hamiltonian cycle
+ 3.4 Branch & bound: FIFO, LIFO and LC search
+ 3.5 0/1 Knapsack and TSP with branch & bound
+
+Unit IV · NP-completeness and approximation
+ 4.1 Polynomial vs exponential, non-deterministic algorithms
+ 4.2 P, NP, NP-hard and NP-complete
+ 4.3 Polynomial-time reductions
+ 4.4 Proving NP-completeness: 3-SAT, Clique, Vertex Cover
+ 4.5 Approximation algorithms and their uses in AI, big data and cryptography
+
+Every video keeps the same promise:
+→ a real problem first, so the idea has a reason to exist
+→ every step traced on screen: tables, trees and graphs, animated
+→ proofs short enough to write in the exam
+→ a practice question with a pause, then the answer
+→ exam tips and a recap
+
+There is also a lab series: the same programs written and run in both C++ and Java, live in VS Code.
+
+Unit V, network flow, starts next.
+
+If you teach, learn or examine algorithms, I would value your feedback. And if you know a student who has DAA this semester, please pass this on. It is free, and it will stay free.
+
+Playlist: [PLAYLIST LINK]
+
+#DAA #Algorithms #ComputerScience #Teaching #BTech
+
+
+VERSION B — short post (about 500 characters; for a repost or a second push)
+-----------------------------------------------------------------------------
+
+Backtracking, branch & bound, NP-completeness, approximation algorithms: 10 free lectures, every step animated on screen.
+
+Units III and IV of Design & Analysis of Algorithms are now complete on YouTube. Each video: a real problem first, a full trace, an exam-ready proof, a practice question and exam tips.
+
+Share it with a student who has DAA this semester.
+
+Playlist: [PLAYLIST LINK]
+
+#DAA #Algorithms #Teaching
+
+
+FIRST COMMENT (post this yourself right after the post goes up)
+---------------------------------------------------------------
+
+Playlist (all 10 videos, in order): [PLAYLIST LINK]
+Start with 3.1 if you are new to backtracking, or 4.2 if NP-completeness is what worries you.
+
+
+HOW TO POST IT
+--------------
+1. Upload the 49-second video as a NATIVE LinkedIn video (not a YouTube link): native video autoplays in the feed and gets far more reach than an external link preview.
+2. Paste Version A as the text. The first two lines show before "...see more", so they carry the hook.
+3. Put the playlist link at the end of the post AND in the first comment. LinkedIn shows posts with external links to fewer people; the comment copy is the safety net.
+4. Post on a weekday morning (Tuesday to Thursday, 8 to 10 am IST works well for students and faculty).
+5. Reply to every comment in the first hour: early replies push the post to more feeds.
+6. Three to five hashtags, no more. The ones above are specific and searched.
+7. A week later, post Version B with a different frame of the video, or one lesson's thumbnail, and tag the next topic.
