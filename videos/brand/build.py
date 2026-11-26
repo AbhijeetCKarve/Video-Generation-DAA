@@ -49,9 +49,11 @@ def esc(text):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--final-dir", default="/home/user/daa-recordings/final")
-    ap.add_argument("--out", default=str(PROJ / "output" / "daa-series-promo-49s.mp4"))
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--voice", help="folder with intro/montage/promise/progress/outro.wav narration (see narrate.py)")
     args = ap.parse_args()
-    final, out = Path(args.final_dir), Path(args.out)
+    final = Path(args.final_dir)
+    out = Path(args.out) if args.out else PROJ / "output" / ("daa-series-promo-49s-voice.mp4" if args.voice else "daa-series-promo-49s.mp4")
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.parent / "tmp-promo"
     tmp.mkdir(exist_ok=True)
@@ -102,11 +104,27 @@ def main():
     events += [(i_promise + 1.2 + 1.8 * k, "pop") for k in range(5)]
     events += [(i_progress + 1.0 + 1.6 * k, "pop") for k in range(3)] + [(i_progress + 5.8, "pop")]
     events += [(i_outro + 2.2, "chime")]
-    sfx = pr.sfx_track(events, total) * 10 ** (8 / 20)          # louder than under narration: nothing else is talking
     n = len(music)
-    mixed = music * 10 ** (-6 / 20)
-    mixed[:, 0] += sfx[:n]
-    mixed[:, 1] += sfx[:n]
+    voice = np.zeros(n, dtype="float32")
+    if args.voice:
+        # each clip starts a beat after its scene cut; the montage line a little later, over the first clip
+        at = {"intro": 0.3, "montage": starts[1] + 0.7, "promise": i_promise + 0.3,
+              "progress": i_progress + 0.7, "outro": i_outro + 0.8}
+        for key, t0 in at.items():
+            y, sr = sf.read(Path(args.voice) / f"{key}.wav", dtype="float32")
+            assert sr == pr.SR, f"{key}.wav must be {pr.SR} Hz"
+            i0 = int(t0 * pr.SR)
+            y = y[:max(0, n - i0)]
+            voice[i0:i0 + len(y)] += y
+            print(f"voice {key:9s} {t0:5.1f} -> {t0 + len(y) / sr:5.1f} s")
+        voice = voice / (np.abs(voice).max() + 1e-9) * 10 ** (-3 / 20)
+        music_db, sfx_db = -20, 4                                # music well under the voice, effects a touch softer
+    else:
+        music_db, sfx_db = -6, 8                                 # nothing else is talking: music carries the piece
+    sfx = pr.sfx_track(events, total) * 10 ** (sfx_db / 20)
+    mixed = music * 10 ** (music_db / 20)
+    mixed[:, 0] += sfx[:n] + voice
+    mixed[:, 1] += sfx[:n] + voice
     mix_wav = tmp / "mix.wav"
     sf.write(mix_wav, mixed, pr.SR)
 
