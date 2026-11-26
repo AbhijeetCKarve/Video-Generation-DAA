@@ -13,16 +13,13 @@ Every year I watch bright students lose marks in Design & Analysis of Algorithms
 
 So I built a free YouTube series that shows the steps.
 
-Units III and IV of DAA (ETCS329) are complete, 10 videos of 7 to 11 minutes each:
+Ten videos so far, 3.1 to 4.5, each 7 to 11 minutes:
 
-Unit III · Backtracking and Branch & Bound
  3.1 Backtracking fundamentals
  3.2 8-Queens and graph colouring
  3.3 Sum of subsets and Hamiltonian cycle
  3.4 Branch & bound: FIFO, LIFO and LC search
  3.5 0/1 Knapsack and TSP with branch & bound
-
-Unit IV · NP-completeness and approximation
  4.1 Polynomial vs exponential, non-deterministic algorithms
  4.2 P, NP, NP-hard and NP-complete
  4.3 Polynomial-time reductions
@@ -38,7 +35,7 @@ Every video keeps the same promise:
 
 There is also a lab series: the same programs written and run in both C++ and Java, live in VS Code.
 
-Unit V, network flow, starts next.
+Next up: network flow.
 
 If you teach, learn or examine algorithms, I would value your feedback. And if you know a student who has DAA this semester, please pass this on. It is free, and it will stay free.
 
@@ -52,7 +49,7 @@ VERSION B — short post (about 500 characters; for a repost or a second push)
 
 Backtracking, branch & bound, NP-completeness, approximation algorithms: 10 free lectures, every step animated on screen.
 
-Units III and IV of Design & Analysis of Algorithms are now complete on YouTube. Each video: a real problem first, a full trace, an exam-ready proof, a practice question and exam tips.
+Ten videos of Design & Analysis of Algorithms, 3.1 to 4.5, are now on YouTube. Each video: a real problem first, a full trace, an exam-ready proof, a practice question and exam tips.
 
 Share it with a student who has DAA this semester.
 

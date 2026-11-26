@@ -38,7 +38,7 @@ class IntroScene(Timed):
     LENGTH = 4.4
 
     def construct(self):
-        tag = chip("DAA SERIES  ·  DES PUNE UNIVERSITY", GOLD, 22, BG).move_to(UP * 2.2)
+        tag = chip("DAA SERIES", GOLD, 22, BG).move_to(UP * 2.2)
         t1 = label("Design & Analysis", 72, TEXT, "BOLD")
         t2 = label("of Algorithms", 72, TEXT, "BOLD")
         title = VGroup(t1, t2).arrange(DOWN, buff=0.15).move_to(UP * 0.35)
@@ -78,21 +78,21 @@ class PromiseScene(Timed):
         self.finish()
 
 
-UNITS = [("III", "Unit III", "Backtracking, Branch & Bound", "5 videos", True),
-         ("IV", "Unit IV", "NP-completeness, approximation", "5 videos", True),
-         ("V", "Unit V", "Network flow & more", "coming next", False)]
+UNITS = [("III", "3.1 – 3.5", "Backtracking, Branch & Bound", "5 videos", True),
+         ("IV", "4.1 – 4.5", "NP-completeness, approximation", "5 videos", True),
+         ("V", "NEXT", "Network flow & more", "coming soon", False)]
 
 
 class ProgressScene(Timed):
     LENGTH = 8.6
 
     def construct(self):
-        head = label("WHERE THE SERIES IS", 40, TEXT, "BOLD").move_to(UP * 2.9)
+        head = label("TEN LECTURES, 3.1 TO 4.5", 40, TEXT, "BOLD").move_to(UP * 2.9)
         cards = VGroup()
         for unit, name, topic, count, done in UNITS:
             colour = UNIT_COLORS[unit]
             box = card(12.4, 1.25)
-            tag = chip(name.upper(), colour, 22).move_to(box.get_left() + RIGHT * 1.25)
+            tag = chip(name.upper(), colour, 22).move_to(box.get_left() + RIGHT * 1.3)
             text = label(topic, 31, TEXT, "BOLD").next_to(tag, RIGHT, buff=0.4)
             right = chip(("✓  " if done else "") + count, SAFE if done else colour, 22).move_to(box.get_right() + LEFT * 1.35)
             cards.add(VGroup(box, tag, text, right))
@@ -111,7 +111,7 @@ class OutroScene(Timed):
     def construct(self):
         tag = chip("DAA SERIES", GOLD, 24, BG).move_to(UP * 2.6)
         name = label("Abhijeet Karve", 64, TEXT, "BOLD").move_to(UP * 1.4)
-        line = label("Design & Analysis of Algorithms  ·  ETCS329  ·  DES Pune University", 28, MUTED).move_to(UP * 0.55)
+        line = label("Design & Analysis of Algorithms  ·  free on YouTube", 28, MUTED).move_to(UP * 0.55)
         btn = chip("▶   Watch the playlist on YouTube", RED, 34, TEXT, pad=0.35).move_to(DOWN * 0.75)
         hint = label("link in the post  ·  free for every student", 28, MUTED).move_to(DOWN * 1.75)
         self.at(0.2, FadeIn(tag, shift=DOWN * 0.2), run_time=0.4)
