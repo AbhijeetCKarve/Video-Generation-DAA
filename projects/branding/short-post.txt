@@ -1,0 +1,36 @@
+30-SECOND VERTICAL PROMO — POSTING TEXT
+=======================================
+File: daa-series-short-30s.mp4 (1080x1920, 30 s, captions burned in)
+Replace [PLAYLIST LINK] before posting.
+
+YOUTUBE SHORTS
+--------------
+Title (under 100 characters):
+200 cities, vans leave at 8, no computer can find the route | DAA, every step on screen #Shorts
+
+Description:
+Students don't fail algorithms because the ideas are hard. They fail because the textbook skips the steps.
+Ten free lectures, 3.1 to 4.5: backtracking, branch & bound, NP-completeness, approximation. Every step traced on screen, the way the examiner expects.
+
+Full playlist: [PLAYLIST LINK]
+
+#DAA #Algorithms #ComputerScience #BTech #Shorts
+
+Pinned comment: Start here → [PLAYLIST LINK]
+
+Settings: upload as a normal video; YouTube files any vertical video under 3 minutes as a Short. Tick "Altered or synthetic content" under Details, since the narration is an AI clone of your voice. Add the playlist as the related video / link.
+
+
+LINKEDIN (same file, posted as a native video)
+----------------------------------------------
+200 cities. The vans leave at 8. No computer can find the best route in time.
+
+Students don't fail Design & Analysis of Algorithms because the ideas are hard. They fail because the textbook shows the final table and skips the steps.
+
+So I show the steps. Ten free lectures, 3.1 to 4.5: backtracking, branch & bound, NP-completeness, approximation. Every step traced on screen, in the words the examiner expects.
+
+Share it with a student who has algorithms this semester.
+
+Playlist: [PLAYLIST LINK]
+
+#DAA #Algorithms #Teaching #BTech
